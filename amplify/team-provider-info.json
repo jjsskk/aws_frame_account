@@ -1,0 +1,29 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-flutterapp-staging-75823-authRole",
+      "UnauthRoleArn": "arn:aws:iam::316671664933:role/amplify-flutterapp-staging-75823-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::316671664933:role/amplify-flutterapp-staging-75823-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-flutterapp-staging-75823-deployment",
+      "UnauthRoleName": "amplify-flutterapp-staging-75823-unauthRole",
+      "StackName": "amplify-flutterapp-staging-75823",
+      "StackId": "arn:aws:cloudformation:us-east-1:316671664933:stack/amplify-flutterapp-staging-75823/e218f330-9705-11ed-9e1b-12dec653b89d",
+      "AmplifyAppId": "d1060isgcwu8oo"
+    },
+    "categories": {
+      "auth": {
+        "flutterapp": {}
+      },
+      "api": {
+        "flutterapp": {}
+      },
+      "storage": {
+        "s3523ce512": {}
+      },
+      "analytics": {
+        "flutterapp": {}
+      }
+    }
+  }
+}
