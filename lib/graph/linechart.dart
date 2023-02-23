@@ -12,7 +12,7 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:get/get.dart';
 
 class Linechart extends StatefulWidget {
-  Linechart({required this.csvlist});//
+  Linechart({required this.csvlist});
 
   late List<String> csvlist;
 
