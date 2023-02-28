@@ -45,43 +45,43 @@ class _LinechartState extends State<Linechart> {
   }
 
   bool showChart2 = false;
-  List<List<dynamic>> _data = []; //use for csv file in local device
+  // List<List<dynamic>> _data = []; //use for csv file in local device
 
-  Future<void> _loadCSVaws() async {
-    final documentsDir = await getApplicationDocumentsDirectory();
-    final filepath = documentsDir.path + '/20230206_165833_Spectrum.csv';
-    final file = File(filepath);
-    print('file path : ' + filepath);
-
-    // final listOptions =
-    // S3ListOptions(accessLevel: StorageAccessLevel.private);
-    final downloadOptions = S3DownloadFileOptions(
-      accessLevel: StorageAccessLevel.protected,
-      // e.g. us-west-2:2f41a152-14d1-45ff-9715-53e20751c7ee
-    );
-
-    try {
-      final result = await Amplify.Storage.downloadFile(
-        key: '20230206_165833_Spectrum.csv',
-        local: file,
-        options: downloadOptions,
-        onProgress: (progress) {
-          safePrint('Fraction completed: ${progress.getFractionCompleted()}');
-        },
-      );
-      final contents = result.file.readAsStringSync();
-      // Or you can reference the file that is created above
-      // final contents = file.readAsStringSync();
-      safePrint('Downloaded contents: $contents');
-      final rawdata = const CsvToListConverter().convert(contents);
-
-      setState(() {
-        _data = rawdata;
-      });
-    } on StorageException catch (e) {
-      safePrint('Error downloading file: $e');
-    }
-  }
+  // Future<void> _loadCSVaws() async {
+  //   final documentsDir = await getApplicationDocumentsDirectory();
+  //   final filepath = documentsDir.path + '/20230206_165833_Spectrum.csv';
+  //   final file = File(filepath);
+  //   print('file path : ' + filepath);
+  //
+  //   // final listOptions =
+  //   // S3ListOptions(accessLevel: StorageAccessLevel.private);
+  //   final downloadOptions = S3DownloadFileOptions(
+  //     accessLevel: StorageAccessLevel.protected,
+  //     // e.g. us-west-2:2f41a152-14d1-45ff-9715-53e20751c7ee
+  //   );
+  //
+  //   try {
+  //     final result = await Amplify.Storage.downloadFile(
+  //       key: '20230206_165833_Spectrum.csv',
+  //       local: file,
+  //       options: downloadOptions,
+  //       onProgress: (progress) {
+  //         safePrint('Fraction completed: ${progress.getFractionCompleted()}');
+  //       },
+  //     );
+  //     final contents = result.file.readAsStringSync();
+  //     // Or you can reference the file that is created above
+  //     // final contents = file.readAsStringSync();
+  //     safePrint('Downloaded contents: $contents');
+  //     final rawdata = const CsvToListConverter().convert(contents);
+  //
+  //     setState(() {
+  //       _data = rawdata;
+  //     });
+  //   } on StorageException catch (e) {
+  //     safePrint('Error downloading file: $e');
+  //   }
+  // }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(

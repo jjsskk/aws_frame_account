@@ -50,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Stack(children: [
             Positioned(
               child: Container(
-                height: 250,
+                height: MediaQuery.of(context).size.height/3,
                 decoration: BoxDecoration(
                   color: Colors.black87,
                 ),
@@ -72,11 +72,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
             // Login Form
             Positioned(
-              top: 249.93,
+              top: MediaQuery.of(context).size.height/3,
+              //MediaQuery.of(context).size.height-433.5,
+              // 249.93,
               child: Container(
                   color: Colors.black87,
                   padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  height: 300,
+                  height: MediaQuery.of(context).size.height/2,
                   width: MediaQuery.of(context).size.width,
                   child: _loginForm()),
             ),
@@ -86,25 +88,30 @@ class _LoginPageState extends State<LoginPage> {
             Positioned(
               left: 0,
               right: 0,
-              top: MediaQuery.of(context).size.height - 133.65,
+              top: MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2,
               child: Container(
                 padding: EdgeInsets.only(bottom: 50),
-                  height: 200,
+                  height:  MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2),
                   color: Colors.black87,
                   alignment: Alignment.center,
-                  child: TextButton.icon(
-                    onPressed: widget.shouldShowSignUp,
-                    label: Text(
-                      'Don\'t have an account? Sign up.',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        minimumSize: Size(155, 40),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20)),
-                        backgroundColor: Colors.indigo),
-                    icon: Icon(Icons.arrow_forward),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton.icon(
+                        onPressed: widget.shouldShowSignUp,
+                        label: Text(
+                          'Don\'t have an account? Sign up.',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        style: TextButton.styleFrom(
+                            primary: Colors.white,
+                            minimumSize: Size(155, 40),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            backgroundColor: Colors.indigo),
+                        icon: Icon(Icons.arrow_forward),
+                      ),
+                    ],
                   )),
             )
           ]),

@@ -42,7 +42,7 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Stack(children: [
             Positioned(
               child: Container(
-                height: 220,
+                height: MediaQuery.of(context).size.height/3,
                 decoration: BoxDecoration(
                   color: Colors.black87,
                 ),
@@ -64,11 +64,11 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             // Sign Up Form
             Positioned(
-              top: 219.85,
+                top: MediaQuery.of(context).size.height/3,
               child: Container(
                   color: Colors.black87,
                   padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  height: 350,
+                  height: MediaQuery.of(context).size.height/2,
                   width: MediaQuery.of(context).size.width,
                   child: _signUpForm()),
             ),
@@ -77,9 +77,9 @@ class _SignUpPageState extends State<SignUpPage> {
             Positioned(
               left: 0,
               right: 0,
-              top: MediaQuery.of(context).size.height - 113.7,
+              top: MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2,
               child: Container(
-                height: 120,
+                height:  MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2),
                 color: Colors.black87,
                 alignment: Alignment.center,
                 child: TextButton.icon(
