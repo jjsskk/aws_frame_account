@@ -1,4 +1,4 @@
-package com.example.aws_amplified
+package com.example.aws_frame_account
 
 import io.flutter.embedding.android.FlutterActivity
 

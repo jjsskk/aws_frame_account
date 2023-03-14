@@ -1,4 +1,4 @@
-# aws_amplified
+# aws_frame_account
 
 A new Flutter project.
 

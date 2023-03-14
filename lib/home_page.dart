@@ -1,4 +1,4 @@
-import 'package:aws_amplified/camera_gallary/camera_flow.dart';
+import 'package:aws_frame_account/camera_gallary/camera_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 

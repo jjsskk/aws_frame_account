@@ -1,6 +1,6 @@
-import 'package:aws_amplified/analytics/analytics_events.dart';
-import 'package:aws_amplified/analytics/analytics_service.dart';
-import 'package:aws_amplified/auth_credentials.dart';
+import 'package:aws_frame_account/analytics/analytics_events.dart';
+import 'package:aws_frame_account/analytics/analytics_service.dart';
+import 'package:aws_frame_account/auth_credentials.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';

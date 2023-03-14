@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:aws_amplified/analytics/analytics_events.dart';
-import 'package:aws_amplified/analytics/analytics_service.dart';
-import 'package:aws_amplified/storage/storage_service.dart';
+import 'package:aws_frame_account/analytics/analytics_events.dart';
+import 'package:aws_frame_account/analytics/analytics_service.dart';
+import 'package:aws_frame_account/storage/storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

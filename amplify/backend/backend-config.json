@@ -1,35 +1,12 @@
 {
   "analytics": {
-    "flutterapp": {
+    "awsamplify": {
       "providerPlugin": "awscloudformation",
       "service": "Pinpoint"
     }
   },
-  "api": {
-    "flutterapp": {
-      "dependsOn": [],
-      "output": {
-        "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AWS_IAM"
-            }
-          ],
-          "defaultAuthentication": {
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 30,
-              "description": "api key description"
-            },
-            "authenticationType": "API_KEY"
-          }
-        }
-      },
-      "providerPlugin": "awscloudformation",
-      "service": "AppSync"
-    }
-  },
   "auth": {
-    "flutterapp": {
+    "awsamplify": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -44,9 +21,7 @@
           ],
           "passwordPolicyMinLength": 8
         },
-        "signupAttributes": [
-          "EMAIL"
-        ],
+        "signupAttributes": [],
         "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"
@@ -60,7 +35,7 @@
     }
   },
   "storage": {
-    "s3523ce512": {
+    "s3abed2243": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
       "service": "S3"

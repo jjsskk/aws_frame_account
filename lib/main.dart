@@ -307,11 +307,11 @@
 //   }
 // }
 
-import 'package:aws_amplified/auth_service.dart';
-import 'package:aws_amplified/camera_gallary/camera_flow.dart';
-import 'package:aws_amplified/login_page.dart';
-import 'package:aws_amplified/sign_up_page.dart';
-import 'package:aws_amplified/verification_page.dart';
+import 'package:aws_frame_account/auth_service.dart';
+import 'package:aws_frame_account/camera_gallary/camera_flow.dart';
+import 'package:aws_frame_account/login_page.dart';
+import 'package:aws_frame_account/sign_up_page.dart';
+import 'package:aws_frame_account/verification_page.dart';
 import 'package:flutter/material.dart';
 
 // Amplify Flutter Packages
@@ -344,7 +344,7 @@ class _MyAppState extends State<MyApp> {
 
   final _authService = AuthService();
   final _amplify = Amplify;
-
+  
   @override
   void initState() {
     super.initState();

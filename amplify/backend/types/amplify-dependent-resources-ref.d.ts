@@ -1,20 +1,13 @@
 export type AmplifyDependentResourcesAttributes = {
   "analytics": {
-    "flutterapp": {
+    "awsamplify": {
       "Id": "string",
       "Region": "string",
       "appName": "string"
     }
   },
-  "api": {
-    "flutterapp": {
-      "GraphQLAPIEndpointOutput": "string",
-      "GraphQLAPIIdOutput": "string",
-      "GraphQLAPIKeyOutput": "string"
-    }
-  },
   "auth": {
-    "flutterapp": {
+    "awsamplify": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
       "IdentityPoolId": "string",
@@ -25,7 +18,7 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
-    "s3523ce512": {
+    "s3abed2243": {
       "BucketName": "string",
       "Region": "string"
     }

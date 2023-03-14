@@ -1,5 +1,5 @@
-import 'package:aws_amplified/analytics/analytics_events.dart';
-import 'package:aws_amplified/analytics/analytics_service.dart';
+import 'package:aws_frame_account/analytics/analytics_events.dart';
+import 'package:aws_frame_account/analytics/analytics_service.dart';
 import 'package:flutter/material.dart';
 
 class VerificationPage extends StatefulWidget {

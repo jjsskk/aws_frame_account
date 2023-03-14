@@ -1,5 +1,5 @@
-import 'package:aws_amplified/controller/graph_controller.dart';
-import 'package:aws_amplified/graph/linechart.dart';
+import 'package:aws_frame_account/controller/graph_controller.dart';
+import 'package:aws_frame_account/graph/linechart.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
