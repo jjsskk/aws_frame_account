@@ -3,7 +3,7 @@ import 'package:aws_frame_account/mainpage/mainpage.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'communication_service/communication_service.dart';
-import 'protector_service/protector_serviice.dart';
+import 'protector_service/protector_service.dart';
 import 'traning record/record_manage.dart';
 
 class HomePage extends StatefulWidget {

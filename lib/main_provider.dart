@@ -7,7 +7,7 @@
 // import 'package:aws_frame_account/sign_up_page.dart';
 // import 'package:aws_frame_account/start_page.dart';
 // import 'package:aws_frame_account/verification_page.dart';
-// import 'package:aws_frame_account/protector_service/protector_serviice.dart';
+// import 'package:aws_frame_account/protector_service/protector_service.dart';
 // import 'package:flutter/material.dart';
 //
 // // Amplify Flutter Packages

@@ -1,5 +1,5 @@
 import 'package:aws_frame_account/camera_gallary/graph_page.dart';
-import 'package:aws_frame_account/protector_service/protector_serviice.dart';
+import 'package:aws_frame_account/protector_service/protector_service.dart';
 import 'package:flutter/material.dart';
 
 class Manage extends StatefulWidget {
