@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // 1
-enum AuthFlowStatus { login, signUp, verification, session }
+enum AuthFlowStatus { login, signUp, verification, session, start }
 
 // 2
 class AuthState {
@@ -33,6 +33,11 @@ class AuthService {
   // 6 showSignUp과 동일한 기능을 수행하지만 스트림을 업데이트하여 로그인 정보를 전송합니다.
   void showLogin() {
     final state = AuthState(authFlowStatus: AuthFlowStatus.login);
+    authStateController.add(state);
+  }
+
+  void showstart() {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.start);
     authStateController.add(state);
   }
 
@@ -114,7 +119,7 @@ class AuthService {
   //   final state = AuthState(authFlowStatus: AuthFlowStatus.session);
   //   authStateController.add(state);
   // }
-  void verifyCode(String verificationCode) async {
+  Future<void> verifyCode(String verificationCode, BuildContext context) async {
     try {
       // 2
       final result = await Amplify.Auth.confirmSignUp(
@@ -129,6 +134,13 @@ class AuthService {
       }
     } on AuthException catch (authError) {
       print('Could not verify code - ${authError.recoverySuggestion}');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '인증번호가 올바르지 않습니다.',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.indigoAccent,
+      ));
     }
   }
 
@@ -154,12 +166,12 @@ class AuthService {
         authStateController.add(state);
       } else {
         print('User state : logout');
-        final state = AuthState(authFlowStatus: AuthFlowStatus.login);
+        final state = AuthState(authFlowStatus: AuthFlowStatus.start);
         authStateController.add(state);
       }
     } catch (authError) {
       print(authError);
-      final state = AuthState(authFlowStatus: AuthFlowStatus.login);
+      final state = AuthState(authFlowStatus: AuthFlowStatus.start);
       authStateController.add(state);
     }
   }

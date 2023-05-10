@@ -1,9 +1,12 @@
 import 'package:aws_frame_account/analytics/analytics_events.dart';
 import 'package:aws_frame_account/analytics/analytics_service.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+
 
 class VerificationPage extends StatefulWidget {
-  final ValueChanged<String> didProvideVerificationCode;
+  // final ValueChanged<String> didProvideVerificationCode;
+  final Future<void> Function(String value, BuildContext context) didProvideVerificationCode;
 
   VerificationPage({Key? key, required this.didProvideVerificationCode})
       : super(key: key);
@@ -14,18 +17,21 @@ class VerificationPage extends StatefulWidget {
 
 class _VerificationPageState extends State<VerificationPage> {
   final _verificationCodeController = TextEditingController();
-
+  bool showspiner = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black87,
-      body: GestureDetector(
-        onTap: (){
-          FocusScope.of(context).unfocus();
-        },
-        child: SafeArea(
-          minimum: EdgeInsets.symmetric(horizontal: 40),
-          child: _verificationForm(),
+      body: ModalProgressHUD(
+        inAsyncCall: showspiner,
+        child: GestureDetector(
+          onTap: (){
+            FocusScope.of(context).unfocus();
+          },
+          child: SafeArea(
+            minimum: EdgeInsets.symmetric(horizontal: 40),
+            child: _verificationForm(),
+          ),
         ),
       ),
     );
@@ -62,9 +68,15 @@ class _VerificationPageState extends State<VerificationPage> {
     );
   }
 
-  void _verify() {
+  void _verify() async{
+    setState(() {
+      showspiner = true;
+    });
     final verificationCode = _verificationCodeController.text.trim();
-    widget.didProvideVerificationCode(verificationCode);
+    await widget.didProvideVerificationCode(verificationCode, context);
     AnalyticsService.log(VerificationEvent());
+    setState(() {
+      showspiner = false;
+    });
   }
 }

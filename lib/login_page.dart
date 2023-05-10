@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback shouldShowSignUp;
+  final VoidCallback shouldShowstart;
   final Future<void> Function(LoginCredentials value, BuildContext context)
       didProvideCredentials;
 
@@ -17,7 +18,8 @@ class LoginPage extends StatefulWidget {
   LoginPage(
       {Key? key,
       required this.didProvideCredentials,
-      required this.shouldShowSignUp})
+      required this.shouldShowSignUp,
+      required this.shouldShowstart})
       : super(key: key);
 
   @override
@@ -28,14 +30,15 @@ class _LoginPageState extends State<LoginPage> {
   // 1
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   bool showSpinner = false; //로그인 or signup시 대기시간동안 스핀이 돌도록....
-
 
   @override
   void initState() {
     super.initState();
     Get.deleteAll();
   }
+
   @override
   Widget build(BuildContext context) {
     // 2
@@ -47,74 +50,87 @@ class _LoginPageState extends State<LoginPage> {
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: Stack(children: [
-            Positioned(
-              child: Container(
-                height: MediaQuery.of(context).size.height/3,
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 130,
-                        height: 130,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('image/frame.png'),
-                        ),
-                      ),
-                    ]),
-              ),
-              top: 0,
-              right: 0,
-              left: 0,
-            ),
-            // Login Form
-            Positioned(
-              top: MediaQuery.of(context).size.height/3,
-              //MediaQuery.of(context).size.height-433.5,
-              // 249.93,
-              child: Container(
-                  color: Colors.black87,
-                  padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  height: MediaQuery.of(context).size.height/2,
-                  width: MediaQuery.of(context).size.width,
-                  child: _loginForm()),
-            ),
-
-            // 6
-            // Sign Up Button
-            Positioned(
-              left: 0,
-              right: 0,
-              top: MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2,
-              child: Container(
-                padding: EdgeInsets.only(bottom: 50),
-                  height:  MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2),
-                  color: Colors.black87,
-                  alignment: Alignment.center,
+          child: SafeArea(
+            child: Stack(children: [
+              Positioned(
+                child: Container(
+                  height: MediaQuery.of(context).size.height / 3,
+                  decoration: BoxDecoration(
+                    color: Colors.black87,
+                  ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton.icon(
-                        onPressed: widget.shouldShowSignUp,
-                        label: Text(
-                          'Don\'t have an account? Sign up.',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                                onPressed: widget.shouldShowstart,
+                                icon: Icon(Icons.arrow_back,color: Colors.white,)),
+                          ],
                         ),
-                        style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            minimumSize: Size(155, 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            backgroundColor: Colors.indigo),
-                        icon: Icon(Icons.arrow_forward),
-                      ),
-                    ],
-                  )),
-            )
-          ]),
+                        Container(
+                          width: 130,
+                          height: 130,
+                          child: CircleAvatar(
+                            backgroundImage: AssetImage('image/frame.png'),
+                          ),
+                        ),
+                      ]),
+                ),
+                top: 0,
+                right: 0,
+                left: 0,
+              ),
+              // Login Form
+              Positioned(
+                top: MediaQuery.of(context).size.height / 3,
+                //MediaQuery.of(context).size.height-433.5,
+                // 249.93,
+                child: Container(
+                    color: Colors.black87,
+                    padding: EdgeInsets.symmetric(horizontal: 40.0),
+                    height: MediaQuery.of(context).size.height / 2,
+                    width: MediaQuery.of(context).size.width,
+                    child: _loginForm()),
+              ),
+
+              // 6
+              // Sign Up Button
+              Positioned(
+                left: 0,
+                right: 0,
+                top: MediaQuery.of(context).size.height / 3 +
+                    MediaQuery.of(context).size.height / 2,
+                child: Container(
+                    padding: EdgeInsets.only(bottom: 50),
+                    height: MediaQuery.of(context).size.height -
+                        (MediaQuery.of(context).size.height / 3 +
+                            MediaQuery.of(context).size.height / 2),
+                    color: Colors.black87,
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton.icon(
+                          onPressed: widget.shouldShowSignUp,
+                          label: Text(
+                            'Don\'t have an account? Sign up.',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              minimumSize: Size(155, 40),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              backgroundColor: Colors.indigo),
+                          icon: Icon(Icons.arrow_forward),
+                        ),
+                      ],
+                    )),
+              )
+            ]),
+          ),
         ),
       ),
     );
@@ -122,82 +138,95 @@ class _LoginPageState extends State<LoginPage> {
 
   // 5
   Widget _loginForm() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Username TextField
-        TextField(
-          style: const TextStyle(color: Colors.white),
-          controller: _usernameController,
-          decoration: const InputDecoration(
-              icon: Icon(
-                Icons.mail,
-                color: Colors.white,
-              ),
-              labelText: 'Username',
-              labelStyle: const TextStyle(color: Colors.white),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 2))),
-        ),
-
-        // Password TextField
-        TextField(
-          style: const TextStyle(color: Colors.white),
-          controller: _passwordController,
-          decoration:const InputDecoration(
-            icon: Icon(
-              Icons.lock_open,
-              color: Colors.white,
-            ),
-            labelText: 'Password',
-            labelStyle: const TextStyle(color: Colors.white),
-            enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white,width: 2)
-            )
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Username TextField
+          TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '이메일을 입력해주세요';
+              }
+              return null;
+            },
+            style: const TextStyle(color: Colors.white),
+            controller: _usernameController,
+            decoration: const InputDecoration(
+                icon: Icon(
+                  Icons.mail,
+                  color: Colors.white,
+                ),
+                labelText: 'Username',
+                labelStyle: const TextStyle(color: Colors.white),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2))),
           ),
-          obscureText: true,
-          keyboardType: TextInputType.visiblePassword,
-        ),
-        SizedBox(
-          height: 50,
-        ),
 
-        // Login Button
-        Center(
-          child: Container(
-            padding: EdgeInsets.all(15),
-            height: 90,
-            width: 90,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(50)),
-            child: GestureDetector(
-              onTap: _login,
-              child: Container(
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Colors.deepPurple, Colors.indigo],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight),
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          spreadRadius: 1,
-                          blurRadius: 1,
-                          offset: Offset(0, 1))
-                    ]),
-                child: Center(
-                  child: Text(
-                    'login',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+          // Password TextField
+          TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return '비밀번호를 입력해주세요';
+              }
+              return null;
+            },
+            style: const TextStyle(color: Colors.white),
+            controller: _passwordController,
+            decoration: const InputDecoration(
+                icon: Icon(
+                  Icons.lock_open,
+                  color: Colors.white,
+                ),
+                labelText: 'Password',
+                labelStyle: const TextStyle(color: Colors.white),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.white, width: 2))),
+            obscureText: true,
+            keyboardType: TextInputType.visiblePassword,
+          ),
+          SizedBox(
+            height: 50,
+          ),
+
+          // Login Button
+          Center(
+            child: Container(
+              padding: EdgeInsets.all(15),
+              height: 90,
+              width: 90,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(50)),
+              child: GestureDetector(
+                onTap: _login,
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Colors.deepPurple, Colors.indigo],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: Offset(0, 1))
+                      ]),
+                  child: Center(
+                    child: Text(
+                      'login',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
@@ -206,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       showSpinner = true;
     });
-
+    _formKey.currentState!.validate();
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 

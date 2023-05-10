@@ -6,18 +6,18 @@ import 'package:aws_frame_account/storage/storage_service.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-class CameraFlow extends StatefulWidget {
+class LoginSession extends StatefulWidget {
   // 1 CameraFlow는 사용자가 로그아웃할 때 상태 변경을 트리거하고 main.dart에서 상태를
   // 다시 업데이트해야 합니다. GalleryPage를 생성하고 나서 잠시 후 이 기능을 구현하겠습니다.
   final VoidCallback shouldLogOut;
 
-  CameraFlow({Key? key, required this.shouldLogOut}) : super(key: key);
+  LoginSession({Key? key, required this.shouldLogOut}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _CameraFlowState();
+  State<StatefulWidget> createState() => _LoginSessionState();
 }
 
-class _CameraFlowState extends State<CameraFlow> {
+class _LoginSessionState extends State<LoginSession> {
   late CameraDescription _camera;
 
   // 2 이 플래그는 카메라가 표시되어야 하는지 여부를 결정하는 상태 역할을 합니다.
@@ -40,15 +40,16 @@ class _CameraFlowState extends State<CameraFlow> {
           child: HomePage(
             pickedimageurl: pickedimageurl,
         didtogglegallery: () =>_toggleGalleryOpen(true),
-        didtogglegraph: () {_toggleGraphOpen(true);},
+        // didtogglegraph: () {_toggleGraphOpen(true);},
+              shouldLogOut: widget.shouldLogOut
       )),
       // Show Gallery Page
 
-      if(_graphpage)
-        MaterialPage(
-            child: GraphPage(didtogglegraph: (){_toggleGraphOpen(false);},
-
-            )),
+      // if(_graphpage)
+      //   MaterialPage(
+      //       child: GraphPage(didtogglegraph: (){_toggleGraphOpen(false);},
+      //
+      //       )),
 
       if (_gallerypage)
         MaterialPage(

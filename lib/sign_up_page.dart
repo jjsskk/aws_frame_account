@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:aws_frame_account/analytics/analytics_events.dart';
 import 'package:aws_frame_account/analytics/analytics_service.dart';
 import 'package:aws_frame_account/auth_credentials.dart';
@@ -7,6 +9,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback shouldShowLogin;
+  final VoidCallback shouldShowstart;
 
   // final ValueChanged<SignUpCredentials> didProvideCredentials;
   final Future<void> Function(SignUpCredentials value, BuildContext context)
@@ -17,18 +20,21 @@ class SignUpPage extends StatefulWidget {
   SignUpPage(
       {Key? key,
       required this.didProvideCredentials,
-      required this.shouldShowLogin})
+      required this.shouldShowLogin,
+      required this.shouldShowstart})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _SignUpPageState();
 }
-
+enum SingingCharacter { agree, disagree }
 class _SignUpPageState extends State<SignUpPage> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool showspiner = false;
+  final _formKey = GlobalKey<FormState>();
+  SingingCharacter? _radio = null;
 
   @override
   Widget build(BuildContext context) {
@@ -39,16 +45,27 @@ class _SignUpPageState extends State<SignUpPage> {
           onTap: () {
             FocusScope.of(context).unfocus();
           },
-          child: Stack(children: [
-            Positioned(
-              child: Container(
-                height: MediaQuery.of(context).size.height/3,
+          child: SafeArea(
+            child: ListView(children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
                 decoration: BoxDecoration(
                   color: Colors.black87,
                 ),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                              onPressed: widget.shouldShowstart,
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              )),
+                        ],
+                      ),
                       Container(
                         width: 130,
                         height: 130,
@@ -58,28 +75,74 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ]),
               ),
-              top: 0,
-              right: 0,
-              left: 0,
-            ),
-            // Sign Up Form
-            Positioned(
-                top: MediaQuery.of(context).size.height/3,
-              child: Container(
+              Container(
+                color: Colors.black87,
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 4),
+                  child: Column(
+                    children: [
+                      ListView(
+                        shrinkWrap: true,
+                        children: [
+                          Text(
+                            '본인은 행정기관이 보유하고 있는 부동산 전산자료를 한국수출보험공사에게 제공'
+                            " 하는데 대하여 아래와 같이 동의합니다.\n"
+                            "-  아      래  -\n"
+                            "1. 	사용목적 : 구상권 및 소구권의 행사\n"
+                            " 2. 	자료제공의 범위 : 소유 부동산 현황 (전국)\n"
+                            "3. 	동의서의 유효기간 :\n"
+                            "- 수출신용보증의 구상채무 소멸시까지\n"
+                            "- 수출어음보험의 소구채무 소멸시까지\n"
+                            "- 수출보증보험의 구상채무 소멸시까지\n",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text('동의',style: TextStyle(color: Colors.white),),
+                          Radio<SingingCharacter>(
+                            activeColor: Colors.white,
+                            value: SingingCharacter.agree,
+                            groupValue: _radio,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _radio = value;
+                              });
+                            },
+                          ),
+                          Text('비동의',style: TextStyle(color: Colors.white),),
+                          Radio<SingingCharacter>(
+                            activeColor: Colors.white,
+                            value: SingingCharacter.disagree,
+                            groupValue: _radio,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _radio = value;
+                              });
+                            },
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              // Username TextField
+              // Sign Up Form
+              Container(
                   color: Colors.black87,
                   padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  height: MediaQuery.of(context).size.height/2,
+                  height: MediaQuery.of(context).size.height / 2,
                   width: MediaQuery.of(context).size.width,
                   child: _signUpForm()),
-            ),
 
-            // Login Button
-            Positioned(
-              left: 0,
-              right: 0,
-              top: MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2,
-              child: Container(
-                height:  MediaQuery.of(context).size.height-(MediaQuery.of(context).size.height/3+MediaQuery.of(context).size.height/2),
+              // Login Button
+              Container(
+                height: MediaQuery.of(context).size.height -
+                    (MediaQuery.of(context).size.height / 3 +
+                        MediaQuery.of(context).size.height / 2),
                 color: Colors.black87,
                 alignment: Alignment.center,
                 child: TextButton.icon(
@@ -97,9 +160,9 @@ class _SignUpPageState extends State<SignUpPage> {
                       backgroundColor: Colors.indigo),
                   icon: Icon(Icons.arrow_forward),
                 ),
-              ),
-            )
-          ]),
+              )
+            ]),
+          ),
         ),
       ),
     );
@@ -107,103 +170,135 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Widget _signUpForm() {
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Username TextField
-          TextField(
-            style: const TextStyle(color: Colors.white),
-            controller: _usernameController,
-            decoration: const InputDecoration(
-                icon: Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                labelText: 'Username',
-                labelStyle: const TextStyle(color: Colors.white),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2))),
-          ),
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '이름을 입력해주세요';
+                }
+                return null;
+              },
+              style: const TextStyle(color: Colors.white),
+              controller: _usernameController,
+              decoration: const InputDecoration(
+                  icon: Icon(
+                    Icons.person,
+                    color: Colors.white,
+                  ),
+                  labelText: 'Username',
+                  labelStyle: const TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2))),
+            ),
 
-          // Email TextField
-          TextField(
-            style: const TextStyle(color: Colors.white),
-            controller: _emailController,
-            decoration: InputDecoration(
-                icon: Icon(Icons.mail, color: Colors.white),
-                labelText: 'Email',
-                labelStyle: const TextStyle(color: Colors.white),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2))),
-          ),
+            // Email TextField
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '이메일을 입력해주세요';
+                }
+                return null;
+              },
+              style: const TextStyle(color: Colors.white),
+              controller: _emailController,
+              decoration: InputDecoration(
+                  icon: Icon(Icons.mail, color: Colors.white),
+                  labelText: 'Email',
+                  labelStyle: const TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2))),
+            ),
 
-          // Password TextField
-          TextField(
-            style: const TextStyle(color: Colors.white),
-            controller: _passwordController,
-            decoration: InputDecoration(
-                icon: Icon(
-                  Icons.lock_open,
-                  color: Colors.white,
-                ),
-                labelText: 'Password',
-                labelStyle: const TextStyle(color: Colors.white),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2))),
-            obscureText: true,
-            keyboardType: TextInputType.visiblePassword,
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          // Sign Up Button
-          Center(
-            child: Container(
-              padding: EdgeInsets.all(15),
-              height: 90,
-              width: 90,
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(50)),
-              child: GestureDetector(
-                onTap: _signUp,
-                child: Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Colors.deepPurple, Colors.indigo],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight),
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: Offset(0, 1))
-                      ]),
-                  child: Center(
-                    child: Text(
-                      'signup',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+            // Password TextField
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '비밀번호을 입력해주세요';
+                }
+                return null;
+              },
+              style: const TextStyle(color: Colors.white),
+              controller: _passwordController,
+              decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.lock_open,
+                    color: Colors.white,
+                  ),
+                  labelText: 'Password',
+                  labelStyle: const TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2))),
+              obscureText: true,
+              keyboardType: TextInputType.visiblePassword,
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            // Sign Up Button
+            Center(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                height: 90,
+                width: 90,
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(50)),
+                child: GestureDetector(
+                  onTap: _signUp,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [Colors.deepPurple, Colors.indigo],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight),
+                        borderRadius: BorderRadius.circular(30),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.black.withOpacity(0.3),
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                              offset: Offset(0, 1))
+                        ]),
+                    child: Center(
+                      child: Text(
+                        'signup',
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
 
   void _signUp() async {
+    if(_radio != SingingCharacter.agree)
+      {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            '개인정보 동의를 눌러주세요',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.indigoAccent,
+        ));
+      return;
+      }
     setState(() {
       showspiner = true;
     });
     final username = _usernameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
-
+    _formKey.currentState!.validate();
     print('username: $username');
     print('email: $email');
     print('password: $password');
@@ -215,4 +310,19 @@ class _SignUpPageState extends State<SignUpPage> {
       showspiner = false;
     });
   }
+}
+
+class Paragraph extends StatelessWidget {
+  const Paragraph(this.content, {super.key});
+
+  final String content;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Text(
+          content,
+          style: const TextStyle(fontSize: 18),
+        ),
+      );
 }

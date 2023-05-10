@@ -45,6 +45,7 @@ class _LinechartState extends State<Linechart> {
   }
 
   bool showChart2 = false;
+
   // List<List<dynamic>> _data = []; //use for csv file in local device
 
   // Future<void> _loadCSVaws() async {
@@ -128,55 +129,21 @@ class _LinechartState extends State<Linechart> {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              for (var item in widget.csvlist)
-                Row(
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          setState(() {
-                            controller = Get.find<GraphController>(tag: item);
-                            showChart2 = false;
-                          });
-                          print(item);
-                        },
-                        child: Text(item)),
-                  ],
-                ),
-              // SizedBox(
-              //   width: 10,
-              // ),
-              // TextButton(onPressed: (){}, child: Text('graph2')),
-              // SizedBox(
-              //   width: 10,
-              // ),
-              // TextButton(onPressed: (){}, child: Text('graph3')),
-              SizedBox(
-                height: 10,
-              )
-            ],
+          SizedBox(
+            height: 10,
           ),
-          DropdownButton(value: _selectedCsv,
-              items: widget.csvlist.map((e) =>
-                  DropdownMenuItem(value: e,
-                      child: Text(e))).toList(),
-              onChanged: (value){
+          DropdownButton(
+              value: _selectedCsv,
+              items: widget.csvlist
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                  .toList(),
+              onChanged: (value) {
                 setState(() {
-                  _selectedCsv=value!;
+                  _selectedCsv = value!;
                   controller = Get.find<GraphController>(tag: value);
                   showChart2 = false;
-
                 });
               }),
-
           SizedBox(
             height: 20,
           ),
@@ -187,9 +154,7 @@ class _LinechartState extends State<Linechart> {
               'green : attention\npurple : meditation',
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () {
-
-            },
+            onPressed: () {},
           ),
           Stack(
             children: [
@@ -207,8 +172,8 @@ class _LinechartState extends State<Linechart> {
                       return controller.showspinner.value
                           ? Center(child: CircularProgressIndicator())
                           : LineChart(
-                        showChart2 ? mainChart2() : mainChart(),
-                      );
+                              showChart2 ? mainChart2() : mainChart(),
+                            );
                     }),
                   ),
                 ),
