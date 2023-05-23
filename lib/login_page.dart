@@ -28,7 +28,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // 1
-  final _usernameController = TextEditingController();
+  final _EmailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool showSpinner = false; //로그인 or signup시 대기시간동안 스핀이 돌도록....
@@ -51,84 +51,68 @@ class _LoginPageState extends State<LoginPage> {
             FocusScope.of(context).unfocus();
           },
           child: SafeArea(
-            child: Stack(children: [
-              Positioned(
-                child: Container(
-                  height: MediaQuery.of(context).size.height / 3,
-                  decoration: BoxDecoration(
-                    color: Colors.black87,
-                  ),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            IconButton(
-                                onPressed: widget.shouldShowstart,
-                                icon: Icon(Icons.arrow_back,color: Colors.white,)),
-                          ],
-                        ),
-                        Container(
-                          width: 130,
-                          height: 130,
-                          child: CircleAvatar(
-                            backgroundImage: AssetImage('image/frame.png'),
-                          ),
-                        ),
-                      ]),
+            child: ListView(children: [
+              Container(
+                height: MediaQuery.of(context).size.height / 3,
+                decoration: BoxDecoration(
+                  color: Colors.black87,
                 ),
-                top: 0,
-                right: 0,
-                left: 0,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                              onPressed: widget.shouldShowstart,
+                              icon: Icon(Icons.arrow_back,color: Colors.white,)),
+                        ],
+                      ),
+                      Container(
+                        width: 130,
+                        height: 130,
+                        child: CircleAvatar(
+                          backgroundImage: AssetImage('image/frame.png'),
+                        ),
+                      ),
+                    ]),
               ),
               // Login Form
-              Positioned(
-                top: MediaQuery.of(context).size.height / 3,
-                //MediaQuery.of(context).size.height-433.5,
-                // 249.93,
-                child: Container(
-                    color: Colors.black87,
-                    padding: EdgeInsets.symmetric(horizontal: 40.0),
-                    height: MediaQuery.of(context).size.height / 2,
-                    width: MediaQuery.of(context).size.width,
-                    child: _loginForm()),
-              ),
+              Container(
+                  color: Colors.black87,
+                  padding: EdgeInsets.symmetric(horizontal: 40.0),
+                  height: MediaQuery.of(context).size.height / 2,
+                  width: MediaQuery.of(context).size.width,
+                  child: _loginForm()),
 
               // 6
               // Sign Up Button
-              Positioned(
-                left: 0,
-                right: 0,
-                top: MediaQuery.of(context).size.height / 3 +
-                    MediaQuery.of(context).size.height / 2,
-                child: Container(
-                    padding: EdgeInsets.only(bottom: 50),
-                    height: MediaQuery.of(context).size.height -
-                        (MediaQuery.of(context).size.height / 3 +
-                            MediaQuery.of(context).size.height / 2),
-                    color: Colors.black87,
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton.icon(
-                          onPressed: widget.shouldShowSignUp,
-                          label: Text(
-                            'Don\'t have an account? Sign up.',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          style: TextButton.styleFrom(
-                              primary: Colors.white,
-                              minimumSize: Size(155, 40),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              backgroundColor: Colors.indigo),
-                          icon: Icon(Icons.arrow_forward),
+              Container(
+                  padding: EdgeInsets.only(bottom: 50),
+                  height: MediaQuery.of(context).size.height -
+                      (MediaQuery.of(context).size.height / 3 +
+                          MediaQuery.of(context).size.height / 2),
+                  color: Colors.black87,
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton.icon(
+                        onPressed: widget.shouldShowSignUp,
+                        label: Text(
+                          'Don\'t have an account? Sign up.',
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ],
-                    )),
-              )
+                        style: TextButton.styleFrom(
+                            primary: Colors.white,
+                            minimumSize: Size(155, 40),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            backgroundColor: Colors.indigo),
+                        icon: Icon(Icons.arrow_forward),
+                      ),
+                    ],
+                  ))
             ]),
           ),
         ),
@@ -152,13 +136,13 @@ class _LoginPageState extends State<LoginPage> {
               return null;
             },
             style: const TextStyle(color: Colors.white),
-            controller: _usernameController,
+            controller: _EmailController,
             decoration: const InputDecoration(
                 icon: Icon(
                   Icons.mail,
                   color: Colors.white,
                 ),
-                labelText: 'Username',
+                labelText: 'Email',
                 labelStyle: const TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white, width: 2))),
@@ -236,15 +220,15 @@ class _LoginPageState extends State<LoginPage> {
       showSpinner = true;
     });
     _formKey.currentState!.validate();
-    final username = _usernameController.text.trim();
+    final Email = _EmailController.text.trim();
     final password = _passwordController.text.trim();
 
-    print('username: $username');
+    print('username: $Email');
     print('password: $password');
     final credentials =
-        LoginCredentials(username: username, password: password);
+        LoginCredentials(username: Email, password: password);
     await widget.didProvideCredentials(credentials, context);
-    AnalyticsService.log(LoginEvent());
+    // AnalyticsService.log(LoginEvent());
 
     setState(() {
       showSpinner = false;

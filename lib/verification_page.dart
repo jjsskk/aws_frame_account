@@ -74,7 +74,7 @@ class _VerificationPageState extends State<VerificationPage> {
     });
     final verificationCode = _verificationCodeController.text.trim();
     await widget.didProvideVerificationCode(verificationCode, context);
-    AnalyticsService.log(VerificationEvent());
+    // AnalyticsService.log(VerificationEvent());
     setState(() {
       showspiner = false;
     });

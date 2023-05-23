@@ -1,10 +1,5 @@
 {
-  "analytics": {
-    "awsamplify": {
-      "providerPlugin": "awscloudformation",
-      "service": "Pinpoint"
-    }
-  },
+  "analytics": {},
   "auth": {
     "awsamplify": {
       "customAuth": false,

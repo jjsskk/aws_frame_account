@@ -215,15 +215,20 @@ class _SignUpPageState extends State<SignUpPage> {
 
             // Password TextField
             TextFormField(
+
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return '비밀번호을 입력해주세요';
                 }
+                RegExp passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*\d)[a-z\d]{8,}$');
+                if (!passwordRegex.hasMatch(value!))
+                  return '반드시 소문자와 숫자를 포함해서 최소 8글자 이상 입력해주세요';
                 return null;
               },
               style: const TextStyle(color: Colors.white),
               controller: _passwordController,
               decoration: InputDecoration(
+                errorMaxLines: 2,
                   icon: Icon(
                     Icons.lock_open,
                     color: Colors.white,
@@ -292,7 +297,9 @@ class _SignUpPageState extends State<SignUpPage> {
         ));
       return;
       }
-    setState(() {
+    if (!_formKey.currentState!.validate())
+      return;
+      setState(() {
       showspiner = true;
     });
     final username = _usernameController.text.trim();
@@ -303,9 +310,9 @@ class _SignUpPageState extends State<SignUpPage> {
     print('email: $email');
     print('password: $password');
     final credentials =
-        SignUpCredentials(username: username, email: email, password: password);
+        SignUpCredentials(username: email, email: username, password: password); // username is recognized as user's email by amplify api
     await widget.didProvideCredentials(credentials, context);
-    AnalyticsService.log(SignUpEvent());
+    // AnalyticsService.log(SignUpEvent());
     setState(() {
       showspiner = false;
     });

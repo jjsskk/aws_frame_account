@@ -88,7 +88,9 @@ class AuthService {
           //Amplify class는 static singleton
           username: credentials.username,
           password: credentials.password,
-          options: CognitoSignUpOptions(userAttributes: userAttributes));
+          //options: CognitoSignUpOptions(userAttributes: userAttributes)
+      );
+
 
       // 4
       // if (result.isSignUpComplete) {
@@ -107,7 +109,7 @@ class AuthService {
       print('Failed to sign up - ${authError.recoverySuggestion}');
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'please enter correct email and password',
+          '유효한 이메일을 입력해주세요',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.indigoAccent,

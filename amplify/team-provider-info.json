@@ -24,8 +24,7 @@
         "s3abed2243": {}
       },
       "analytics": {
-        "flutterapp": {},
-        "awsamplify": {}
+        "flutterapp": {}
       }
     }
   }
