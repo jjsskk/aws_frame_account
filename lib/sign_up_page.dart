@@ -27,7 +27,9 @@ class SignUpPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SignUpPageState();
 }
+
 enum SingingCharacter { agree, disagree }
+
 class _SignUpPageState extends State<SignUpPage> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
@@ -101,7 +103,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                       Row(
                         children: [
-                          Text('동의',style: TextStyle(color: Colors.white),),
+                          Text(
+                            '동의',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           Radio<SingingCharacter>(
                             activeColor: Colors.white,
                             value: SingingCharacter.agree,
@@ -112,7 +117,10 @@ class _SignUpPageState extends State<SignUpPage> {
                               });
                             },
                           ),
-                          Text('비동의',style: TextStyle(color: Colors.white),),
+                          Text(
+                            '비동의',
+                            style: TextStyle(color: Colors.white),
+                          ),
                           Radio<SingingCharacter>(
                             activeColor: Colors.white,
                             value: SingingCharacter.disagree,
@@ -201,6 +209,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 if (value == null || value.isEmpty) {
                   return '이메일을 입력해주세요';
                 }
+                RegExp emailRegex = RegExp(r'@');
+                if (!emailRegex.hasMatch(value!)) return '올바른 이메일 형식을 입력해주세요';
                 return null;
               },
               style: const TextStyle(color: Colors.white),
@@ -215,12 +225,12 @@ class _SignUpPageState extends State<SignUpPage> {
 
             // Password TextField
             TextFormField(
-
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return '비밀번호을 입력해주세요';
                 }
-                RegExp passwordRegex = RegExp(r'^(?=.*[a-z])(?=.*\d)[a-z\d]{8,}$');
+                RegExp passwordRegex =
+                    RegExp(r'^(?=.*[a-z])(?=.*\d)[a-z\d]{8,}$');
                 if (!passwordRegex.hasMatch(value!))
                   return '반드시 소문자와 숫자를 포함해서 최소 8글자 이상 입력해주세요';
                 return null;
@@ -228,7 +238,7 @@ class _SignUpPageState extends State<SignUpPage> {
               style: const TextStyle(color: Colors.white),
               controller: _passwordController,
               decoration: InputDecoration(
-                errorMaxLines: 2,
+                  errorMaxLines: 2,
                   icon: Icon(
                     Icons.lock_open,
                     color: Colors.white,
@@ -286,20 +296,18 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _signUp() async {
-    if(_radio != SingingCharacter.agree)
-      {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-            '개인정보 동의를 눌러주세요',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: Colors.indigoAccent,
-        ));
+    if (_radio != SingingCharacter.agree) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '개인정보 동의를 눌러주세요',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.indigoAccent,
+      ));
       return;
-      }
-    if (!_formKey.currentState!.validate())
-      return;
-      setState(() {
+    }
+    if (!_formKey.currentState!.validate()) return;
+    setState(() {
       showspiner = true;
     });
     final username = _usernameController.text.trim();
@@ -309,8 +317,11 @@ class _SignUpPageState extends State<SignUpPage> {
     print('username: $username');
     print('email: $email');
     print('password: $password');
-    final credentials =
-        SignUpCredentials(username: email, email: username, password: password); // username is recognized as user's email by amplify api
+    final credentials = SignUpCredentials(
+        username: email,
+        email: username,
+        password:
+            password); // username is recognized as user's email by amplify api
     await widget.didProvideCredentials(credentials, context);
     // AnalyticsService.log(SignUpEvent());
     setState(() {
