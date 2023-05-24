@@ -3,7 +3,7 @@
   "cognitoConfig": {
     "identityPoolName": "testAuthIdentityPool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "awsamp6f1384fb",
+    "resourceNameTruncated": "awsamp442e6d14",
     "userPoolName": "awsamplify",
     "autoVerifiedAttributes": [
       "email"
@@ -22,21 +22,23 @@
       "Requires Lowercase",
       "Requires Numbers"
     ],
-    "requiredAttributes": [],
+    "requiredAttributes": [
+      "phone_number",
+      "name"
+    ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
     "userpoolClientRefreshTokenValidity": 30,
     "userpoolClientWriteAttributes": [],
     "userpoolClientReadAttributes": [],
-    "userpoolClientLambdaRole": "awsamp6f1384fb_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "awsamp442e6d14_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "6f1384fb",
+    "sharedId": "442e6d14",
     "resourceName": "awsamplify",
     "authSelections": "identityPoolAndUserPool",
     "serviceName": "Cognito",
     "usernameAttributes": [
-      "email",
-      "phone_number"
+      "email"
     ],
     "useDefault": "manual",
     "userPoolGroups": false,

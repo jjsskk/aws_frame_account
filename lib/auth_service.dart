@@ -80,15 +80,16 @@ class AuthService {
       //1
       // 2
       final userAttributes = {
-        CognitoUserAttributeKey.email: credentials.email,
+        CognitoUserAttributeKey.name: credentials.name,
+        CognitoUserAttributeKey.phoneNumber: credentials.phonenumber,
       }; // aws 가이드 라인이랑 틀림 (인증추가 기능구현)
 
       // 3
       final result = await Amplify.Auth.signUp(
           //Amplify class는 static singleton
-          username: credentials.username,
+          username: credentials.username, // email
           password: credentials.password,
-          //options: CognitoSignUpOptions(userAttributes: userAttributes)
+          options: CognitoSignUpOptions(userAttributes: userAttributes)
       );
 
 

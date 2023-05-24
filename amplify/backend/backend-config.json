@@ -16,7 +16,10 @@
           ],
           "passwordPolicyMinLength": 8
         },
-        "signupAttributes": [],
+        "signupAttributes": [
+          "PHONE_NUMBER",
+          "NAME"
+        ],
         "socialProviders": [],
         "usernameAttributes": [
           "EMAIL"

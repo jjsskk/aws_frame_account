@@ -34,6 +34,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final _usernameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _phonenumberController = TextEditingController();
+  final _userphonenumberController = TextEditingController();
   bool showspiner = false;
   final _formKey = GlobalKey<FormState>();
   SingingCharacter? _radio = null;
@@ -216,6 +218,8 @@ class _SignUpPageState extends State<SignUpPage> {
               style: const TextStyle(color: Colors.white),
               controller: _emailController,
               decoration: InputDecoration(
+                hintStyle: TextStyle(color: Colors.white),
+                hintText: 'ex: FRAME@naver.com',
                   icon: Icon(Icons.mail, color: Colors.white),
                   labelText: 'Email',
                   labelStyle: const TextStyle(color: Colors.white),
@@ -249,6 +253,46 @@ class _SignUpPageState extends State<SignUpPage> {
                       borderSide: BorderSide(color: Colors.white, width: 2))),
               obscureText: true,
               keyboardType: TextInputType.visiblePassword,
+            ),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '전화번호를 입력해주세요';
+                }
+                RegExp numberRegex = RegExp(r'^[0-9]+$');;
+                if (!numberRegex.hasMatch(value!)) return '숫자만 입력해주세요';
+                return null;
+              },
+              style: const TextStyle(color: Colors.white),
+              controller: _phonenumberController,
+              decoration: InputDecoration(
+                hintStyle: TextStyle(color:Colors.white),
+                hintText: 'ex: 01012345678',
+                  icon: Icon(Icons.phone, color: Colors.white),
+                  labelText: 'phone number',
+                  labelStyle: const TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2))),
+            ),
+            TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return '이용인번호를 입력해주세요';
+                }
+                RegExp numberRegex = RegExp(r'^[0-9]+$');;
+                if (!numberRegex.hasMatch(value!)) return '숫자만 입력해주세요';
+                return null;
+              },
+              style: const TextStyle(color: Colors.white),
+              controller: _userphonenumberController,
+              decoration: InputDecoration(
+                  hintStyle: TextStyle(color:Colors.white),
+                  hintText: 'ex: 01012345678',
+                  icon: Icon(Icons.phone, color: Colors.white),
+                  labelText: 'user phone number',
+                  labelStyle: const TextStyle(color: Colors.white),
+                  enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white, width: 2))),
             ),
             SizedBox(
               height: 50,
@@ -313,15 +357,18 @@ class _SignUpPageState extends State<SignUpPage> {
     final username = _usernameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
+    String tem='+';
+    final phonenumber = tem + _phonenumberController.text.trim();
     _formKey.currentState!.validate();
     print('username: $username');
     print('email: $email');
     print('password: $password');
     final credentials = SignUpCredentials(
         username: email,
-        email: username,
-        password:
-            password); // username is recognized as user's email by amplify api
+        name: username,
+        password: password,
+        phonenumber:
+            phonenumber); // username is recognized as user's email by amplify api
     await widget.didProvideCredentials(credentials, context);
     // AnalyticsService.log(SignUpEvent());
     setState(() {

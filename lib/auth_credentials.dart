@@ -14,8 +14,13 @@ class LoginCredentials extends AuthCredentials {
 
 // 3
 class SignUpCredentials extends AuthCredentials {
-  final String email;
+  final String phonenumber;
+  final String name;
 
-  SignUpCredentials({required String username, required String password, required this.email})
+  SignUpCredentials(
+      {required String username, //email
+      required String password,
+      required this.name,
+      required this.phonenumber})
       : super(username: username, password: password);
 }
