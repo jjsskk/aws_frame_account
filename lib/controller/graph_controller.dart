@@ -34,6 +34,7 @@ class GraphController extends GetxController{
     final file = File(filepath);
     print('file path : '+filepath);
 
+
     // final listOptions =
     // S3ListOptions(accessLevel: StorageAccessLevel.private);
     final downloadOptions = S3DownloadFileOptions(

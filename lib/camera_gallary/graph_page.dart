@@ -22,7 +22,7 @@ class _GraphPageState extends State<GraphPage> {
   List<String> csvlist = [];
 
   // late String csvname;
-  late var file_exist ;
+  late var file_exist;
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +52,9 @@ class _GraphPageState extends State<GraphPage> {
   void initState() {
     super.initState();
     // downloadFile();
-    file_exist=true;
+    file_exist = true;
     configure();
-  }//jkj
+  } //jkj
 
   void configure() async {
     final listOptions =
@@ -63,7 +63,9 @@ class _GraphPageState extends State<GraphPage> {
     final result = await Amplify.Storage.list(options: listOptions);
     // print("result : ${result.items.length}");
     if (result.items.length != 0) {
+      //folder length
       for (var item in result.items) {
+        // file in folder
         if (item.key != '') {
           // print('list : ${item.key}');
           Get.put(GraphController(csvname: item.key), tag: item.key);
@@ -73,9 +75,14 @@ class _GraphPageState extends State<GraphPage> {
         }
       }
       // csvname =csvlist.first;
-      setState(() {
-        file_exist = true;
-      });
+      if (csvlist.isNotEmpty)
+        setState(() {
+          file_exist = true;
+        });
+      else
+        setState(() {
+          file_exist = false;
+        });
     } else {
       setState(() {
         file_exist = false;

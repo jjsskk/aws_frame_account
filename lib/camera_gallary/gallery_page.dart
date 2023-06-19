@@ -194,9 +194,16 @@ class _GalleryPageState extends State<GalleryPage> {
         // 1
         stream: widget.imageUrlsController.stream,
         builder: (context, snapshot) {
-          // 2
-          if (snapshot.hasData) {
-            // 3
+
+          if (snapshot.hasError) {
+            return const Text('Something went wrong');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
             if (snapshot.data!.length != 0) {
               return GridView.builder(
                   padding: EdgeInsets.all(10),
@@ -228,10 +235,7 @@ class _GalleryPageState extends State<GalleryPage> {
               // 5
               return Center(child: Text('No images to display.'));
             }
-          } else {
-            // 6
-            return Center(child: CircularProgressIndicator());
-          }
+
         });
   }
 }

@@ -1,5 +1,7 @@
 
 import 'package:aws_frame_account/auth_service.dart';
+import 'package:aws_frame_account/find_password_page.dart';
+import 'package:aws_frame_account/loadingpage.dart';
 import 'package:aws_frame_account/login_session.dart';
 import 'package:aws_frame_account/login_page.dart';
 import 'package:aws_frame_account/provider_login/login_state.dart';
@@ -67,6 +69,15 @@ class _MyAppState extends State<MyApp> {
           // 2 AuthService 인스턴스의 authStateController에서 AuthState 스트림에 액세스합니다.
           stream: _authService.authStateController.stream,
           builder: (context, snapshot) {
+
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
+
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return LoadingPage();
+            }
+
             // 3스트림에 데이터가 있을 수도 있고 없을 수도 있습니다.
             // AuthState 유형의 데이터에서 authFlowStatus에 안전하게 액세스하기 위해 여기에서는 먼저 검사를 구현합니다
             if (snapshot.hasData) {
@@ -83,6 +94,7 @@ class _MyAppState extends State<MyApp> {
                           shouldShowstart: _authService.showstart,
                       didProvideCredentials: _authService.loginWithCredentials,
                       shouldShowSignUp: _authService.showSignUp,
+                          shouldShowsresetpassword: _authService.showresetpassword,
                     )),
 
                   // 5 스트림이 AuthFlowStatus.signUp을 전송하면 SignUpPage가 표시됩니다.
@@ -103,6 +115,15 @@ class _MyAppState extends State<MyApp> {
                             didProvideVerificationCode:
                                 _authService.verifyCode)),
 
+                  if (snapshot.data!.authFlowStatus ==
+                      AuthFlowStatus.resetpassward)
+                    MaterialPage(
+                        child: Find_Password_Page(
+                          shouldShowLogin: _authService.showLogin,
+                          resetPassword: _authService.resetPassword,
+                          confirmResetPassword: _authService.confirmResetPassword,
+                          )),
+
                   // Show Camera Flow
                   if (snapshot.data!.authFlowStatus == AuthFlowStatus.session)
                     MaterialPage(
@@ -112,10 +133,7 @@ class _MyAppState extends State<MyApp> {
               );
             } else {
               // 6 스트림에 데이터가 없으면 CircularProgressIndicator가 표시됩니다
-              return Container(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
-              );
+              return LoadingPage();
             }
           }),
     );
@@ -127,8 +145,8 @@ class _MyAppState extends State<MyApp> {
     // await _amplify.addPlugin(AmplifyStorageS3());
       final auth = AmplifyAuthCognito();
       final storage = AmplifyStorageS3();
-      final analytics = AmplifyAnalyticsPinpoint();
-    await _amplify.addPlugins([auth,storage,analytics]);
+      // final analytics = AmplifyAnalyticsPinpoint();
+    await _amplify.addPlugins([auth,storage]);
       await _amplify.configure(amplifyconfig);
     _authService.checkAuthStatus();
 

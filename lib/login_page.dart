@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 class LoginPage extends StatefulWidget {
   final VoidCallback shouldShowSignUp;
   final VoidCallback shouldShowstart;
+  final VoidCallback shouldShowsresetpassword;
   final Future<void> Function(LoginCredentials value, BuildContext context)
       didProvideCredentials;
 
@@ -19,7 +20,8 @@ class LoginPage extends StatefulWidget {
       {Key? key,
       required this.didProvideCredentials,
       required this.shouldShowSignUp,
-      required this.shouldShowstart})
+      required this.shouldShowstart,
+      required this.shouldShowsresetpassword})
       : super(key: key);
 
   @override
@@ -65,7 +67,10 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           IconButton(
                               onPressed: widget.shouldShowstart,
-                              icon: Icon(Icons.arrow_back,color: Colors.white,)),
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Colors.white,
+                              )),
                         ],
                       ),
                       Container(
@@ -170,8 +175,16 @@ class _LoginPageState extends State<LoginPage> {
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TextButton(onPressed: () {}, child: Text('아이디 찾기')),
+              Text(' / '),
+              TextButton(onPressed: widget.shouldShowsresetpassword, child: Text('비밀번호 찾기')),
+            ],
+          ),
           SizedBox(
-            height: 50,
+            height: 30,
           ),
 
           // Login Button
@@ -216,6 +229,7 @@ class _LoginPageState extends State<LoginPage> {
 
   // 7
   void _login() async {
+    if (!_formKey.currentState!.validate()) return;
     setState(() {
       showSpinner = true;
     });
@@ -225,8 +239,7 @@ class _LoginPageState extends State<LoginPage> {
 
     print('username: $Email');
     print('password: $password');
-    final credentials =
-        LoginCredentials(username: Email, password: password);
+    final credentials = LoginCredentials(username: Email, password: password);
     await widget.didProvideCredentials(credentials, context);
     // AnalyticsService.log(LoginEvent());
 

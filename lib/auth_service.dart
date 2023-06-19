@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // 1
-enum AuthFlowStatus { login, signUp, verification, session, start }
+enum AuthFlowStatus { login, signUp, verification, session, start, resetpassward }
 
 // 2
 class AuthState {
@@ -38,6 +38,10 @@ class AuthService {
 
   void showstart() {
     final state = AuthState(authFlowStatus: AuthFlowStatus.start);
+    authStateController.add(state);
+  }
+  void showresetpassword() {
+    final state = AuthState(authFlowStatus: AuthFlowStatus.resetpassward);
     authStateController.add(state);
   }
 
@@ -89,9 +93,7 @@ class AuthService {
           //Amplify class는 static singleton
           username: credentials.username, // email
           password: credentials.password,
-          options: CognitoSignUpOptions(userAttributes: userAttributes)
-      );
-
+          options: CognitoSignUpOptions(userAttributes: userAttributes));
 
       // 4
       // if (result.isSignUpComplete) {
@@ -158,6 +160,81 @@ class AuthService {
       print('Could not log out - ${authError.recoverySuggestion}');
     }
   }
+
+  Future<void> resetPassword(String username, Function(bool check) checkvelification,BuildContext context) async {
+    try {
+      final result = await Amplify.Auth.resetPassword(
+        username: username,
+      );
+      // if (result.isPasswordReset) {
+      //
+      // } else {
+      //   // 4
+      //   print('Password could not be changed');
+      // }
+
+      // await _handleResetPasswordResult(result);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          ' 인증코드가 발송되었습니다',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.indigoAccent,
+      ));
+      checkvelification(true);
+    } on AuthException catch (e) {
+      safePrint('Error resetting password: ${e.message}');
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          ' 이메일이 올바르지 않거나 가입된 이메일이 아닙니다.',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.indigoAccent,
+      ));
+    }
+  }
+
+  Future<void> confirmResetPassword(
+    String username,
+    String newPassword,
+    String confirmationCode,
+    BuildContext context
+  ) async {
+    try {
+      final result = await Amplify.Auth.confirmResetPassword(
+        username: username,
+        newPassword: newPassword,
+        confirmationCode: confirmationCode,
+      );
+
+      final state = AuthState(authFlowStatus: AuthFlowStatus.login);
+      authStateController.add(state);
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '비밀번호가 변경되었습니다 다시 로그인 해주세요.',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.indigoAccent,
+      ));
+
+      // safePrint('Password reset complete: ${result.isPasswordReset}');
+    } on AuthException catch (e) {
+      safePrint('Error confirm resetting password: ${e.message}');
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          '올바른 인증번호를 입력해주세요',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.indigoAccent,
+      ));
+
+    }
+  }
+
+
 
   void checkAuthStatus() async {
     try {
