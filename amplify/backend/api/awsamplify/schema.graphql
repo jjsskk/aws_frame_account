@@ -1,0 +1,34 @@
+﻿type Todo @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  description: String
+}
+
+type Test @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  description: String
+}
+
+type MonthlyDBTest @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  month: String!
+  total_time: Int
+  avg_att: Int
+  avg_med: Int
+  firsts_name: String
+  first_amt: Int
+  second_name: String
+  second_amt: Int
+  con_score: Int
+  spacetime_score: Int
+  exec_score: Int
+  mem_score: Int
+  ling_score: Int
+  cal_score: Int
+  reac_score:Int
+  orient_score:Int
+  createdAt: AWSDateTime
+  updatedAt:AWSDateTime
+
+}

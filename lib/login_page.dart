@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback shouldShowSignUp;
-  final VoidCallback shouldShowstart;
   final VoidCallback shouldShowsresetpassword;
   final Future<void> Function(LoginCredentials value, BuildContext context)
       didProvideCredentials;
@@ -20,7 +20,6 @@ class LoginPage extends StatefulWidget {
       {Key? key,
       required this.didProvideCredentials,
       required this.shouldShowSignUp,
-      required this.shouldShowstart,
       required this.shouldShowsresetpassword})
       : super(key: key);
 
@@ -30,21 +29,61 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   // 1
-  final _EmailController = TextEditingController();
+  var _emailController = null;
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool showSpinner = false; //로그인 or signup시 대기시간동안 스핀이 돌도록....
+  String _cacheid = '';
+  late SharedPreferences _prefs;
+
+  bool isChecked_id = true;
+  bool isChecked_autologin = false;
+
+  // 캐시에 있는 데이터를 불러오는 함수
+  // 이 함수의 기능으로, 어플을 끄고 켜도 데이터가 유지된다.
+  _loadId() async {
+    _prefs = await SharedPreferences.getInstance(); // 캐시에 저장되어있는 값을 불러온다.
+    setState(() {
+      // 캐시에 저장된 값을 반영하여 현재 상태를 설정한다.
+      // SharedPreferences에 id, pw로 저장된 값을 읽어 필드에 저장. 없을 경우 0으로 대입
+      _cacheid = (_prefs.getString('id') ?? '');
+      display_cacheId();
+      print('cache id :$_cacheid'); // Run 기록으로 id와 pw의 값을 확인할 수 있음.
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     Get.deleteAll();
+    _loadId();
+  }
+
+  Color getColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+    if (states.any(interactiveStates.contains)) {
+      return Colors.blue;
+    }
+    return Colors.blueAccent;
+  }
+
+  void display_cacheId() {
+    if (_cacheid == '')
+      _emailController = TextEditingController();
+    else
+      _emailController = TextEditingController(text: _cacheid);
   }
 
   @override
   Widget build(BuildContext context) {
+    // display_cacheId();
     // 2
     return Scaffold(
+      backgroundColor: Colors.black87,
       // 3
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
@@ -54,50 +93,30 @@ class _LoginPageState extends State<LoginPage> {
           },
           child: SafeArea(
             child: ListView(children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 3,
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                              onPressed: widget.shouldShowstart,
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Colors.white,
-                              )),
-                        ],
-                      ),
-                      Container(
-                        width: 130,
-                        height: 130,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('image/frame.png'),
-                        ),
-                      ),
-                    ]),
+              const SizedBox(
+                height: 50,
               ),
+              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                  width: 130,
+                  height: 130,
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('image/frame.png'),
+                  ),
+                ),
+              ]),
               // Login Form
-              Container(
-                  color: Colors.black87,
-                  padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  height: MediaQuery.of(context).size.height / 2,
-                  width: MediaQuery.of(context).size.width,
-                  child: _loginForm()),
-
+              const SizedBox(
+                height: 30,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.0),
+                child: _loginForm(),
+              ),
               // 6
               // Sign Up Button
               Container(
-                  padding: EdgeInsets.only(bottom: 50),
-                  height: MediaQuery.of(context).size.height -
-                      (MediaQuery.of(context).size.height / 3 +
-                          MediaQuery.of(context).size.height / 2),
-                  color: Colors.black87,
+                  height: MediaQuery.of(context).size.height / 5,
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -132,6 +151,38 @@ class _LoginPageState extends State<LoginPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Row(
+            children: [
+              Checkbox(
+                checkColor: Colors.white,
+                fillColor: MaterialStateProperty.resolveWith(getColor),
+                value: isChecked_autologin,
+                onChanged: (bool? value) {
+                  setState(() {
+                    isChecked_autologin = value!;
+                  });
+                },
+              ),
+              Text(
+                '자동 로그인',
+                style: TextStyle(color: Colors.white),
+              ),
+              Checkbox(
+                checkColor: Colors.white,
+                fillColor: MaterialStateProperty.resolveWith(getColor),
+                value: isChecked_id,
+                onChanged: (bool? value) {
+                  setState(() {
+                    isChecked_id = value!;
+                  });
+                },
+              ),
+              Text(
+                '아이디 저장',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
           // Username TextField
           TextFormField(
             validator: (value) {
@@ -141,13 +192,13 @@ class _LoginPageState extends State<LoginPage> {
               return null;
             },
             style: const TextStyle(color: Colors.white),
-            controller: _EmailController,
+            controller: _emailController,
             decoration: const InputDecoration(
                 icon: Icon(
                   Icons.mail,
                   color: Colors.white,
                 ),
-                labelText: 'Email',
+                labelText: '이메일',
                 labelStyle: const TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white, width: 2))),
@@ -168,7 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                   Icons.lock_open,
                   color: Colors.white,
                 ),
-                labelText: 'Password',
+                labelText: '비밀번호',
                 labelStyle: const TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white, width: 2))),
@@ -180,7 +231,9 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               TextButton(onPressed: () {}, child: Text('아이디 찾기')),
               Text(' / '),
-              TextButton(onPressed: widget.shouldShowsresetpassword, child: Text('비밀번호 찾기')),
+              TextButton(
+                  onPressed: widget.shouldShowsresetpassword,
+                  child: Text('비밀번호 찾기')),
             ],
           ),
           SizedBox(
@@ -230,12 +283,24 @@ class _LoginPageState extends State<LoginPage> {
   // 7
   void _login() async {
     if (!_formKey.currentState!.validate()) return;
+
     setState(() {
       showSpinner = true;
     });
     _formKey.currentState!.validate();
-    final Email = _EmailController.text.trim();
+    final Email = _emailController.text.trim();
     final password = _passwordController.text.trim();
+    if (isChecked_id)
+      _prefs.setString(
+          'id', Email); // id를 키로 가지고 있는 값에 입력받은 _id(email)를 넣어줌. = 캐시에 넣어줌
+    else
+      _prefs.remove('id');
+
+    if (isChecked_autologin)
+      _prefs.setBool('autologin',
+          true); // id를 키로 가지고 있는 값에 입력받은 _id(email)를 넣어줌. = 캐시에 넣어줌
+    else
+      _prefs.remove('autologin');
 
     print('username: $Email');
     print('password: $password');

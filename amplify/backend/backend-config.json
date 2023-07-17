@@ -1,5 +1,28 @@
 {
   "analytics": {},
+  "api": {
+    "awsamplify": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "awsamplify": {
       "customAuth": false,
@@ -32,7 +55,94 @@
       "service": "Cognito"
     }
   },
+  "function": {
+    "awsamplify26b1e3cf": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_awsamplify26b1e3cf_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "awsamplify26b1e3cf"
+        }
+      ]
+    },
+    "AMPLIFY_function_awsamplify26b1e3cf_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "awsamplify26b1e3cf"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    }
+  },
   "storage": {
+    "Institution": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
     "s3abed2243": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",

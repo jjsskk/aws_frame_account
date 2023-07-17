@@ -16,11 +16,15 @@ class LoginCredentials extends AuthCredentials {
 class SignUpCredentials extends AuthCredentials {
   final String phonenumber;
   final String name;
+  final String usernumber;
+  final String institutionnumber;
 
   SignUpCredentials(
-      {required String username, //email
+      {required String username, //email(id)
       required String password,
       required this.name,
-      required this.phonenumber})
+      required this.phonenumber,
+      required this.usernumber, //훈련자 번호
+      required this.institutionnumber})
       : super(username: username, password: password);
 }

@@ -23,10 +23,10 @@ import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/foundation.dart';
 
 
-/** This is an auto generated class representing the Todo type in your schema. */
+/** This is an auto generated class representing the Test type in your schema. */
 @immutable
-class Todo extends Model {
-  static const classType = const _TodoModelType();
+class Test extends Model {
+  static const classType = const _TestModelType();
   final String id;
   final String? _name;
   final String? _description;
@@ -40,8 +40,8 @@ class Todo extends Model {
   @override
   String getId() => id;
   
-  TodoModelIdentifier get modelIdentifier {
-      return TodoModelIdentifier(
+  TestModelIdentifier get modelIdentifier {
+      return TestModelIdentifier(
         id: id
       );
   }
@@ -71,10 +71,10 @@ class Todo extends Model {
     return _updatedAt;
   }
   
-  const Todo._internal({required this.id, required name, description, createdAt, updatedAt}): _name = name, _description = description, _createdAt = createdAt, _updatedAt = updatedAt;
+  const Test._internal({required this.id, required name, description, createdAt, updatedAt}): _name = name, _description = description, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory Todo({String? id, required String name, String? description}) {
-    return Todo._internal(
+  factory Test({String? id, required String name, String? description}) {
+    return Test._internal(
       id: id == null ? UUID.getUUID() : id,
       name: name,
       description: description);
@@ -87,7 +87,7 @@ class Todo extends Model {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is Todo &&
+    return other is Test &&
       id == other.id &&
       _name == other._name &&
       _description == other._description;
@@ -100,7 +100,7 @@ class Todo extends Model {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("Todo {");
+    buffer.write("Test {");
     buffer.write("id=" + "$id" + ", ");
     buffer.write("name=" + "$_name" + ", ");
     buffer.write("description=" + "$_description" + ", ");
@@ -111,14 +111,14 @@ class Todo extends Model {
     return buffer.toString();
   }
   
-  Todo copyWith({String? name, String? description}) {
-    return Todo._internal(
+  Test copyWith({String? name, String? description}) {
+    return Test._internal(
       id: id,
       name: name ?? this.name,
       description: description ?? this.description);
   }
   
-  Todo.fromJson(Map<String, dynamic> json)  
+  Test.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _name = json['name'],
       _description = json['description'],
@@ -133,13 +133,13 @@ class Todo extends Model {
     'id': id, 'name': _name, 'description': _description, 'createdAt': _createdAt, 'updatedAt': _updatedAt
   };
 
-  static final QueryModelIdentifier<TodoModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<TodoModelIdentifier>();
+  static final QueryModelIdentifier<TestModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<TestModelIdentifier>();
   static final QueryField ID = QueryField(fieldName: "id");
   static final QueryField NAME = QueryField(fieldName: "name");
   static final QueryField DESCRIPTION = QueryField(fieldName: "description");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "Todo";
-    modelSchemaDefinition.pluralName = "Todos";
+    modelSchemaDefinition.name = "Test";
+    modelSchemaDefinition.pluralName = "Tests";
     
     modelSchemaDefinition.authRules = [
       AuthRule(
@@ -155,13 +155,13 @@ class Todo extends Model {
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Todo.NAME,
+      key: Test.NAME,
       isRequired: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
     
     modelSchemaDefinition.addField(ModelFieldDefinition.field(
-      key: Todo.DESCRIPTION,
+      key: Test.DESCRIPTION,
       isRequired: false,
       ofType: ModelFieldType(ModelFieldTypeEnum.string)
     ));
@@ -182,30 +182,30 @@ class Todo extends Model {
   });
 }
 
-class _TodoModelType extends ModelType<Todo> {
-  const _TodoModelType();
+class _TestModelType extends ModelType<Test> {
+  const _TestModelType();
   
   @override
-  Todo fromJson(Map<String, dynamic> jsonData) {
-    return Todo.fromJson(jsonData);
+  Test fromJson(Map<String, dynamic> jsonData) {
+    return Test.fromJson(jsonData);
   }
   
   @override
   String modelName() {
-    return 'Todo';
+    return 'Test';
   }
 }
 
 /**
  * This is an auto generated class representing the model identifier
- * of [Todo] in your schema.
+ * of [Test] in your schema.
  */
 @immutable
-class TodoModelIdentifier implements ModelIdentifier<Todo> {
+class TestModelIdentifier implements ModelIdentifier<Test> {
   final String id;
 
-  /** Create an instance of TodoModelIdentifier using [id] the primary key. */
-  const TodoModelIdentifier({
+  /** Create an instance of TestModelIdentifier using [id] the primary key. */
+  const TestModelIdentifier({
     required this.id});
   
   @override
@@ -223,7 +223,7 @@ class TodoModelIdentifier implements ModelIdentifier<Todo> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'TodoModelIdentifier(id: $id)';
+  String toString() => 'TestModelIdentifier(id: $id)';
   
   @override
   bool operator ==(Object other) {
@@ -231,7 +231,7 @@ class TodoModelIdentifier implements ModelIdentifier<Todo> {
       return true;
     }
     
-    return other is TodoModelIdentifier &&
+    return other is TestModelIdentifier &&
       id == other.id;
   }
   

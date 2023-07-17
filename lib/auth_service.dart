@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // 1
-enum AuthFlowStatus { login, signUp, verification, session, start, resetpassward }
+enum AuthFlowStatus { login, signUp, verification, session, resetpassward }
 
 // 2
 class AuthState {
@@ -36,10 +36,6 @@ class AuthService {
     authStateController.add(state);
   }
 
-  void showstart() {
-    final state = AuthState(authFlowStatus: AuthFlowStatus.start);
-    authStateController.add(state);
-  }
   void showresetpassword() {
     final state = AuthState(authFlowStatus: AuthFlowStatus.resetpassward);
     authStateController.add(state);
@@ -86,6 +82,8 @@ class AuthService {
       final userAttributes = {
         CognitoUserAttributeKey.name: credentials.name,
         CognitoUserAttributeKey.phoneNumber: credentials.phonenumber,
+        CognitoUserAttributeKey.preferredUsername : credentials.institutionnumber,
+        CognitoUserAttributeKey.nickname: credentials.usernumber
       }; // aws 가이드 라인이랑 틀림 (인증추가 기능구현)
 
       // 3
@@ -161,7 +159,8 @@ class AuthService {
     }
   }
 
-  Future<void> resetPassword(String username, Function(bool check) checkvelification,BuildContext context) async {
+  Future<void> resetPassword(String username,
+      Function(bool check) checkvelification, BuildContext context) async {
     try {
       final result = await Amplify.Auth.resetPassword(
         username: username,
@@ -196,12 +195,8 @@ class AuthService {
     }
   }
 
-  Future<void> confirmResetPassword(
-    String username,
-    String newPassword,
-    String confirmationCode,
-    BuildContext context
-  ) async {
+  Future<void> confirmResetPassword(String username, String newPassword,
+      String confirmationCode, BuildContext context) async {
     try {
       final result = await Amplify.Auth.confirmResetPassword(
         username: username,
@@ -230,28 +225,28 @@ class AuthService {
         ),
         backgroundColor: Colors.indigoAccent,
       ));
-
     }
   }
 
-
-
-  void checkAuthStatus() async {
+  void checkAuthStatus(bool autologin) async {
     try {
       final result = await Amplify.Auth.fetchAuthSession();
 
       if (result.isSignedIn) {
-        print('User state : login');
-        final state = AuthState(authFlowStatus: AuthFlowStatus.session);
-        authStateController.add(state);
+        if (autologin) {
+          print('User state : login');
+          final state = AuthState(authFlowStatus: AuthFlowStatus.session);
+          authStateController.add(state);
+        } else
+          logOut();
       } else {
         print('User state : logout');
-        final state = AuthState(authFlowStatus: AuthFlowStatus.start);
+        final state = AuthState(authFlowStatus: AuthFlowStatus.login);
         authStateController.add(state);
       }
     } catch (authError) {
       print(authError);
-      final state = AuthState(authFlowStatus: AuthFlowStatus.start);
+      final state = AuthState(authFlowStatus: AuthFlowStatus.login);
       authStateController.add(state);
     }
   }

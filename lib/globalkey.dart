@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 
-class NavigationService {
-  static final GlobalKey<NavigatorState> naviagatorState =
-  GlobalKey<NavigatorState>();
+class KeyForBottomAppbar {
+ final GlobalKey<ScaffoldState> _key = GlobalKey();
+
+  GlobalKey<ScaffoldState> get key => _key;
+
+  // GlobalKey<ScaffoldState> getKey()
+  // {
+  //   return GlobalKey();
+  // }
 }

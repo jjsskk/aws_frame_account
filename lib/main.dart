@@ -1,4 +1,3 @@
-
 import 'package:aws_frame_account/auth_service.dart';
 import 'package:aws_frame_account/find_password_page.dart';
 import 'package:aws_frame_account/loadingpage.dart';
@@ -21,6 +20,7 @@ import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:path/path.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Generated in previous step
 import 'models/ModelProvider.dart';
@@ -29,11 +29,10 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(ChangeNotifierProvider(
-    create :(context) => LoginState(),
-    builder: (context, child) {
-      return MyApp();
-    }
-  ));
+      create: (context) => LoginState(),
+      builder: (context, child) {
+        return MyApp();
+      }));
 }
 
 class MyApp extends StatefulWidget {
@@ -48,12 +47,25 @@ class _MyAppState extends State<MyApp> {
 
   final _authService = AuthService();
   final _amplify = Amplify;
+  bool _cacheautologin = true;
+  late SharedPreferences _prefs;
 
   @override
   void initState() {
     super.initState();
+    _loadautologin();
     _configureAmplify();
+  }
 
+  _loadautologin() async {
+    _prefs = await SharedPreferences.getInstance(); // 캐시에 저장되어있는 값을 불러온다.
+    setState(() {
+      // 캐시에 저장된 값을 반영하여 현재 상태를 설정한다.
+      // SharedPreferences에 id, pw로 저장된 값을 읽어 필드에 저장. 없을 경우 0으로 대입
+      _cacheautologin = (_prefs.getBool('autologin') ?? false);
+      print(
+          'cache autologin :$_cacheautologin'); // Run 기록으로 id와 pw의 값을 확인할 수 있음.
+    });
   }
 
   @override
@@ -62,14 +74,16 @@ class _MyAppState extends State<MyApp> {
     appState.set(_authService);
     return MaterialApp(
       title: 'Photo Gallery App',
-      theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
+      theme: ThemeData(
+          primarySwatch: Colors.deepPurple,
+          // useMaterial3: true,
+          visualDensity: VisualDensity.adaptivePlatformDensity),
 
       // 1 AuthState를 전송하는 스트림을 관찰할 StreamBuilder로 Navigator를 래핑했습니다
       home: StreamBuilder<AuthState>(
           // 2 AuthService 인스턴스의 authStateController에서 AuthState 스트림에 액세스합니다.
           stream: _authService.authStateController.stream,
           builder: (context, snapshot) {
-
             if (snapshot.hasError) {
               return const Text('Something went wrong');
             }
@@ -83,18 +97,14 @@ class _MyAppState extends State<MyApp> {
             if (snapshot.hasData) {
               return Navigator(
                 pages: [
-                  if (snapshot.data!.authFlowStatus == AuthFlowStatus.start)
-                    MaterialPage(
-                        child: StartPage(shouldShowlogin: _authService.showLogin)),
                   // 4 스트림이 AuthFlowStatus.login을 전송하면 LoginPage가 표시됩니다
                   // Show Login Page
                   if (snapshot.data!.authFlowStatus == AuthFlowStatus.login)
                     MaterialPage(
                         child: LoginPage(
-                          shouldShowstart: _authService.showstart,
                       didProvideCredentials: _authService.loginWithCredentials,
                       shouldShowSignUp: _authService.showSignUp,
-                          shouldShowsresetpassword: _authService.showresetpassword,
+                      shouldShowsresetpassword: _authService.showresetpassword,
                     )),
 
                   // 5 스트림이 AuthFlowStatus.signUp을 전송하면 SignUpPage가 표시됩니다.
@@ -102,7 +112,6 @@ class _MyAppState extends State<MyApp> {
                   if (snapshot.data!.authFlowStatus == AuthFlowStatus.signUp)
                     MaterialPage(
                         child: SignUpPage(
-                          shouldShowstart: _authService.showstart,
                       didProvideCredentials: _authService.signUpWithCredentials,
                       shouldShowLogin: _authService.showLogin,
                     )),
@@ -119,10 +128,10 @@ class _MyAppState extends State<MyApp> {
                       AuthFlowStatus.resetpassward)
                     MaterialPage(
                         child: Find_Password_Page(
-                          shouldShowLogin: _authService.showLogin,
-                          resetPassword: _authService.resetPassword,
-                          confirmResetPassword: _authService.confirmResetPassword,
-                          )),
+                      shouldShowLogin: _authService.showLogin,
+                      resetPassword: _authService.resetPassword,
+                      confirmResetPassword: _authService.confirmResetPassword,
+                    )),
 
                   // Show Camera Flow
                   if (snapshot.data!.authFlowStatus == AuthFlowStatus.session)
@@ -141,21 +150,49 @@ class _MyAppState extends State<MyApp> {
 
   void _configureAmplify() async {
     try {
-    // await _amplify.addPlugin(AmplifyAuthCognito());
-    // await _amplify.addPlugin(AmplifyStorageS3());
+      // await _amplify.addPlugin(AmplifyAuthCognito());
+      // await _amplify.addPlugin(AmplifyStorageS3());
       final auth = AmplifyAuthCognito();
       final storage = AmplifyStorageS3();
+      final api = AmplifyAPI(modelProvider: ModelProvider.instance);
       // final analytics = AmplifyAnalyticsPinpoint();
-    await _amplify.addPlugins([auth,storage]);
+      await _amplify.addPlugins([auth, storage, api]);
       await _amplify.configure(amplifyconfig);
-    _authService.checkAuthStatus();
+      // mutateByApiName();
+      _authService.checkAuthStatus(_cacheautologin);
 
       print('Successfully configured Amplify 🎉');
     } catch (e) {
       print('Could not configure Amplify ☠️');
     }
   }
+
+  Future<void> mutateByApiName() async {
+    final operation = Amplify.API.mutate<String>(
+      request: GraphQLRequest(
+        document: 'schemaTest.graphql',
+        apiName: 'awsamplify',
+      ),
+    );
+    final response = await operation.response;
+    final data = response.data;
+    safePrint('data: $data');
+  }
+
+  Future<void> createTodo() async {
+    try {
+      final todo = Todo(name: 'my first todo', description: 'todo description');
+      final request = ModelMutations.create(todo);
+      final response = await Amplify.API.mutate(request: request).response;
+
+      final createdTodo = response.data;
+      if (createdTodo == null) {
+        safePrint('errors: ${response.errors}');
+        return;
+      }
+      safePrint('Mutation result: ${createdTodo.name}');
+    } on ApiException catch (e) {
+      safePrint('Mutation failed: $e');
+    }
+  }
 }
-
-
-

@@ -17,14 +17,30 @@
         "awsamplify": {}
       },
       "api": {
-        "flutterapp": {}
+        "flutterapp": {},
+        "awsamplify": {}
       },
       "storage": {
         "s3523ce512": {},
-        "s3abed2243": {}
+        "s3abed2243": {},
+        "Institution": {
+          "tableName": "Institution",
+          "region": "us-east-2",
+          "arn": "arn:aws:dynamodb:us-east-2:516430446510:table/Institution",
+          "partitionKeyName": "institution_Id",
+          "partitionKeyType": "S",
+          "sortKeyName": "date",
+          "sortKeyType": "S"
+        }
       },
       "analytics": {
         "flutterapp": {}
+      },
+      "function": {
+        "awsamplify26b1e3cf": {
+          "deploymentBucketName": "amplify-awsamplify-staging-71301-deployment",
+          "s3Key": "amplify-builds/awsamplify26b1e3cf-734155766b6531535075-build.zip"
+        }
       }
     }
   }

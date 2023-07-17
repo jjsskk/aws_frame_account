@@ -43,7 +43,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 3
+      backgroundColor: Colors.black87,
       body: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: GestureDetector(
@@ -52,47 +52,31 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
           },
           child: SafeArea(
             child: ListView(children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 3,
-                decoration: BoxDecoration(
-                  color: Colors.black87,
-                ),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.start,
-                      //   children: [
-                      //     IconButton(
-                      //         onPressed: widget.shouldShowstart,
-                      //         icon: Icon(Icons.arrow_back,color: Colors.white,)),
-                      //   ],
-                      // ),
-                      Container(
-                        width: 130,
-                        height: 130,
-                        child: CircleAvatar(
-                          backgroundImage: AssetImage('image/frame.png'),
-                        ),
-                      ),
-                    ]),
+              const SizedBox(
+                height: 50,
               ),
+              Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 130,
+                      height: 130,
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage('image/frame.png'),
+                      ),
+                    ),
+                  ]),
+              const SizedBox(height: 30,),
               // Login Form
-              Container(
-                  color: Colors.black87,
-                  padding: EdgeInsets.symmetric(horizontal: 40.0),
-                  height: MediaQuery.of(context).size.height / 2,
-                  width: MediaQuery.of(context).size.width,
-                  child: _verificationForm()),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.0),
+                child: _verificationForm(),
+              ),
 
               // 6
               // Sign Up Button
               Container(
-                  padding: EdgeInsets.only(bottom: 50),
-                  height: MediaQuery.of(context).size.height -
-                      (MediaQuery.of(context).size.height / 3 +
-                          MediaQuery.of(context).size.height / 2),
-                  color: Colors.black87,
+                  height: MediaQuery.of(context).size.height/6,
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -136,7 +120,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                       hintStyle: TextStyle(color: Colors.white),
                       hintText: 'ex: FRAME@naver.com',
                       icon: Icon(Icons.mail, color: Colors.white),
-                      labelText: 'Email',
+                      labelText: '이메일',
                       labelStyle: const TextStyle(color: Colors.white),
                       enabledBorder: UnderlineInputBorder(
                           borderSide:
@@ -157,6 +141,8 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
             ],
           ),
           // _verificationcheck == false ? Text('') : Text('${_emailController.text.trim()}로 인증코드가 발송되었습니다.'),
+          const SizedBox(height: 20,),
+          Divider(thickness: 1.0,color: Colors.white,),
           // Verification Code TextField
           TextFormField(
             validator: (value) {
@@ -172,7 +158,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                   Icons.confirmation_number,
                   color: Colors.white,
                 ),
-                labelText: 'Verification code',
+                labelText: '인증 코드',
                 labelStyle: const TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white, width: 2))),
@@ -196,7 +182,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                   Icons.lock_open,
                   color: Colors.white,
                 ),
-                labelText: 'New Password',
+                labelText: '새로운 비밀번호 ',
                 labelStyle: const TextStyle(color: Colors.white),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: Colors.white, width: 2))),
@@ -207,14 +193,42 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
             height: 20,
           ),
           // Verify Button
-          ElevatedButton(
-              onPressed: _verifycode,
-              child: Text(
-                'Verify',
-                style: TextStyle(fontWeight: FontWeight.bold),
+          const SizedBox(height: 30,),
+
+          Center(
+            child: Container(
+              padding: EdgeInsets.all(15),
+              height: 90,
+              width: 90,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(50)),
+              child: GestureDetector(
+                onTap: _verifycode,
+                child: Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Colors.deepPurple, Colors.indigo],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.3),
+                            spreadRadius: 1,
+                            blurRadius: 1,
+                            offset: Offset(0, 1))
+                      ]),
+                  child: Center(
+                    child: Text(
+                      '인증',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
               ),
-              style:
-                  ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple)),
+            ),
+          )
         ],
       ),
     );

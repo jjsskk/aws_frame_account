@@ -86,7 +86,7 @@ class _LinechartState extends State<Linechart> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 15);
+        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 10);
     String text = value.toString();
     text = text + 's';
     if (text == '75.0s') text = '';
