@@ -1,13 +1,10 @@
+import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/traning%20record/analyzing_report.dart';
 import 'package:aws_frame_account/traning%20record/brain_signal_graph.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-//needed when using queryItem method
-import 'package:aws_frame_account/models/Todo.dart';
-import 'package:aws_frame_account/models/MonthlyDBTest.dart';
-import 'package:amplify_api/amplify_api.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
+
 
 class TraningReportPage extends StatefulWidget {
   TraningReportPage({Key? key}) : super(key: key);
@@ -39,12 +36,13 @@ class _TraningReportPageState extends State<TraningReportPage> {
 
   //반응속도 점수
   String ORIENT_SCORE = '';
-
+ late final gql;
   //지남력점수
   @override
   void initState() {
     super.initState();
-    queryItem().then((value) {
+    gql=GraphQLController.Obj;
+    gql.queryItem().then((value) {
       setState(() {
         CON_SCORE = "${value!.con_score}";
         SPACETIME_SCORE = "${value!.spacetime_score}";
@@ -58,62 +56,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
     });
   }
 
-  Future<void> createTodo() async {
-    try {
-      final todo = Todo(name: 'my first todo', description: 'todo description');
-      final request = ModelMutations.create(todo);
-      final response = await Amplify.API.mutate(request: request).response;
 
-      final createdTodo = response.data;
-      if (createdTodo == null) {
-        safePrint('errors: ${response.errors}');
-        return;
-      }
-      safePrint('Mutation result: ${createdTodo.name}');
-    } on ApiException catch (e) {
-      safePrint('Mutation failed: $e');
-    }
-  }
-
-  Future<MonthlyDBTest?> queryItem() async {
-    const ID = '1234';
-    final queryPredicate = MonthlyDBTest.ID.eq(ID);
-
-    try {
-      final request = ModelQueries.list<MonthlyDBTest>(
-        MonthlyDBTest.classType,
-        where: queryPredicate,
-      );
-      print("here");
-      final response = await Amplify.API.query(request: request).response;
-      final test = response.data?.items.first;
-      if (test == null) {
-        safePrint('errors: ${response.errors}');
-      }
-      print(test.toString());
-      return test;
-    } on ApiException catch (e) {
-      safePrint('Query failed: $e');
-      return null;
-    }
-  }
-
-  Future<List<MonthlyDBTest?>> queryListItems() async {
-    try {
-      final request = ModelQueries.list(MonthlyDBTest.classType);
-      final response = await Amplify.API.query(request: request).response;
-
-      final items = response.data?.items;
-      if (items == null) {
-        print('errors: ${response.errors}');
-        return <MonthlyDBTest?>[];
-      }
-      return items;
-    } on ApiException catch (e) {
-      print('Query failed: $e');
-    }
-    return <MonthlyDBTest?>[];
-  }
 
   @override
   Widget build(BuildContext context) {

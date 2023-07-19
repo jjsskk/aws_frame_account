@@ -26,13 +26,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'models/ModelProvider.dart';
 import 'amplifyconfiguration.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
+  initializeDateFormatting().then((_) =>   runApp(ChangeNotifierProvider(
       create: (context) => LoginState(),
       builder: (context, child) {
         return MyApp();
-      }));
+      })));
+
 }
 
 class MyApp extends StatefulWidget {

@@ -1,6 +1,8 @@
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
 import 'package:aws_frame_account/globalkey.dart';
+import 'package:aws_frame_account/provider_login/login_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CommentViewPage extends StatefulWidget {
   CommentViewPage({Key? key}) : super(key: key);
@@ -64,6 +66,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<LoginState>();
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -72,14 +75,10 @@ class _CommentViewPageState extends State<CommentViewPage> {
             UserAccountsDrawerHeader(
               currentAccountPicture: CircleAvatar(
                 backgroundImage: AssetImage('image/frame.png'),
-
-                // widget.pickedimageurl == ''
-                //     ? null
-                //     : NetworkImage(widget.pickedimageurl!),
                 backgroundColor: Colors.white,
               ),
-              accountName: Text('name : '),
-              accountEmail: Text('E-mail : '),
+              accountName: Text('name : ${appState.username}'),
+              accountEmail: Text('E-mail : ${appState.useremail}'),
               decoration: BoxDecoration(
                   color: Colors.deepPurpleAccent,
                   borderRadius: BorderRadius.only(
@@ -118,6 +117,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                         // Use a Material design search bar
                         child: TextField(
                           controller: _searchController,
+                          onChanged: (value) => _runFilter(value),
                           decoration: InputDecoration(
                             hintText: 'Search...',
                             // Add a clear button to the search bar
@@ -172,7 +172,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                         children: _buildListCards(context),
                       )
                     : const Text(
-                        'No results found',
+                        '검색된 내용이 없습니다',
                         style: TextStyle(fontSize: 24),
                       ),
               ),

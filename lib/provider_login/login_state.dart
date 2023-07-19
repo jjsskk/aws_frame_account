@@ -19,6 +19,37 @@ class LoginState extends ChangeNotifier {
   // final _amplify = Amplify;
   late var _authService;
 
+  String _useremail = '';
+  String _username = '';
+  String _userphonenumber = '';
+
+  String get useremail => _useremail;
+
+  set useremail(String value) {
+    _useremail = value;
+  }
+
+
+  void set(AuthService authService) {
+    this._authService=authService;
+  }
+  AuthService get() {
+    return _authService;
+  }
+
+  String get username => _username;
+
+  set username(String value) {
+    _username = value;
+  }
+
+  String get userphonenumber => _userphonenumber;
+
+  set userphonenumber(String value) {
+    _userphonenumber = value;
+  }
+
+
   LoginState() {
     // _configureAmplify();
     // _authService.authStateController.stream.listen((snapshot) {
@@ -85,14 +116,9 @@ class LoginState extends ChangeNotifier {
   //   _configureAmplify();
   // }
 
-  void set(AuthService authService) {
-    this._authService=authService;
-  }
-  AuthService get() {
-    return _authService;
-  }
 
-  // void _configureAmplify() async {
+
+// void _configureAmplify() async {
   //   try {
   //     // await _amplify.addPlugin(AmplifyAuthCognito());
   //     // await _amplify.addPlugin(AmplifyStorageS3());

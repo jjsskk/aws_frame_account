@@ -4,7 +4,9 @@ import 'package:aws_frame_account/communication_service/instituition_info/instit
 import 'package:aws_frame_account/communication_service/user_activity.dart';
 import 'package:aws_frame_account/communication_service/user_care_information.dart';
 import 'package:aws_frame_account/globalkey.dart';
+import 'package:aws_frame_account/provider_login/login_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 final keyObj = KeyForBottomAppbar();
 final bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
@@ -17,6 +19,7 @@ class CommunicationYardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<LoginState>();
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
     return Scaffold(
@@ -33,8 +36,8 @@ class CommunicationYardPage extends StatelessWidget {
                 //     : NetworkImage(widget.pickedimageurl!),
                 backgroundColor: Colors.white,
               ),
-              accountName: Text('name : '),
-              accountEmail: Text('E-mail : '),
+              accountName: Text('name : ${appState.username}'),
+              accountEmail: Text('E-mail : ${appState.useremail}'),
               decoration: BoxDecoration(
                   color: Colors.deepPurpleAccent,
                   borderRadius: BorderRadius.only(
