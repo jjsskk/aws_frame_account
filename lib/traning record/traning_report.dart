@@ -42,7 +42,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
   void initState() {
     super.initState();
     gql=GraphQLController.Obj;
-    gql.queryItem().then((value) {
+    gql.queryMonthlyDBItem().then((value) {
       setState(() {
         CON_SCORE = "${value!.con_score}";
         SPACETIME_SCORE = "${value!.spacetime_score}";

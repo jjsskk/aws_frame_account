@@ -10,8 +10,8 @@ type Test @model @auth(rules: [{allow: public}]) {
   description: String
 }
 
-type MonthlyDBTest @model @auth(rules: [{allow: public}]) {
-  id: ID!
+type MonthlyDBTest @model @auth(rules: [{allow: public}]){
+  id: ID! @primaryKey(sortKeyFields:["month"])
   month: String!
   total_time: Int
   avg_att: Int
@@ -28,6 +28,17 @@ type MonthlyDBTest @model @auth(rules: [{allow: public}]) {
   cal_score: Int
   reac_score:Int
   orient_score:Int
+  createdAt: AWSDateTime
+  updatedAt:AWSDateTime
+
+}
+
+type UserDBTest @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  birth: Int!
+  name: String
+  organization: String
+  sex: String
   createdAt: AWSDateTime
   updatedAt:AWSDateTime
 

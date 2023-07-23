@@ -55,9 +55,19 @@ class MonthlyDBTest extends Model {
   String getId() => id;
   
   MonthlyDBTestModelIdentifier get modelIdentifier {
+    try {
       return MonthlyDBTestModelIdentifier(
-        id: id
+        id: id,
+        month: _month!
       );
+    } catch(e) {
+      throw new AmplifyCodeGenModelException(
+          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+          recoverySuggestion:
+            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+          underlyingException: e.toString()
+          );
+    }
   }
   
   String get month {
@@ -143,7 +153,7 @@ class MonthlyDBTest extends Model {
   
   const MonthlyDBTest._internal({required this.id, required month, total_time, avg_att, avg_med, firsts_name, first_amt, second_name, second_amt, con_score, spacetime_score, exec_score, mem_score, ling_score, cal_score, reac_score, orient_score, createdAt, updatedAt}): _month = month, _total_time = total_time, _avg_att = avg_att, _avg_med = avg_med, _firsts_name = firsts_name, _first_amt = first_amt, _second_name = second_name, _second_amt = second_amt, _con_score = con_score, _spacetime_score = spacetime_score, _exec_score = exec_score, _mem_score = mem_score, _ling_score = ling_score, _cal_score = cal_score, _reac_score = reac_score, _orient_score = orient_score, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory MonthlyDBTest({String? id, required String month, int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score}) {
+  factory MonthlyDBTest({String? id, required String month, int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score, TemporalDateTime? createdAt, TemporalDateTime? updatedAt}) {
     return MonthlyDBTest._internal(
       id: id == null ? UUID.getUUID() : id,
       month: month,
@@ -161,7 +171,9 @@ class MonthlyDBTest extends Model {
       ling_score: ling_score,
       cal_score: cal_score,
       reac_score: reac_score,
-      orient_score: orient_score);
+      orient_score: orient_score,
+      createdAt: createdAt==null ? TemporalDateTime.now() : createdAt,
+      updatedAt: updatedAt==null ? TemporalDateTime.now() : updatedAt);
   }
   
   bool equals(Object other) {
@@ -188,7 +200,9 @@ class MonthlyDBTest extends Model {
       _ling_score == other._ling_score &&
       _cal_score == other._cal_score &&
       _reac_score == other._reac_score &&
-      _orient_score == other._orient_score;
+      _orient_score == other._orient_score &&
+      _createdAt == other._createdAt &&
+      _updatedAt == other._updatedAt;
   }
   
   @override
@@ -223,10 +237,10 @@ class MonthlyDBTest extends Model {
     return buffer.toString();
   }
   
-  MonthlyDBTest copyWith({String? month, int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score}) {
+  MonthlyDBTest copyWith({int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score, TemporalDateTime? createdAt, TemporalDateTime? updatedAt}) {
     return MonthlyDBTest._internal(
       id: id,
-      month: month ?? this.month,
+      month: month,
       total_time: total_time ?? this.total_time,
       avg_att: avg_att ?? this.avg_att,
       avg_med: avg_med ?? this.avg_med,
@@ -241,7 +255,9 @@ class MonthlyDBTest extends Model {
       ling_score: ling_score ?? this.ling_score,
       cal_score: cal_score ?? this.cal_score,
       reac_score: reac_score ?? this.reac_score,
-      orient_score: orient_score ?? this.orient_score);
+      orient_score: orient_score ?? this.orient_score,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt);
   }
   
   MonthlyDBTest.fromJson(Map<String, dynamic> json)  
@@ -291,9 +307,26 @@ class MonthlyDBTest extends Model {
   static final QueryField CAL_SCORE = QueryField(fieldName: "cal_score");
   static final QueryField REAC_SCORE = QueryField(fieldName: "reac_score");
   static final QueryField ORIENT_SCORE = QueryField(fieldName: "orient_score");
+  static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
+  static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
   static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "MonthlyDBTest";
     modelSchemaDefinition.pluralName = "MonthlyDBTests";
+    
+    modelSchemaDefinition.authRules = [
+      AuthRule(
+        authStrategy: AuthStrategy.PUBLIC,
+        operations: [
+          ModelOperation.CREATE,
+          ModelOperation.UPDATE,
+          ModelOperation.DELETE,
+          ModelOperation.READ
+        ])
+    ];
+    
+    modelSchemaDefinition.indexes = [
+      ModelIndex(fields: const ["id", "month"], name: null)
+    ];
     
     modelSchemaDefinition.addField(ModelFieldDefinition.id());
     
@@ -393,17 +426,15 @@ class MonthlyDBTest extends Model {
       ofType: ModelFieldType(ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
-      fieldName: 'createdAt',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: MonthlyDBTest.CREATEDAT,
       isRequired: false,
-      isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.nonQueryField(
-      fieldName: 'updatedAt',
+    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+      key: MonthlyDBTest.UPDATEDAT,
       isRequired: false,
-      isReadOnly: true,
       ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
     ));
   });
@@ -430,14 +461,20 @@ class _MonthlyDBTestModelType extends ModelType<MonthlyDBTest> {
 @immutable
 class MonthlyDBTestModelIdentifier implements ModelIdentifier<MonthlyDBTest> {
   final String id;
+  final String month;
 
-  /** Create an instance of MonthlyDBTestModelIdentifier using [id] the primary key. */
+  /**
+   * Create an instance of MonthlyDBTestModelIdentifier using [id] the primary key.
+   * And [month] the sort key.
+   */
   const MonthlyDBTestModelIdentifier({
-    required this.id});
+    required this.id,
+    required this.month});
   
   @override
   Map<String, dynamic> serializeAsMap() => (<String, dynamic>{
-    'id': id
+    'id': id,
+    'month': month
   });
   
   @override
@@ -450,7 +487,7 @@ class MonthlyDBTestModelIdentifier implements ModelIdentifier<MonthlyDBTest> {
   String serializeAsString() => serializeAsMap().values.join('#');
   
   @override
-  String toString() => 'MonthlyDBTestModelIdentifier(id: $id)';
+  String toString() => 'MonthlyDBTestModelIdentifier(id: $id, month: $month)';
   
   @override
   bool operator ==(Object other) {
@@ -459,10 +496,12 @@ class MonthlyDBTestModelIdentifier implements ModelIdentifier<MonthlyDBTest> {
     }
     
     return other is MonthlyDBTestModelIdentifier &&
-      id == other.id;
+      id == other.id &&
+      month == other.month;
   }
   
   @override
   int get hashCode =>
-    id.hashCode;
+    id.hashCode ^
+    month.hashCode;
 }

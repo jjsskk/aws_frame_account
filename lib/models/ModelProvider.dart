@@ -23,16 +23,18 @@ import 'package:amplify_core/amplify_core.dart';
 import 'MonthlyDBTest.dart';
 import 'Test.dart';
 import 'Todo.dart';
+import 'UserDBTest.dart';
 
 export 'MonthlyDBTest.dart';
 export 'Test.dart';
 export 'Todo.dart';
+export 'UserDBTest.dart';
 
 class ModelProvider implements ModelProviderInterface {
   @override
-  String version = "5bfe44b3580e4c063b98b779b3bb6a97";
+  String version = "5805572b4716ae62584eb98abe568104";
   @override
-  List<ModelSchema> modelSchemas = [MonthlyDBTest.schema, Test.schema, Todo.schema];
+  List<ModelSchema> modelSchemas = [MonthlyDBTest.schema, Test.schema, Todo.schema, UserDBTest.schema];
   static final ModelProvider _instance = ModelProvider();
   @override
   List<ModelSchema> customTypeSchemas = [];
@@ -47,6 +49,8 @@ class ModelProvider implements ModelProviderInterface {
         return Test.classType;
       case "Todo":
         return Todo.classType;
+      case "UserDBTest":
+        return UserDBTest.classType;
       default:
         throw Exception("Failed to find model in model provider for model name: " + modelName);
     }
