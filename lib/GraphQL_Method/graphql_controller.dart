@@ -82,7 +82,7 @@ class GraphQLController {
   }
 
   Future<MonthlyDBTest?> queryMonthlyDBItem() async {
-    const ID = '1234';
+    var ID = '1';
     // final queryPredicatemonth = MonthlyDBTest.MONTH.eq(ID);
     // final queryPredicate = MonthlyDBTest.ID.eq(ID).and(queryPredicatemonth);
     final queryPredicate = MonthlyDBTest.ID.eq(ID);
@@ -107,26 +107,25 @@ class GraphQLController {
   }
 
   Future<List<MonthlyDBTest?>> queryListMonthlyDBItems() async {
+    var ID = '1';
+    final queryPredicate = MonthlyDBTest.ID.eq(ID);
     try {
-      const ID = '1';
-      final queryPredicate = MonthlyDBTest.ID.eq(ID);
-      final request = ModelQueries.list(
+      final request = ModelQueries.list<MonthlyDBTest>(
         MonthlyDBTest.classType,
         where: queryPredicate,
-        limit: 12
       );
       final response = await Amplify.API.query(request: request).response;
 
       final items = response.data?.items;
       if (items == null) {
         print('errors: ${response.errors}');
-        return <MonthlyDBTest?>[];
+        return const [];
       }
       return items;
     } on ApiException catch (e) {
       print('Query failed: $e');
+      return const [];
     }
-    return <MonthlyDBTest?>[];
   }
 
   Future<UserDBTest?> queryUserDBItem() async {
