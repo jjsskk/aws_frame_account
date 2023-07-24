@@ -12,7 +12,6 @@ import 'package:aws_frame_account/amplifyconfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:aws_frame_account/home_page.dart';
 
-import '../start_page.dart';
 
 class LoginState extends ChangeNotifier {
   // final _authService = AuthService();

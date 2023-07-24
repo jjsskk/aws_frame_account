@@ -13,7 +13,7 @@ class BrainSignalPage extends StatelessWidget {
       body: Column(
         children: [
 
-        ],
+          ],
       ),
     );
   }

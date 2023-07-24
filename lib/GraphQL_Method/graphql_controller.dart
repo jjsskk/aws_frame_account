@@ -16,7 +16,7 @@ class GraphQLController {
 
   //user
   var birth = 19640101;
-  var userid = "2";
+  var userid = "1";
   var useridint = 2;
 
   //brain signal
@@ -51,7 +51,7 @@ class GraphQLController {
   Future<void> createMonthlyData() async {
     try {
       final row = MonthlyDBTest(
-        id: "1",
+        id: "3",
         month: brainmonth,
         avg_att: Random().nextInt(100) + 1,
         avg_med: Random().nextInt(100) + 1,
@@ -107,38 +107,64 @@ class GraphQLController {
   }
 
   Future<List<MonthlyDBTest?>> queryListMonthlyDBItems() async {
+    var ID = '1';
+    final queryPredicate = MonthlyDBTest.ID.eq(ID);
     try {
-      const ID = '1';
-      final queryPredicate = MonthlyDBTest.ID.eq(ID);
-      final request = ModelQueries.list(
+      final request = ModelQueries.list<MonthlyDBTest>(
         MonthlyDBTest.classType,
         where: queryPredicate,
-        limit: 12
       );
       final response = await Amplify.API.query(request: request).response;
 
       final items = response.data?.items;
       if (items == null) {
         print('errors: ${response.errors}');
-        return <MonthlyDBTest?>[];
+        return const [];
       }
       return items;
     } on ApiException catch (e) {
       print('Query failed: $e');
+      return const [];
     }
-    return <MonthlyDBTest?>[];
+  }
+
+  Future<MonthlyDBTest?> queryMonthlyDBSimilarAgeData(
+      String id, int month) async {
+    print(month + 40);
+    final queryPredicateId =
+        MonthlyDBTest.MONTH.between(month.toString(), (month + 40).toString());
+    final queryPredicateboth = MonthlyDBTest.ID.eq(id).and(queryPredicateId);
+
+    try {
+      final request = ModelQueries.list<MonthlyDBTest>(
+        MonthlyDBTest.classType,
+        where: queryPredicateboth,
+      );
+      final response = await Amplify.API.query(request: request).response;
+      final test = response.data?.items.first;
+      if (test == null) {
+        safePrint('errors: ${response.errors}');
+        return null;
+      }
+      print(test.toString());
+      return test;
+    } on ApiException catch (e) {
+      safePrint('Query failed: $e');
+      return null;
+    }
   }
 
   Future<UserDBTest?> queryUserDBItem() async {
     const ID = '1234';
+
     final queryPredicate = UserDBTest.ID.eq(ID);
+    // final queryPredicateboth = UserDBTest.BIRTH.between(start, end).and(queryPredicateId);
 
     try {
       final request = ModelQueries.list<UserDBTest>(
         UserDBTest.classType,
         where: queryPredicate,
       );
-      print("here");
       final response = await Amplify.API.query(request: request).response;
       final test = response.data?.items.first;
       if (test == null) {
@@ -152,9 +178,11 @@ class GraphQLController {
     }
   }
 
-  Future<List<UserDBTest?>> queryListUserDBItems() async {
+  Future<List<UserDBTest?>> queryListUserDBItems(int start, int end) async {
+    final queryPredicate = UserDBTest.BIRTH.between(start, end);
     try {
-      final request = ModelQueries.list(UserDBTest.classType);
+      final request =
+          ModelQueries.list(UserDBTest.classType, where: queryPredicate);
       final response = await Amplify.API.query(request: request).response;
 
       final items = response.data?.items;

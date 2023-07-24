@@ -60,10 +60,10 @@ dev_dependencies:
   provider: ^6.0.5
   shared_preferences: ^2.1.2
   table_calendar: ^3.0.9
-  spider_chart: ^0.2.0
   flutter_radar_chart: ^0.2.1
-  kg_charts: ^0.0.5
   age_calculator: ^1.0.0
+  datepicker_dropdown: ^0.0.7+5
+  percent_indicator: ^4.2.3
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

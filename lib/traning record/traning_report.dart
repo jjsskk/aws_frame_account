@@ -36,8 +36,9 @@ class _TraningReportPageState extends State<TraningReportPage> {
 
   //반응속도 점수
   String ORIENT_SCORE = '';
- late final gql;
+
   //지남력점수
+ late final gql;
   @override
   void initState() {
     super.initState();
