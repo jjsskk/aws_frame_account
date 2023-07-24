@@ -4,9 +4,6 @@ import 'dart:math';
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:spider_chart/spider_chart.dart';
-import 'package:flutter_radar_chart/flutter_radar_chart.dart';
-import 'package:age_calculator/age_calculator.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../models/MonthlyDBTest.dart';
 
