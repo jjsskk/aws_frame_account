@@ -248,9 +248,9 @@ class _TraningReportPageState extends State<TraningReportPage> {
                     ),
                     Column(
                       children: [
-                        CON_SCORE == ''
+                        CAL_SCORE == ''
                             ? CircularProgressIndicator()
-                            : Text(CON_SCORE),
+                            : Text(CAL_SCORE),
                         Text('계산력 점수'),
                       ],
                     ),

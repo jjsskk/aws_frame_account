@@ -82,9 +82,9 @@ class GraphQLController {
   }
 
   Future<MonthlyDBTest?> queryMonthlyDBItem() async {
-    const ID = '1234';
-    // final queryPredicatemonth = MonthlyDBTest.MONTH.eq(ID);
-    // final queryPredicate = MonthlyDBTest.ID.eq(ID).and(queryPredicatemonth);
+    var ID = '1';
+    // final queryPredicatemonth = MonthlyDBTest.MONTH.ascending().field;
+    // print("what : $queryPredicatemonth");
     final queryPredicate = MonthlyDBTest.ID.eq(ID);
 
     try {
@@ -94,7 +94,7 @@ class GraphQLController {
       );
       print("here");
       final response = await Amplify.API.query(request: request).response;
-      final test = response.data?.items.first;
+      final test = response.data?.items.last; //Latest DATA
       if (test == null) {
         safePrint('errors: ${response.errors}');
       }
@@ -113,6 +113,7 @@ class GraphQLController {
       final request = ModelQueries.list<MonthlyDBTest>(
         MonthlyDBTest.classType,
         where: queryPredicate,
+
       );
       final response = await Amplify.API.query(request: request).response;
 
@@ -128,12 +129,12 @@ class GraphQLController {
     }
   }
 
-  Future<MonthlyDBTest?> queryMonthlyDBSimilarAgeData(
-      String id, int month) async {
-    print(month + 40);
-    final queryPredicateId =
-        MonthlyDBTest.MONTH.between(month.toString(), (month + 40).toString());
-    final queryPredicateboth = MonthlyDBTest.ID.eq(id).and(queryPredicateId);
+  Future<MonthlyDBTest?> queryMonthlyDBRequiredItem(
+      String id, int yearMonth) async {
+    print(yearMonth + 40);
+    final queryPredicateDate=
+        MonthlyDBTest.MONTH.between(yearMonth.toString(), (yearMonth + 40).toString());
+    final queryPredicateboth = MonthlyDBTest.ID.eq(id).and(queryPredicateDate);
 
     try {
       final request = ModelQueries.list<MonthlyDBTest>(
