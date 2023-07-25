@@ -319,7 +319,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                       // optional
                       width: 10,
                       // optional
-                      locale: "ko",
+                      locale: "zh_CN",
                       // selectedDay: 14, // optional
                       showDay: false,
                       selectedMonth: month,
@@ -473,13 +473,12 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                   ),
                 ),
               ),
-
+              Center(child: Text('평균연령 $ageEra세 점수 ')),
               Expanded(
                 child: ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   shrinkWrap: true,
                   children: [
-                    Center(child: Text('평균연령 $ageEra세 점수 ')),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 15.0),
                       child: Row(
