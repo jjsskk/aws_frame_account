@@ -21,23 +21,77 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
   bool darkMode = false;
   String? selectedLabel;
   bool useSides = false;
+  List<Color> gradientColors = [
+    const Color(0xff23b6e6),
+    const Color(0xff02d39a),
+  ];
 
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    value = value + 1;
 
-  List<String> buttonLabels = [
-    "avg_att",
-    "avg_med",
-    "con_score",
-    "spacetime_score",
-    "exec_score",
-    "mem_score",
-    "ling_score",
-    "cal_score",
-    "reac_score",
-    "orient_score",
-  ]; //버튼 이름
+    const style = TextStyle(
+        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 14);
+    String text = value.toInt().toString();
+    text = text + "월";
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(text, style: style, textAlign: TextAlign.center),
+    );
+  }
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Color(0xff67727d),
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+    );
+    String text = '';
+    switch (value.toInt()) {
+      case 20:
+        text = '20';
+        break;
+      case 40:
+        text = '40';
+        break;
+      case 60:
+        text = '60';
+        break;
+      case 80:
+        text = '80';
+        break;
+    }
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(text, style: style),
+    );
+  }
+
+  Map<String, String> buttonLabels = {
+    "avg_att": "평균\n집중도",
+    "avg_med": "평균\n안정감",
+    "con_score": "주의력",
+    "spacetime_score": "시공간",
+    "exec_score": "집행기능",
+    "mem_score": "기억력",
+    "ling_score": "언어기능",
+    "cal_score": "계산력",
+    "reac_score": "반응속도",
+    "orient_score": "지남력",
+  }; //버튼 이름
+
   List<double> _getGraphData(String label) {
     List<double> graphData = [];
+    DateTime twelveMonthsAgo = DateTime.now().subtract(Duration(days: 365 * 1));
     for (var result in results) {
+      // 날짜 필터링
+      String? monthStr = result?.month;
+      int year = int.parse(monthStr!.substring(0, 4));
+      int month = int.parse(monthStr.substring(4, 6));
+      DateTime date = DateTime(year, month);
+      if (date.isBefore(twelveMonthsAgo)) {
+        continue;
+      }
       double? value;
       switch (label) {
         case "avg_att":
@@ -89,12 +143,40 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
 
     return LineChartData(
         lineTouchData: LineTouchData(enabled: true),
-        gridData: FlGridData(show: true),
-        titlesData: FlTitlesData(show: true),
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: true,
+
+
+        ),
+        titlesData: FlTitlesData(
+            show: true,
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 22,
+                  // interval: 3,
+                  getTitlesWidget: bottomTitleWidgets),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+
+                getTitlesWidget: leftTitleWidgets,
+
+                reservedSize: 28,
+                // margin: 12,
+              ),
+            ),
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
+        borderData: FlBorderData(
+            show: true,
+            border: Border.all(color: const Color(0xff37434d), width: 1)),
         minX: 0,
         maxX: (graphData.length - 1).toDouble(),
         minY: 0,
-        maxY: graphData.isNotEmpty ? graphData.reduce(max) : 0,
+        maxY: 100,
         lineBarsData: [
           LineChartBarData(
               spots: graphData
@@ -102,16 +184,27 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                   .map((i, e) => MapEntry(i, FlSpot(i.toDouble(), e)))
                   .values
                   .toList(),
-              barWidth: 6,
-              color: Colors.blue,
-              dotData: FlDotData(show: true))
+            isCurved: true,
+            gradient: LinearGradient(colors: gradientColors),
+            barWidth: 5,
+            isStrokeCapRound: true,
+            dotData: FlDotData(
+              show: true,
+            ),
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                  colors: gradientColors
+                      .map((color) => color.withOpacity(0.3))
+                      .toList()),
+            ),)
         ]);
   }
 
   Widget _buildLineChart() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: 200,
+      height: 300,
       child: Padding(
         padding: EdgeInsets.all(16),
         child: LineChart(_getLineChartData()),
@@ -124,8 +217,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       crossAxisCount: 5,  // 3열을 만듦
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(), // 스크롤을 막음
-      padding: EdgeInsets.all(8.0),
-      children: buttonLabels.map((label) => ElevatedButton(
+      padding: EdgeInsets.all(1.0),
+      children: buttonLabels.keys.map((label) => ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(),
 
@@ -176,8 +269,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
           }
         },
         child: Text(
-          label,
-          style: TextStyle(fontSize: 13.0),  // 버튼 텍스트 크기 조절
+            buttonLabels[label]!,
+          style: TextStyle(fontSize: 13.0, height: 1.3),  // 버튼 텍스트 크기 조절
         ),
       )).toList(),
     );
@@ -301,7 +394,21 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                 //   ),
                 // ),
                 _buildButtons(),
-                _buildLineChart() ,
+                AspectRatio(
+                  aspectRatio: 6 / 5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        color: Color(0xff232d37)),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                      child: _buildLineChart() ,
+                    ),
+                  ),
+                ),
+
               ]
             ),
           ),
