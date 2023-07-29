@@ -1,8 +1,10 @@
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
+import 'package:aws_frame_account/provider_login/login_state.dart';
 import 'package:aws_frame_account/traning%20record/analyzing_report.dart';
 import 'package:aws_frame_account/traning%20record/brain_signal_graph.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -37,6 +39,10 @@ class _TraningReportPageState extends State<TraningReportPage> {
   //반응속도 점수
   String ORIENT_SCORE = '';
 
+  late var appState;
+
+  String _latestDataDate = '';
+
   //지남력점수
  late final gql;
   @override
@@ -53,6 +59,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
         CAL_SCORE = "${value!.cal_score}";
         REAC_SCORE = "${value!.reac_score}";
         ORIENT_SCORE = "${value!.orient_score}";
+        _latestDataDate = value.month;
       });
     });
   }
@@ -61,6 +68,8 @@ class _TraningReportPageState extends State<TraningReportPage> {
 
   @override
   Widget build(BuildContext context) {
+    appState = context.watch<LoginState>();
+
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
     return Scaffold(
@@ -77,7 +86,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text("홍길동님의 두되나이"),
+                Text("홍길동님의 두뇌나이"),
                 const SizedBox(
                   height: 10,
                 ),
@@ -312,7 +321,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BrainSignalPage()),
+                                builder: (context) => BrainSignalPage(latestDataDate: _latestDataDate,)),
                           );
                         },
                         icon: Icon(Icons.graphic_eq),

@@ -63,7 +63,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    var _authService = context.watch<LoginState>().get();
+    var _authService = context.watch<LoginState>().authService;
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
     return Scaffold(

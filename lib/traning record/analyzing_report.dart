@@ -113,7 +113,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     int changeddate = year * 10000 + month * 100;
     numberForonedata = 0;
     Future<dynamic> future =
-        gql.queryMonthlyDBRequiredItem("1", changeddate).then((value) {
+        gql.queryMonthlyDBRequiredItem( changeddate).then((value) {
       if (value != null) {
         setState(() {
           numberForonedata++;
@@ -174,9 +174,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   }
 
   void calculateAverageSignal() async {
-    setState(() {
-      loading = true;
-    });
+
     // futuresList = [];
     int CON_SCORE_SUM = 0; // 주의력 점수
 
@@ -405,6 +403,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                         ),
                         IconButton(
                             onPressed: () {
+                              setState(() {
+                                loading = true;
+                              });
                               futuresList = [];
                               futuresList.add(extractRequiredUserData());
 

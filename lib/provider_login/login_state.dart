@@ -12,42 +12,59 @@ import 'package:aws_frame_account/amplifyconfiguration.dart';
 import 'package:flutter/material.dart';
 import 'package:aws_frame_account/home_page.dart';
 
-
 class LoginState extends ChangeNotifier {
   // final _authService = AuthService();
   // final _amplify = Amplify;
   late var _authService;
 
-  String _useremail = '';
-  String _username = '';
-  String _userphonenumber = '';
+  get authService => _authService;
+  String _protectorEmail = '';
+  String _protectorName = '';
+  String _protectorPhonenumber = '';
+  String _userNumber = '';
+  String _institutionNumber = '';
+  String _latestDataDate = '';
 
-  String get useremail => _useremail;
+  String get userNumber => _userNumber;
 
-  set useremail(String value) {
-    _useremail = value;
+  set userNumber(String value) {
+    _userNumber = value;
   }
 
+  String get latestDataDate => _latestDataDate;
+
+  set latestDataDate(String value) {
+    _latestDataDate = value;
+  }
+
+  String get protectorEmail => _protectorEmail;
+
+  set protectorEmail(String value) {
+    _protectorEmail = value;
+  }
 
   void set(AuthService authService) {
-    this._authService=authService;
-  }
-  AuthService get() {
-    return _authService;
+    this._authService = authService;
   }
 
-  String get username => _username;
 
-  set username(String value) {
-    _username = value;
+  String get protectorName => _protectorName;
+
+  set protectorName(String value) {
+    _protectorName = value;
   }
 
-  String get userphonenumber => _userphonenumber;
+  String get protectorPhonenumber => _protectorPhonenumber;
 
-  set userphonenumber(String value) {
-    _userphonenumber = value;
+  set protectorPhonenumber(String value) {
+    _protectorPhonenumber = value;
   }
 
+  String get institutionNumber => _institutionNumber;
+
+  set institutionNumber(String value) {
+    _institutionNumber = value;
+  }
 
   LoginState() {
     // _configureAmplify();
@@ -111,25 +128,23 @@ class LoginState extends ChangeNotifier {
     // );
   }
 
-  // void init(){
-  //   _configureAmplify();
-  // }
-
-
+// void init(){
+//   _configureAmplify();
+// }
 
 // void _configureAmplify() async {
-  //   try {
-  //     // await _amplify.addPlugin(AmplifyAuthCognito());
-  //     // await _amplify.addPlugin(AmplifyStorageS3());
-  //     final auth = AmplifyAuthCognito();
-  //     final storage = AmplifyStorageS3();
-  //     final analytics = AmplifyAnalyticsPinpoint();
-  //     await _amplify.addPlugins([auth, storage, analytics]);
-  //     await _amplify.configure(amplifyconfig);
-  //     _authService.checkAuthStatus();
-  //     print('Successfully configured Amplify 🎉');
-  //   } catch (e) {
-  //     print('Could not configure Amplify ☠️');
-  //   }
-  // }
+//   try {
+//     // await _amplify.addPlugin(AmplifyAuthCognito());
+//     // await _amplify.addPlugin(AmplifyStorageS3());
+//     final auth = AmplifyAuthCognito();
+//     final storage = AmplifyStorageS3();
+//     final analytics = AmplifyAnalyticsPinpoint();
+//     await _amplify.addPlugins([auth, storage, analytics]);
+//     await _amplify.configure(amplifyconfig);
+//     _authService.checkAuthStatus();
+//     print('Successfully configured Amplify 🎉');
+//   } catch (e) {
+//     print('Could not configure Amplify ☠️');
+//   }
+// }
 }

@@ -77,8 +77,8 @@ class _CommentViewPageState extends State<CommentViewPage> {
                 backgroundImage: AssetImage('image/frame.png'),
                 backgroundColor: Colors.white,
               ),
-              accountName: Text('name : ${appState.username}'),
-              accountEmail: Text('E-mail : ${appState.useremail}'),
+              accountName: Text('name : ${appState.protectorName}'),
+              accountEmail: Text('E-mail : ${appState.protectorEmail}'),
               decoration: BoxDecoration(
                   color: Colors.deepPurpleAccent,
                   borderRadius: BorderRadius.only(

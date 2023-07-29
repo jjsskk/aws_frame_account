@@ -82,8 +82,8 @@ class AuthService {
       final userAttributes = {
         CognitoUserAttributeKey.name: credentials.name,
         CognitoUserAttributeKey.phoneNumber: credentials.phonenumber,
-        CognitoUserAttributeKey.preferredUsername : credentials.institutionnumber,
-        CognitoUserAttributeKey.nickname: credentials.usernumber
+        CognitoUserAttributeKey.custom("institutionNumber") : credentials.institutionnumber,
+        CognitoUserAttributeKey.custom("userNumber"): credentials.usernumber
       }; // aws 가이드 라인이랑 틀림 (인증추가 기능구현)
 
       // 3

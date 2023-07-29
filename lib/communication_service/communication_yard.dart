@@ -3,6 +3,7 @@ import 'package:aws_frame_account/communication_service/comment_view.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
 import 'package:aws_frame_account/communication_service/user_activity.dart';
 import 'package:aws_frame_account/communication_service/user_care_information.dart';
+import 'package:aws_frame_account/drawer/drawer.dart';
 import 'package:aws_frame_account/globalkey.dart';
 import 'package:aws_frame_account/provider_login/login_state.dart';
 import 'package:flutter/material.dart';
@@ -23,30 +24,7 @@ class CommunicationYardPage extends StatelessWidget {
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('image/frame.png'),
-
-                // widget.pickedimageurl == ''
-                //     ? null
-                //     : NetworkImage(widget.pickedimageurl!),
-                backgroundColor: Colors.white,
-              ),
-              accountName: Text('name : ${appState.username}'),
-              accountEmail: Text('E-mail : ${appState.useremail}'),
-              decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40.0),
-                      bottomRight: Radius.circular(40.0))),
-            ),
-          ],
-        ),
-      ),
+      drawer: GlobalDrawer.getDrawer(context, appState),
       key: keyObj.key,
       appBar: AppBar(
           title: Text('소통마당'),

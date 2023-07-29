@@ -82,7 +82,7 @@ class GraphQLController {
   }
 
   Future<MonthlyDBTest?> queryMonthlyDBItem() async {
-    var ID = '1';
+    var ID = '3';
     // final queryPredicatemonth = MonthlyDBTest.MONTH.ascending().field;
     // print("what : $queryPredicatemonth");
     final queryPredicate = MonthlyDBTest.ID.eq(ID);
@@ -92,9 +92,11 @@ class GraphQLController {
         MonthlyDBTest.classType,
         where: queryPredicate,
       );
+      // final request = ModelQueries.get(MonthlyDBTest.classType, ID);
       print("here");
       final response = await Amplify.API.query(request: request).response;
       final test = response.data?.items.last; //Latest DATA
+      // final test = response.data; //Latest DATA
       if (test == null) {
         safePrint('errors: ${response.errors}');
       }
@@ -106,13 +108,22 @@ class GraphQLController {
     }
   }
 
-  Future<List<MonthlyDBTest?>> queryListMonthlyDBItems() async {
-    var ID = '1';
-    final queryPredicate = MonthlyDBTest.ID.eq(ID);
+  Future<List<MonthlyDBTest?>> queryListMonthlyDBItems(int yearMonth) async {
+    var ID = '3';
+    // final queryPredicate = MonthlyDBTest.ID.eq(ID);
+    //20240211- 10000 + 50
+    //if( yearmonth >  )2
+   print("yearmonth:${yearMonth - 10000 + 50}");
+    final queryPredicateDateMax=
+    MonthlyDBTest.MONTH.le("$yearMonth");
+    final queryPredicateDatemin=
+    MonthlyDBTest.MONTH.gt("${yearMonth - 10000 + 50}");
+    final queryPredicateall= MonthlyDBTest.ID.eq(ID).and(queryPredicateDateMax).and(queryPredicateDatemin);
+
     try {
       final request = ModelQueries.list<MonthlyDBTest>(
         MonthlyDBTest.classType,
-        where: queryPredicate,
+        where: queryPredicateall
 
       );
       final response = await Amplify.API.query(request: request).response;
@@ -130,11 +141,12 @@ class GraphQLController {
   }
 
   Future<MonthlyDBTest?> queryMonthlyDBRequiredItem(
-      String id, int yearMonth) async {
+       int yearMonth) async {
+    var ID = '3';
     print(yearMonth + 40);
     final queryPredicateDate=
         MonthlyDBTest.MONTH.between(yearMonth.toString(), (yearMonth + 40).toString());
-    final queryPredicateboth = MonthlyDBTest.ID.eq(id).and(queryPredicateDate);
+    final queryPredicateboth = MonthlyDBTest.ID.eq(ID).and(queryPredicateDate);
 
     try {
       final request = ModelQueries.list<MonthlyDBTest>(

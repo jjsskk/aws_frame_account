@@ -21,7 +21,7 @@ class _CommunicationServiceState extends State<CommunicationService> {
       body: Column(
         children: [
           ElevatedButton(
-              onPressed: appState.get().logOut,
+              onPressed: appState.authService.logOut,
               child: Text('logout'))
         ],
       ),

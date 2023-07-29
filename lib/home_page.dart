@@ -1,6 +1,7 @@
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
 import 'package:aws_frame_account/camera_gallary/graph_page.dart';
 import 'package:aws_frame_account/communication_service/communication_yard.dart';
+import 'package:aws_frame_account/drawer/drawer.dart';
 import 'package:aws_frame_account/globalkey.dart';
 import 'package:aws_frame_account/login_session.dart';
 import 'package:aws_frame_account/mainpage/mainpage.dart';
@@ -12,14 +13,14 @@ import 'communication_service/communication_service.dart';
 import 'protector_service/protector_service.dart';
 import 'traning record/record_manage.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage(
-      {Key? key,
-      required this.didtogglegallery,
-      // required this.didtogglegraph,
-      required this.pickedimageurl,
-      required this.shouldLogOut})
+  HomePage({Key? key,
+    required this.didtogglegallery,
+    // required this.didtogglegraph,
+    required this.pickedimageurl,
+    required this.shouldLogOut})
       : super(key: key);
   final VoidCallback didtogglegallery;
 
@@ -46,6 +47,7 @@ class _HomePageState extends State<HomePage> {
   late final bottomappbar;
   late final keyObj;
   late var appState;
+
   @override
   void initState() {
     super.initState();
@@ -62,27 +64,37 @@ class _HomePageState extends State<HomePage> {
         if (element.userAttributeKey.key == "name")
           setState(() {
             // username = element.value;
-            appState.username =element.value;
-            // print("username : ${username}");
+            appState.protectorName = (element.value) ?? "no result";
           });
 
         if (element.userAttributeKey.key == "phone_number")
           setState(() {
             // userphonenumber = element.value;
-            appState.userphonenumber = element.value;
+            appState.protectorPhonenumber = (element.value) ?? " no result";
           });
 
         if (element.userAttributeKey.key == "email")
           setState(() {
             // useremail = element.value;
-            appState.useremail = element.value;
+            appState.protectorEmail = (element.value) ?? "no result";
+          });
+
+        if (element.userAttributeKey.key.toLowerCase() ==
+            "custom:institutionNumber".toLowerCase())
+          setState(() {
+            // useremail = element.value;
+            appState.institutionNumber = (element.value) ?? "no result";
+          });
+
+        if (element.userAttributeKey.key.toLowerCase() ==
+            "custom:userNumber".toLowerCase())
+          setState(() {
+            // useremail = element.value;
+            appState.userNumber = (element.value) ?? "no result";
           });
       });
-      // print('userid:' + result.userId);
-      // print('username:' + result.username);
-      print(attribute.toString());
-      // useremail = result.username;
-      // print('useremail: ' + useremail);
+
+      // print(attribute.toString());
     } catch (e) {
       print(e);
     }
@@ -90,179 +102,173 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var colorScheme = Theme.of(context).colorScheme;
+    var colorScheme = Theme
+        .of(context)
+        .colorScheme;
     var theme = Theme.of(context);
     appState = context.watch<LoginState>();
-    if (appState.username == '' ||
-        appState.useremail == '' ||
-        appState.userphonenumber == '') getCurrentuser();
-    return Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: [
-              UserAccountsDrawerHeader(
-                currentAccountPicture: CircleAvatar(
-                  backgroundImage: AssetImage('image/frame.png'),
+    if (appState.protectorName == '' ||
+        appState.protectorEmail == '' ||
+        appState.protectorPhonenumber == '' ||
+        appState.institutionNumber == '' ||
+        appState.userNumber == '') getCurrentuser();
 
-                  // widget.pickedimageurl == ''
-                  //     ? null
-                  //     : NetworkImage(widget.pickedimageurl!),
-                  backgroundColor: Colors.white,
+    Future<bool> _onBackKey() async {
+      return await showDialog(
+          context: context, builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('끝내겠습니까?'),
+          actions: [
+            TextButton(onPressed: () {
+              Navigator.pop(context, true);
+            }, child: Text('네')),
+            TextButton(onPressed: () {
+              Navigator.pop(context, false);
+            }, child: Text('아니요'))
+          ],
+        );
+      });
+    }
+    return WillPopScope(
+      onWillPop: () {
+        return _onBackKey();
+      },
+      child: Scaffold(
+          drawer: GlobalDrawer.getDrawer(context, appState),
+          key: keyObj.key,
+          appBar: AppBar(
+            title: Text(
+              '홍길동님의 동반자 고길동님 안녕하세요',
+              style: TextStyle(fontSize: 15),
+            ),
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.logout,
+                  semanticLabel: 'logout',
                 ),
-                accountName: Text('name : ${appState.username}'),
-                accountEmail: Text('E-mail : ${appState.useremail}'),
-                decoration: BoxDecoration(
-                    color: Colors.deepPurpleAccent,
-                    borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(40.0),
-                        bottomRight: Radius.circular(40.0))),
-              ),
-              ListTile(
-                leading: IconButton(
-                  icon: const Icon(Icons.person, semanticLabel: 'home'),
-                  color: theme.colorScheme.primary,
-                  onPressed: widget.didtogglegallery,
-                ),
-                title: const Text('profile'),
-                onTap: widget.didtogglegallery,
-                trailing: Icon(Icons.add),
+                onPressed: widget.shouldLogOut,
               ),
             ],
+            automaticallyImplyLeading:
+            false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
           ),
-        ),
-        key: keyObj.key,
-        appBar: AppBar(
-          title: Text(
-            '홍길동님의 동반자 고길동님 안녕하세요',
-            style: TextStyle(fontSize: 15),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.logout,
-                semanticLabel: 'logout',
-              ),
-              onPressed: widget.shouldLogOut,
-            ),
-          ],
-          automaticallyImplyLeading:
-              false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
-        ),
-        body: Center(
-            child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
+          body: Center(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text('홍길동님 훈련 데이터'),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            GraphPage(),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text('홍길동님 지난달보다 집중력 상승!'),
+                            ElevatedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TraningReportPage()),
+                                  );
+                                },
+                                child: Text('훈련결과 보러가기')),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton.icon(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.accessibility_new_rounded),
+                                    label: Text('오늘의 활동기록')),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                TextButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                CommunicationYardPage()),
+                                      );
+                                    },
+                                    icon: Icon(Icons.account_box),
+                                    label: Text('소통마당')),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      Text('홍길동님 훈련 데이터'),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      GraphPage(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text('홍길동님 지난달보다 집중력 상승!'),
-                      ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TraningReportPage()),
-                            );
-                          },
-                          child: Text('훈련결과 보러가기')),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(Icons.accessibility_new_rounded),
-                              label: Text('오늘의 활동기록')),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          TextButton.icon(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          CommunicationYardPage()),
-                                );
-                              },
-                              icon: Icon(Icons.account_box),
-                              label: Text('소통마당')),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                  // Expanded(
+                  //   child: Align(
+                  //     alignment: Alignment.bottomCenter,
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         const SizedBox(
+                  //           width: 1,
+                  //         ),
+                  //         IconButton(
+                  //           onPressed: () {
+                  //             _key.currentState!.openDrawer();
+                  //           },
+                  //           icon: Icon(
+                  //             Icons.menu,
+                  //             color: colorScheme.primary,
+                  //             size: 30,
+                  //           ),
+                  //         ),
+                  //         const SizedBox(
+                  //           width: 5,
+                  //         ),
+                  //         const SizedBox(
+                  //           width: 5,
+                  //         ),
+                  //         IconButton(
+                  //           onPressed: () {},
+                  //           icon: Icon(
+                  //             Icons.adjust,
+                  //             color: colorScheme.primary,
+                  //             size: 30,
+                  //           ),
+                  //         ),
+                  //         const SizedBox(
+                  //           width: 1,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // )
+                ],
+              )),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {},
+            tooltip: 'Create',
+            child: CircleAvatar(
+              radius: 28,
+              backgroundImage: AssetImage('image/frame.png'),
+              backgroundColor: Colors.white,
             ),
-            // Expanded(
-            //   child: Align(
-            //     alignment: Alignment.bottomCenter,
-            //     child: Row(
-            //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //       children: [
-            //         const SizedBox(
-            //           width: 1,
-            //         ),
-            //         IconButton(
-            //           onPressed: () {
-            //             _key.currentState!.openDrawer();
-            //           },
-            //           icon: Icon(
-            //             Icons.menu,
-            //             color: colorScheme.primary,
-            //             size: 30,
-            //           ),
-            //         ),
-            //         const SizedBox(
-            //           width: 5,
-            //         ),
-            //         const SizedBox(
-            //           width: 5,
-            //         ),
-            //         IconButton(
-            //           onPressed: () {},
-            //           icon: Icon(
-            //             Icons.adjust,
-            //             color: colorScheme.primary,
-            //             size: 30,
-            //           ),
-            //         ),
-            //         const SizedBox(
-            //           width: 1,
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // )
-          ],
-        )),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          tooltip: 'Create',
-          child: CircleAvatar(
-            radius: 28,
-            backgroundImage: AssetImage('image/frame.png'),
-            backgroundColor: Colors.white,
           ),
-        ),
-        floatingActionButtonLocation: _fabLocation,
-        bottomNavigationBar: bottomappbar);
+          floatingActionButtonLocation: _fabLocation,
+          bottomNavigationBar: bottomappbar),
+    );
   }
 }
 

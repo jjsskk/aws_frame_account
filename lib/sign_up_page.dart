@@ -105,11 +105,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           fillColor:
                               MaterialStateProperty.resolveWith(getColor),
                           value: isChecked_personal,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isChecked_personal = value!;
-                            });
-                          },
+                          onChanged: null
                         ),
                         TextButton(
                             onPressed: () {
@@ -213,11 +209,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           fillColor:
                               MaterialStateProperty.resolveWith(getColor),
                           value: isChecked_market,
-                          onChanged: (bool? value) {
-                            setState(() {
-                              isChecked_market = value!;
-                            });
-                          },
+                          onChanged: null
                         ),
                         TextButton(
                             onPressed: () {
@@ -640,7 +632,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final password = _passwordController.text.trim();
     String tem = '+';
     final phonenumber = tem + _phonenumberController.text.trim();
-    final institutionphonenumber = tem + _institutionnumberController.text.trim();
+    final institutionphonenumber = _institutionnumberController.text.trim();
     final usernumber = _usernumberController.text.trim();
     _formKey.currentState!.validate();
     print('username: $username');
