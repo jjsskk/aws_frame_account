@@ -141,12 +141,11 @@ class GraphQLController {
   }
 
   Future<MonthlyDBTest?> queryMonthlyDBRequiredItem(
-       int yearMonth) async {
-    var ID = '3';
+      String id, int yearMonth) async {
     print(yearMonth + 40);
     final queryPredicateDate=
         MonthlyDBTest.MONTH.between(yearMonth.toString(), (yearMonth + 40).toString());
-    final queryPredicateboth = MonthlyDBTest.ID.eq(ID).and(queryPredicateDate);
+    final queryPredicateboth = MonthlyDBTest.ID.eq(id).and(queryPredicateDate);
 
     try {
       final request = ModelQueries.list<MonthlyDBTest>(

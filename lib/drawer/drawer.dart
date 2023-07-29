@@ -28,6 +28,16 @@ class GlobalDrawer  {
                     bottomLeft: Radius.circular(40.0),
                     bottomRight: Radius.circular(40.0))),
           ),
+          ListTile(
+            leading: IconButton(
+              icon: const Icon(Icons.person, semanticLabel: 'home'),
+              color: theme.colorScheme.primary,
+              onPressed: appState.authService.logOut,
+            ),
+            title: const Text('로그아웃'),
+            onTap: appState.authService.logOut,
+            trailing: Icon(Icons.logout),
+          ),
           // ListTile(
           //   leading: IconButton(
           //     icon: const Icon(Icons.person, semanticLabel: 'home'),

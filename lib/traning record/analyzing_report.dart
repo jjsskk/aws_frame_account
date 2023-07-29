@@ -51,6 +51,12 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   //반응속도 점수
   int ORIENT_SCORE = 0;
 
+  int AVG_ATT = 0;
+  //평균 집중력
+
+  int AVG_MED =0 ;
+  //평균 안정감
+
   int CON_SCORE_AVG = 0; // 주의력 점수
 
   int SPACETIME_SCORE_AVG = 0; //시공간 점수
@@ -67,6 +73,10 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
   int ORIENT_SCORE_AVG = 0; //지남력점수
 
+  int AVG_ATT_AVG = 0;//평균 집중력
+
+  int AVG_MED_AVG =0 ;//평균 안정감
+
   List<String> users = [];
   List<Future<dynamic?>> futuresList = [];
   int ageEra = 0;
@@ -79,7 +89,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     super.initState();
     gql = GraphQLController.Obj;
     extractLatestUserData();
-    extractSimilarAge();
+    // extractSimilarAge();
     // gql.queryListMonthlyDBItems.then((dynamic) {
     //   print(dynamic);
     // });
@@ -102,9 +112,12 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         CAL_SCORE = value!.cal_score;
         REAC_SCORE = value!.reac_score;
         ORIENT_SCORE = value!.orient_score;
+        AVG_ATT = value!.avg_att;
+        AVG_MED = value!.avg_med;
         month = int.parse(value.month.substring(4, 6));
         print("month : $month");
         year = int.parse(value.month.substring(0, 4));
+        extractSimilarAge();
       });
     });
   }
@@ -113,7 +126,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     int changeddate = year * 10000 + month * 100;
     numberForonedata = 0;
     Future<dynamic> future =
-        gql.queryMonthlyDBRequiredItem( changeddate).then((value) {
+        gql.queryMonthlyDBRequiredItem("3", changeddate).then((value) {
       if (value != null) {
         setState(() {
           numberForonedata++;
@@ -125,6 +138,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           CAL_SCORE = value!.cal_score;
           REAC_SCORE = value!.reac_score;
           ORIENT_SCORE = value!.orient_score;
+          AVG_ATT = value!.avg_att;
+          AVG_MED = value!.avg_med;
         });
       }
     });
@@ -191,6 +206,11 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     int REAC_SCORE_SUM = 0; //반응속도 점수
 
     int ORIENT_SCORE_SUM = 0; //지남력점수
+
+    int AVG_ATT_SUM=0;
+
+    int AVG_MED_SUM=0;
+
     // String month = "20230701";
     // int monthint = int.parse(month.substring(0, 7));
     // monthint = monthint *10;
@@ -229,6 +249,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           ORIENT_SCORE_SUM += value.orient_score as int; //지남력점수
           // ORIENT_SCORE_AVG = (ORIENT_SCORE_SUM ~/ number);
 
+          AVG_ATT_SUM += value.avg_att as int;
+
+          AVG_MED_SUM += value.avg_med as int;
           // int a = (CON_SCORE_SUM ~/ number);
           // print("con : ${a}");
         }
@@ -261,6 +284,10 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
         ORIENT_SCORE_AVG = (ORIENT_SCORE_SUM ~/ numberForavg);
 
+        AVG_ATT_AVG = (AVG_ATT_SUM ~/ numberForavg);
+
+        AVG_MED_AVG = (AVG_MED_SUM~/ numberForavg);
+
         if (numberForonedata == 0) {
           CON_SCORE = 0;
           SPACETIME_SCORE = 0;
@@ -270,6 +297,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           CAL_SCORE = 0;
           REAC_SCORE = 0;
           ORIENT_SCORE = 0;
+          AVG_ATT =0;
+          AVG_MED = 0;
           numberForonedata = 0;
         }
       } else {
@@ -289,6 +318,10 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
         ORIENT_SCORE_AVG = 0;
 
+        AVG_ATT_AVG =0;
+
+        AVG_MED_AVG =0;
+
         if (numberForonedata == 0) {
           CON_SCORE = 0;
           SPACETIME_SCORE = 0;
@@ -299,6 +332,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           REAC_SCORE = 0;
           ORIENT_SCORE = 0;
           numberForonedata = 0;
+          AVG_ATT =0;
+          AVG_MED = 0;
         }
       }
       loading = false;
@@ -319,7 +354,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
       "언어기능($LING_SCORE)",
       "계산력($CAL_SCORE)",
       "반응속도($REAC_SCORE)",
-      "지남력($ORIENT_SCORE)"
+      "지남력($ORIENT_SCORE)",
+      "집중력($AVG_ATT)",
+      "안정감($AVG_MED)",
     ];
     var data = [
       [
@@ -330,7 +367,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         LING_SCORE,
         CAL_SCORE,
         REAC_SCORE,
-        ORIENT_SCORE
+        ORIENT_SCORE,
+        AVG_ATT,
+        AVG_MED,
       ]
     ];
 
@@ -791,6 +830,70 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                             ),
                           ),
                           ORIENT_SCORE_AVG <= ORIENT_SCORE
+                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                          Divider(
+                            thickness: 2.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('집중력'),
+                                Expanded(
+                                  child: LinearPercentIndicator(
+                                    animation: true,
+                                    lineHeight: 20.0,
+                                    animationDuration: 2000,
+                                    percent: AVG_ATT / 100,
+                                    animateFromLastPercent: true,
+                                    center: Text("$AVG_ATT"),
+                                    isRTL: false,
+                                    barRadius: Radius.elliptical(5, 15),
+                                    progressColor: Colors.greenAccent,
+                                    maskFilter:
+                                    MaskFilter.blur(BlurStyle.solid, 3),
+                                  ),
+                                ),
+                                Text("$AVG_ATT_AVG"),
+                                Text('(평균연령 $ageEra)'),
+                              ],
+                            ),
+                          ),
+                          AVG_ATT_AVG <= AVG_ATT
+                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                          Divider(
+                            thickness: 2.0,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('안정감'),
+                                Expanded(
+                                  child: LinearPercentIndicator(
+                                    animation: true,
+                                    lineHeight: 20.0,
+                                    animationDuration: 2000,
+                                    percent: AVG_MED / 100,
+                                    animateFromLastPercent: true,
+                                    center: Text("$AVG_MED"),
+                                    isRTL: false,
+                                    barRadius: Radius.elliptical(5, 15),
+                                    progressColor: Colors.greenAccent,
+                                    maskFilter:
+                                    MaskFilter.blur(BlurStyle.solid, 3),
+                                  ),
+                                ),
+                                Text("$AVG_MED_AVG"),
+                                Text('(평균연령 $ageEra)'),
+                              ],
+                            ),
+                          ),
+                          AVG_MED_AVG <= AVG_MED
                               ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
                               : Text('평균보다 점수가부족합니다. 강해지세요!'),
                           Divider(

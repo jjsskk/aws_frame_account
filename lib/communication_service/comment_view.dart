@@ -1,4 +1,5 @@
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
+import 'package:aws_frame_account/drawer/drawer.dart';
 import 'package:aws_frame_account/globalkey.dart';
 import 'package:aws_frame_account/provider_login/login_state.dart';
 import 'package:flutter/material.dart';
@@ -68,26 +69,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
   Widget build(BuildContext context) {
     var appState = context.watch<LoginState>();
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('image/frame.png'),
-                backgroundColor: Colors.white,
-              ),
-              accountName: Text('name : ${appState.protectorName}'),
-              accountEmail: Text('E-mail : ${appState.protectorEmail}'),
-              decoration: BoxDecoration(
-                  color: Colors.deepPurpleAccent,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(40.0),
-                      bottomRight: Radius.circular(40.0))),
-            ),
-          ],
-        ),
-      ),
+      drawer: GlobalDrawer.getDrawer(context, appState),
       key: keyObj.key,
       appBar: AppBar(
           title: Text('코멘트 모아보기'),

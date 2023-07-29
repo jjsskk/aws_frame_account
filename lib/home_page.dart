@@ -16,11 +16,12 @@ import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key,
-    required this.didtogglegallery,
-    // required this.didtogglegraph,
-    required this.pickedimageurl,
-    required this.shouldLogOut})
+  HomePage(
+      {Key? key,
+      required this.didtogglegallery,
+      // required this.didtogglegraph,
+      required this.pickedimageurl,
+      required this.shouldLogOut})
       : super(key: key);
   final VoidCallback didtogglegallery;
 
@@ -100,11 +101,31 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<bool> _onBackKey() async {
+    return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('끝내겠습니까?'),
+            actions: [
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: Text('네')),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('아니요'))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    var colorScheme = Theme
-        .of(context)
-        .colorScheme;
+    var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
     appState = context.watch<LoginState>();
     if (appState.protectorName == '' ||
@@ -113,22 +134,6 @@ class _HomePageState extends State<HomePage> {
         appState.institutionNumber == '' ||
         appState.userNumber == '') getCurrentuser();
 
-    Future<bool> _onBackKey() async {
-      return await showDialog(
-          context: context, builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('끝내겠습니까?'),
-          actions: [
-            TextButton(onPressed: () {
-              Navigator.pop(context, true);
-            }, child: Text('네')),
-            TextButton(onPressed: () {
-              Navigator.pop(context, false);
-            }, child: Text('아니요'))
-          ],
-        );
-      });
-    }
     return WillPopScope(
       onWillPop: () {
         return _onBackKey();
@@ -151,112 +156,111 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
             automaticallyImplyLeading:
-            false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
+                false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
           ),
           body: Center(
               child: Column(
-                children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 16),
+                    child: Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text('홍길동님 훈련 데이터'),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        GraphPage(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text('홍길동님 지난달보다 집중력 상승!'),
+                        ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TraningReportPage()),
+                              );
+                            },
+                            child: Text('훈련결과 보러가기')),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            TextButton.icon(
+                                onPressed: () {},
+                                icon: Icon(Icons.accessibility_new_rounded),
+                                label: Text('오늘의 활동기록')),
                             const SizedBox(
-                              height: 10,
+                              width: 10,
                             ),
-                            Text('홍길동님 훈련 데이터'),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            GraphPage(),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text('홍길동님 지난달보다 집중력 상승!'),
-                            ElevatedButton(
+                            TextButton.icon(
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            TraningReportPage()),
+                                            CommunicationYardPage()),
                                   );
                                 },
-                                child: Text('훈련결과 보러가기')),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextButton.icon(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.accessibility_new_rounded),
-                                    label: Text('오늘의 활동기록')),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                TextButton.icon(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                CommunicationYardPage()),
-                                      );
-                                    },
-                                    icon: Icon(Icons.account_box),
-                                    label: Text('소통마당')),
-                              ],
-                            ),
+                                icon: Icon(Icons.account_box),
+                                label: Text('소통마당')),
                           ],
                         ),
-                      ),
+                      ],
                     ),
                   ),
-                  // Expanded(
-                  //   child: Align(
-                  //     alignment: Alignment.bottomCenter,
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //       children: [
-                  //         const SizedBox(
-                  //           width: 1,
-                  //         ),
-                  //         IconButton(
-                  //           onPressed: () {
-                  //             _key.currentState!.openDrawer();
-                  //           },
-                  //           icon: Icon(
-                  //             Icons.menu,
-                  //             color: colorScheme.primary,
-                  //             size: 30,
-                  //           ),
-                  //         ),
-                  //         const SizedBox(
-                  //           width: 5,
-                  //         ),
-                  //         const SizedBox(
-                  //           width: 5,
-                  //         ),
-                  //         IconButton(
-                  //           onPressed: () {},
-                  //           icon: Icon(
-                  //             Icons.adjust,
-                  //             color: colorScheme.primary,
-                  //             size: 30,
-                  //           ),
-                  //         ),
-                  //         const SizedBox(
-                  //           width: 1,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // )
-                ],
-              )),
+                ),
+              ),
+              // Expanded(
+              //   child: Align(
+              //     alignment: Alignment.bottomCenter,
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         const SizedBox(
+              //           width: 1,
+              //         ),
+              //         IconButton(
+              //           onPressed: () {
+              //             _key.currentState!.openDrawer();
+              //           },
+              //           icon: Icon(
+              //             Icons.menu,
+              //             color: colorScheme.primary,
+              //             size: 30,
+              //           ),
+              //         ),
+              //         const SizedBox(
+              //           width: 5,
+              //         ),
+              //         const SizedBox(
+              //           width: 5,
+              //         ),
+              //         IconButton(
+              //           onPressed: () {},
+              //           icon: Icon(
+              //             Icons.adjust,
+              //             color: colorScheme.primary,
+              //             size: 30,
+              //           ),
+              //         ),
+              //         const SizedBox(
+              //           width: 1,
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // )
+            ],
+          )),
           floatingActionButton: FloatingActionButton(
             onPressed: () {},
             tooltip: 'Create',
