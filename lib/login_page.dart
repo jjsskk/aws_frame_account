@@ -1,12 +1,14 @@
 import 'package:aws_frame_account/analytics/analytics_events.dart';
 import 'package:aws_frame_account/analytics/analytics_service.dart';
 import 'package:aws_frame_account/auth_credentials.dart';
+import 'package:aws_frame_account/provider_login/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback shouldShowSignUp;
@@ -38,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isChecked_id = true;
   bool isChecked_autologin = false;
+  bool providerReset = false;
 
   // 캐시에 있는 데이터를 불러오는 함수
   // 이 함수의 기능으로, 어플을 끄고 켜도 데이터가 유지된다.
@@ -51,6 +54,8 @@ class _LoginPageState extends State<LoginPage> {
       print('cache id :$_cacheid'); // Run 기록으로 id와 pw의 값을 확인할 수 있음.
     });
   }
+
+  late var appState;
 
   @override
   void initState() {
@@ -80,6 +85,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    appState = context.watch<LoginState>();
+    if (!providerReset) {
+      appState.resetVariables();
+      providerReset = true;
+    }
     // display_cacheId();
     // 2
     return Scaffold(

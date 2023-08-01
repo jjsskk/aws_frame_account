@@ -86,7 +86,25 @@ class GraphQLController {
     // final queryPredicatemonth = MonthlyDBTest.MONTH.ascending().field;
     // print("what : $queryPredicatemonth");
     final queryPredicate = MonthlyDBTest.ID.eq(ID);
-
+    // String graphQLString = """
+    //     query GetLatestData(\$id: String) {
+    //       getLatestData(
+    //         filter: {
+    //           and: [
+    //             { ID: { eq: \$id } },
+    //           ]
+    //         },
+    //         limit: 1,
+    //         sortField: MONTH,
+    //         sortDirection: DESC
+    //       ) {
+    //         items {
+    //           MONTH
+    //
+    //         }
+    //       }
+    //     }
+    //   """;
     try {
       final request = ModelQueries.list<MonthlyDBTest>(
         MonthlyDBTest.classType,
@@ -99,6 +117,7 @@ class GraphQLController {
       // final test = response.data; //Latest DATA
       if (test == null) {
         safePrint('errors: ${response.errors}');
+        // safePrint('errors: ${response}');
       }
       print(test.toString());
       return test;
@@ -113,19 +132,49 @@ class GraphQLController {
     // final queryPredicate = MonthlyDBTest.ID.eq(ID);
     //20240211- 10000 + 50
     //if( yearmonth >  )2
-   print("yearmonth:${yearMonth - 10000 + 50}");
-    final queryPredicateDateMax=
-    MonthlyDBTest.MONTH.le("$yearMonth");
-    final queryPredicateDatemin=
-    MonthlyDBTest.MONTH.gt("${yearMonth - 10000 + 50}");
-    final queryPredicateall= MonthlyDBTest.ID.eq(ID).and(queryPredicateDateMax).and(queryPredicateDatemin);
+    print("yearmonth:${yearMonth - 10000 + 50}");
+    final queryPredicateDateMax = MonthlyDBTest.MONTH.le("$yearMonth");
+    final queryPredicateDatemin =
+        MonthlyDBTest.MONTH.gt("${yearMonth - 10000 + 50}");
+    final queryPredicateall = MonthlyDBTest.ID
+        .eq(ID)
+        .and(queryPredicateDateMax)
+        .and(queryPredicateDatemin);
 
     try {
-      final request = ModelQueries.list<MonthlyDBTest>(
-        MonthlyDBTest.classType,
-        where: queryPredicateall
+      final request = ModelQueries.list<MonthlyDBTest>(MonthlyDBTest.classType,
+          where: queryPredicateall);
+      final response = await Amplify.API.query(request: request).response;
 
-      );
+      final items = response.data?.items;
+      if (items == null) {
+        print('errors: ${response.errors}');
+        return const [];
+      }
+      return items;
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
+    }
+  }
+  Future<List<MonthlyDBTest?>> queryMonthlyDBTwoItems(int yearMonth) async {
+    var ID = '3';
+    // final queryPredicate = MonthlyDBTest.ID.eq(ID);
+    //20240211- 10000 + 50
+    //if( yearmonth >  )2
+    print("yearmonth:${yearMonth - 10000 + 50}");
+    final queryPredicateDateMax = MonthlyDBTest.MONTH.le("$yearMonth");
+    final queryPredicateDatemin =
+    MonthlyDBTest.MONTH.gt("${yearMonth - 10000 + 50}");
+    final queryPredicateall = MonthlyDBTest.ID
+        .eq(ID)
+        .and(queryPredicateDateMax)
+        .and(queryPredicateDatemin);
+
+    try {
+      final request = ModelQueries.list<MonthlyDBTest>(MonthlyDBTest.classType,
+          where: queryPredicateall,
+     );
       final response = await Amplify.API.query(request: request).response;
 
       final items = response.data?.items;
@@ -143,8 +192,8 @@ class GraphQLController {
   Future<MonthlyDBTest?> queryMonthlyDBRequiredItem(
       String id, int yearMonth) async {
     print(yearMonth + 40);
-    final queryPredicateDate=
-        MonthlyDBTest.MONTH.between(yearMonth.toString(), (yearMonth + 40).toString());
+    final queryPredicateDate = MonthlyDBTest.MONTH
+        .between(yearMonth.toString(), (yearMonth + 40).toString());
     final queryPredicateboth = MonthlyDBTest.ID.eq(id).and(queryPredicateDate);
 
     try {
@@ -166,8 +215,8 @@ class GraphQLController {
     }
   }
 
-  Future<UserDBTest?> queryUserDBItem() async {
-    const ID = '1234';
+  Future<UserDBTest?> queryUserDBItem(String id) async {
+    const ID = '1';
 
     final queryPredicate = UserDBTest.ID.eq(ID);
     // final queryPredicateboth = UserDBTest.BIRTH.between(start, end).and(queryPredicateId);

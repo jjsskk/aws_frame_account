@@ -154,7 +154,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
               sideTitles: SideTitles(
                   showTitles: true,
                   reservedSize: 22,
-                  // interval: 3,
+                  interval: 1,
                   getTitlesWidget: bottomTitleWidgets),
             ),
             leftTitles: AxisTitles(

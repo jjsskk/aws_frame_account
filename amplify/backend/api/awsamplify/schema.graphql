@@ -43,3 +43,4 @@ type UserDBTest @model @auth(rules: [{allow: public}]) {
   updatedAt:AWSDateTime
 
 }
+

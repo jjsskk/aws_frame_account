@@ -1,9 +1,7 @@
 import 'package:aws_frame_account/provider_login/login_state.dart';
 import 'package:flutter/material.dart';
 
-
-class GlobalDrawer  {
-
+class GlobalDrawer {
   static Widget getDrawer(BuildContext context, LoginState appState) {
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
@@ -32,7 +30,7 @@ class GlobalDrawer  {
             leading: IconButton(
               icon: const Icon(Icons.person, semanticLabel: 'home'),
               color: theme.colorScheme.primary,
-              onPressed: appState.authService.logOut,
+              onPressed:  appState.authService.logOut,
             ),
             title: const Text('로그아웃'),
             onTap: appState.authService.logOut,

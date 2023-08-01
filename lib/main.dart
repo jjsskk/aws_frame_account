@@ -69,6 +69,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<LoginState>();
@@ -180,20 +181,4 @@ class _MyAppState extends State<MyApp> {
     safePrint('data: $data');
   }
 
-  Future<void> createTodo() async {
-    try {
-      final todo = Todo(name: 'my first todo', description: 'todo description');
-      final request = ModelMutations.create(todo);
-      final response = await Amplify.API.mutate(request: request).response;
-
-      final createdTodo = response.data;
-      if (createdTodo == null) {
-        safePrint('errors: ${response.errors}');
-        return;
-      }
-      safePrint('Mutation result: ${createdTodo.name}');
-    } on ApiException catch (e) {
-      safePrint('Mutation failed: $e');
-    }
-  }
 }
