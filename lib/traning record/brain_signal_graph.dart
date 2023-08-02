@@ -17,26 +17,51 @@ class BrainSignalPage extends StatefulWidget {
 }
 
 class _BrainSignalPageState extends State<BrainSignalPage> {
-  bool darkMode = false;
+
   String? selectedLabel;
   bool useSides = false;
-  List<Color> gradientColors = [
-    const Color(0xff23b6e6),
-    const Color(0xff02d39a),
+  List<Color> buttonColors = [
+    Color(0xff237ACF), // Dark Blue
+    Color(0xff905C7E), // Orchid
+    Color(0xffAA7F39), // Golden Brown
+    Color(0xffDD6031), // Deep Orange
+    Color(0xff3CDBD3), // Turquoise
+    Color(0xff117A65), // Jungle Green
+    Color(0xff764BA2), // Purple
+    Color(0xff801336), // Burgundy
+    Color(0xffEB9F9A), // Salmon
+    Color(0xffFAD201), // Yellow
+
   ];
 
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    value = value + 1;
 
-    const style = TextStyle(
-        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 14);
-    String text = value.toInt().toString();
-    text = text + "월";
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: Text(text, style: style, textAlign: TextAlign.center),
-    );
+
+
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    // value가 0 또는 양수이고 값이 리스트 범위 내에 있음을 확인합니다.
+    if (value >= 0 && value < results.length) {
+      String? currentDate = results[value.toInt()]?.month;
+
+      int year = int.parse(currentDate!.substring(0, 4));
+      int month = int.parse(currentDate.substring(4, 6));
+      String text = "$month월";
+
+      final style = TextStyle(
+          color: Color(0xff68737d),
+          fontWeight: FontWeight.bold,
+          fontSize: 12);
+
+      return SideTitleWidget(
+        axisSide: meta.axisSide,
+        child: Text(text, style: style, textAlign: TextAlign.center),
+      );
+    } else {
+      return Container();
+    }
   }
+
+
+
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
@@ -79,7 +104,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     "orient_score": "지남력",
   }; //버튼 이름
 
-  List<double> _getGraphData(String label) {
+  List<double> _getGraphData(String label,int colorIndex) {
     List<double> graphData = [];
     DateTime twelveMonthsAgo = DateTime.now().subtract(Duration(days: 365 * 1));
     for (var result in results) {
@@ -136,9 +161,15 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
 
   LineChartData _getLineChartData() {
     List<double> graphData = [];
+    int colorIndex = 0;
     if (selectedLabel != null) {
-      graphData = _getGraphData(selectedLabel!);
+      colorIndex = buttonLabels.keys.toList().indexOf(selectedLabel!);
+      graphData = _getGraphData(selectedLabel!, colorIndex);
     }
+    List<Color> selectedGradientColors = [      buttonColors[colorIndex],
+      buttonColors[colorIndex].withOpacity(0.8),
+    ];
+
 
     return LineChartData(
         lineTouchData: LineTouchData(enabled: true),
@@ -153,8 +184,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 22,
-                  // interval: 3,
+                  reservedSize: 40,
+                  interval: 1,
                   getTitlesWidget: bottomTitleWidgets),
             ),
             leftTitles: AxisTitles(
@@ -167,7 +198,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                 // margin: 12,
               ),
             ),
-            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
         borderData: FlBorderData(
             show: true,
@@ -184,7 +215,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                   .values
                   .toList(),
             isCurved: true,
-            gradient: LinearGradient(colors: gradientColors),
+
+            gradient: LinearGradient(colors: selectedGradientColors),
             barWidth: 5,
             isStrokeCapRound: true,
             dotData: FlDotData(
@@ -193,10 +225,11 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
             belowBarData: BarAreaData(
               show: true,
               gradient: LinearGradient(
-                  colors: gradientColors
+                  colors: selectedGradientColors
                       .map((color) => color.withOpacity(0.3))
                       .toList()),
-            ),)
+            ),
+          )
         ]);
   }
 
@@ -357,41 +390,11 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            color: darkMode ? Colors.black : Colors.white,
+            color:  Colors.white,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      darkMode
-                          ? Text(
-                        'Light mode',
-                        style: TextStyle(color: Colors.white),
-                      )
-                          : Text(
-                        'Dark mode',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Switch(
-                        value: this.darkMode,
-                        onChanged: (value) {
-                          setState(() {
-                            darkMode = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
 
-                // Expanded(
-                //   child: ListView(
-                //     children: _buildButtons(),
-                //   ),
-                // ),
                 _buildButtons(),
                 AspectRatio(
                   aspectRatio: 6 / 5,
