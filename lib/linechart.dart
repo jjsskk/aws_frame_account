@@ -1,20 +1,12 @@
-import 'dart:io';
 
-import 'package:aws_frame_account/controller/graph_controller.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:csv/csv.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:amplify_storage_s3/amplify_storage_s3.dart';
-import 'package:amplify_flutter/amplify_flutter.dart';
-import 'package:get/get.dart';
 
 class Linechart extends StatefulWidget {
   Linechart({required this.data,required this.dataName});
 
-  Map<String, int> data;
+  Map<int, int> data;
   String dataName;
 
   @override
@@ -38,7 +30,7 @@ class _LinechartState extends State<Linechart> {
   @override
   void initState() {
     super.initState();
-    convertXborder();
+    // convertXborder();
     // controller = Get.find<GraphController>(tag: widget.csvlist.first);
   }
 
@@ -47,21 +39,22 @@ class _LinechartState extends State<Linechart> {
   double minX = 0;
   double maxX = 0;
 
-  void convertXborder() {
-    minX = double.parse(widget.data.keys.first);
-    maxX = double.parse(widget.data.keys.last);
-    if (minX == 12.0) {
-
-      minX = 0;
-    }
-  }
+  // void convertXborder() {
+  //   minX = double.parse(widget.data.keys.first);
+  //   maxX = double.parse(widget.data.keys.last);
+  //   if (minX == 12.0) {
+  //
+  //     minX = 0;
+  //   }
+  // }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
         color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 11);
-    String text = value.toInt().toString();
+
+    String text = widget.data.keys.toList()[value.toInt()].toString();
     text = text + '월';
-    if (text == '0월') text = '12월';
+    // if (text == '0월') text = '12월';
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -194,28 +187,14 @@ class _LinechartState extends State<Linechart> {
       borderData: FlBorderData(
           show: true,
           border: Border.all(color: const Color(0xff37434d), width: 1)),
-      minX: minX,
-      maxX: maxX,
+      minX: 0,
+      maxX: widget.data.length - 1,
       minY: 0,
       maxY: 100,
       lineBarsData: [
         LineChartBarData(
-          spots: getData(),
-          // [
-          //   widget.data.forEach((key, value) {
-          //
-          //   })
-          //   // for (int i = 0; i < widget.data.values.length; i++)
-          //   //   FlSpot(i + 1, controller.data[i][1].toDouble())
-          //
-          //   // FlSpot(0, 3),
-          //   // FlSpot(2.6, 2),
-          //   // FlSpot(4.9, 5),
-          //   // FlSpot(6.8, 3.1),
-          //   // FlSpot(8, 4),
-          //   // FlSpot(9.5, 3),
-          //   // FlSpot(11, 4),
-          // ],
+          spots: _pushData(),
+
           isCurved: true,
           gradient: LinearGradient(colors: gradientColors),
           barWidth: 5,
@@ -235,16 +214,13 @@ class _LinechartState extends State<Linechart> {
     );
   }
 
-  List<FlSpot> getData() {
+  List<FlSpot> _pushData() {
     List<FlSpot> spots = [];
 
     int index = 0;
     widget.data.forEach((key, value) {
       print(key);
-      if (index == 0 && key == '12')
-        spots.add(FlSpot(double.parse('0'), value.toDouble()));
-      else
-        spots.add(FlSpot(double.parse(key), value.toDouble()));
+        spots.add(FlSpot(index.toDouble(), value.toDouble()));
       index++;
     });
     return spots;

@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   var latestdata = [];
   int max = 0;
   String nameForMax = '';
-  Map<String, int> dataForCamparing = {};
+  Map<int, int> dataForCamparing = {};
 
   @override
   void initState() {
@@ -219,8 +219,8 @@ class _HomePageState extends State<HomePage> {
         if (max < value.first) {
           max = value.first;
           nameForMax = key;
-          dataForCamparing[latestdata.first.month.substring(4, 6)] = value[1];
-          dataForCamparing[latestdata.last.month.substring(4, 6)] = value[2];
+          dataForCamparing[int.parse(latestdata.first.month.substring(4, 6))] = value[1];
+          dataForCamparing[int.parse(latestdata.last.month.substring(4, 6))] = value[2];
         }
       });
 
