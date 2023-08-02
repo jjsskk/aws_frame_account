@@ -29,7 +29,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     value = value + 1;
 
     const style = TextStyle(
-        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 14);
+        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 10);
     String text = value.toInt().toString();
     text = text + "월";
     return SideTitleWidget(

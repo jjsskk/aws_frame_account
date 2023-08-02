@@ -58,7 +58,7 @@ class _LinechartState extends State<Linechart> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 13);
+        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 11);
     String text = value.toInt().toString();
     text = text + '월';
     if (text == '0월') text = '12월';
