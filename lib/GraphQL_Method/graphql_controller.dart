@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:amplify_core/amplify_core.dart';
 import 'package:flutter/material.dart';
 
@@ -157,32 +159,104 @@ class GraphQLController {
       return const [];
     }
   }
-  Future<List<MonthlyDBTest?>> queryMonthlyDBTwoItems(int yearMonth) async {
-    var ID = '3';
-    // final queryPredicate = MonthlyDBTest.ID.eq(ID);
-    //20240211- 10000 + 50
-    //if( yearmonth >  )2
-    print("yearmonth:${yearMonth - 10000 + 50}");
-    final queryPredicateDateMax = MonthlyDBTest.MONTH.le("$yearMonth");
-    final queryPredicateDatemin =
-    MonthlyDBTest.MONTH.gt("${yearMonth - 10000 + 50}");
-    final queryPredicateall = MonthlyDBTest.ID
-        .eq(ID)
-        .and(queryPredicateDateMax)
-        .and(queryPredicateDatemin);
 
+  // Future<List<MonthlyDBTest?>> queryMonthlyDBTwoItems(int yearMonth) async {
+  //   var ID = '3';
+  //   // final queryPredicate = MonthlyDBTest.ID.eq(ID);
+  //   //20240211- 10000 + 50
+  //   //if( yearmonth >  )2
+  //   print("yearmonth:${yearMonth - 10000 + 50}");
+  //   final queryPredicateDateMax = MonthlyDBTest.MONTH.le("$yearMonth");
+  //   final queryPredicateDatemin =
+  //   MonthlyDBTest.MONTH.gt("${yearMonth - 10000 + 50}");
+  //   final queryPredicateall = MonthlyDBTest.ID
+  //       .eq(ID)
+  //       .and(queryPredicateDateMax)
+  //       .and(queryPredicateDatemin);
+  //
+  //   try {
+  //     final request = ModelQueries.list<MonthlyDBTest>(MonthlyDBTest.classType,
+  //         where: queryPredicateall,
+  //    );
+  //     final response = await Amplify.API.query(request: request).response;
+  //
+  //     final items = response.data?.items;
+  //     if (items == null) {
+  //       print('errors: ${response.errors}');
+  //       return const [];
+  //     }
+  //     return items;
+  //   } on ApiException catch (e) {
+  //     print('Query failed: $e');
+  //     return const [];
+  //   }
+  // }
+
+  Future<List<MonthlyDBTest?>> customqueryMonthlyDBLatestTwoItems() async {
     try {
-      final request = ModelQueries.list<MonthlyDBTest>(MonthlyDBTest.classType,
-          where: queryPredicateall,
-     );
-      final response = await Amplify.API.query(request: request).response;
+      var ID = '3';
+      int limit =
+          2; // Fetch the latest 2 data items, you can change this value to fetch more or less
+      String sortDirection =
+          "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
 
-      final items = response.data?.items;
-      if (items == null) {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          document: """
+          query ListMonthlyDBTests(\$id: ID, \$limit: Int, \$sortDirection: ModelSortDirection) {
+            listMonthlyDBTests(
+              id: \$id,
+              limit: \$limit,
+              sortDirection: \$sortDirection
+            ) {
+              items {
+                id
+                month
+                total_time
+                avg_att
+                avg_med
+                firsts_name
+                first_amt
+                second_name
+                second_amt
+                con_score
+                spacetime_score
+                exec_score
+                mem_score
+                ling_score
+                cal_score
+                reac_score
+                orient_score
+                createdAt
+                updatedAt
+              }
+            }
+          }
+        """,
+          variables: {
+            "id": ID,
+            "limit": limit,
+            "sortDirection": sortDirection,
+          },
+        ),
+      );
+
+      var response = await operation.response;
+      // print(response.data);
+      // Map<String, dynamic> json = jsonDecode(response.data);
+      // in Dart, you can use the jsonDecode function from the dart:convert library. The jsonDecode function parses a JSON string and returns the corresponding Dart object.
+      List<MonthlyDBTest> monthlyDBTests =
+          (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
+              .map((item) => MonthlyDBTest.fromJson(item))
+              .toList();
+      // List<MonthlyDBTest> monthlyDBTests = (response.data[0] as List)
+      //     .map((item) => MonthlyDBTest.fromJson(response.data))
+      //     .toList();
+      if (monthlyDBTests == null) {
         print('errors: ${response.errors}');
         return const [];
       }
-      return items;
+      return monthlyDBTests;
     } on ApiException catch (e) {
       print('Query failed: $e');
       return const [];

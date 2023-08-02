@@ -38,9 +38,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // String useremail = '';
-  // String username = '';
-  // String userphonenumber = '';
+
 
   // final GlobalKey<ScaffoldState> _key = GlobalKey();
 
@@ -116,7 +114,7 @@ class _HomePageState extends State<HomePage> {
             // useremail = element.value;
             appState.userNumber = (element.value) ?? "no result";
             getUserData(element.value);
-            getMonthlyDBData(element.value);
+            getMonthlyDBComparingData(element.value);
             print(attribute.toString());
           });
       });
@@ -142,89 +140,94 @@ class _HomePageState extends State<HomePage> {
     // });
   }
 
-  void getMonthlyDBData(String id) async {
-    final data =
-        gql.queryMonthlyDBTwoItems(int.parse("20240201")).then((value) {
+  void getMonthlyDBComparingData(String id) async {
+
+        gql.customqueryMonthlyDBLatestTwoItems().then((value) {
       // print("value: $value");
+      if( value.length == 2)
+        {
+        // value.sort((a, b) {
+        //   var aa = int.parse(a.month);
+        //   var bb = int.parse(b.month);
+        //   return aa.compareTo(bb);
+        // });
+        latestdata = value.sublist(value.length - 2);
+        print("here :$latestdata");
+        Map<String, List<int>> diff = {};
+        diff['주의력 점수'] = [
+          latestdata.first.con_score - latestdata.last.con_score,
+          latestdata.last.con_score,
+          latestdata.first.con_score
+        ];
 
-      value.sort((a, b) {
-        var aa = int.parse(a.month);
-        var bb = int.parse(b.month);
-        return aa.compareTo(bb);
-      });
-      latestdata = value.sublist(value.length - 2);
-      print("here :$latestdata");
-      Map<String, List<int>> diff = {};
-      diff['주의력 점수'] = [
-        latestdata.last.con_score - latestdata.first.con_score,
-        latestdata.first.con_score,
-        latestdata.last.con_score
-      ];
+        diff['시공간 점수'] = [
+          latestdata.first.spacetime_score - latestdata.last.spacetime_score,
+          latestdata.last.spacetime_score,
+          latestdata.first.spacetime_score
+        ];
 
-      diff['시공간 점수'] = [
-        latestdata.last.spacetime_score - latestdata.first.spacetime_score,
-        latestdata.first.spacetime_score,
-        latestdata.last.spacetime_score
-      ];
+        diff['집행기능 점수'] = [
+          latestdata.first.exec_score - latestdata.last.con_score,
+          latestdata.last.con_score,
+          latestdata.first.exec_score
+        ];
 
-      diff['집행기능 점수'] = [
-        latestdata.last.exec_score - latestdata.first.con_score,
-        latestdata.first.con_score,
-        latestdata.last.exec_score
-      ];
+        diff['기억력 점수'] = [
+          latestdata.first.mem_score - latestdata.last.mem_score,
+          latestdata.last.mem_score,
+          latestdata.first.mem_score
+        ];
 
-      diff['기억력 점수'] = [
-        latestdata.last.mem_score - latestdata.first.mem_score,
-        latestdata.first.mem_score,
-        latestdata.last.mem_score
-      ];
+        diff['언어기능 점수'] = [
+          latestdata.first.ling_score - latestdata.last.ling_score,
+          latestdata.last.ling_score,
+          latestdata.first.ling_score
+        ];
 
-      diff['언어기능 점수'] = [
-        latestdata.last.ling_score - latestdata.first.ling_score,
-        latestdata.first.ling_score,
-        latestdata.last.ling_score
-      ];
+        diff['계산력 점수'] = [
+          latestdata.first.cal_score - latestdata.last.cal_score,
+          latestdata.last.cal_score,
+          latestdata.first.cal_score
+        ];
 
-      diff['계산력 점수'] = [
-        latestdata.last.cal_score - latestdata.first.cal_score,
-        latestdata.first.cal_score,
-        latestdata.last.cal_score
-      ];
+        diff['반응속도 점수'] = [
+          latestdata.first.reac_score - latestdata.last.reac_score,
+          latestdata.last.reac_score,
+          latestdata.first.reac_score
+        ];
 
-      diff['반응속도 점수'] = [
-        latestdata.last.reac_score - latestdata.first.reac_score,
-        latestdata.first.reac_score,
-        latestdata.last.reac_score
-      ];
+        diff['지남력 점수'] = [
+          latestdata.first.orient_score - latestdata.last.orient_score,
+          latestdata.last.orient_score,
+          latestdata.first.orient_score
+        ];
 
-      diff['지남력 점수'] = [
-        latestdata.last.orient_score - latestdata.first.orient_score,
-        latestdata.first.orient_score,
-        latestdata.last.orient_score
-      ];
+        diff['집중력 점수 '] = [
+          latestdata.first.avg_att - latestdata.last.avg_att,
+          latestdata.last.avg_att,
+          latestdata.first.avg_att
+        ];
 
-      diff['집중력 점수 '] = [
-        latestdata.last.avg_att - latestdata.first.avg_att,
-        latestdata.first.avg_att,
-        latestdata.last.avg_att
-      ];
+        diff['안정감 점수'] = [
+          latestdata.first.avg_med - latestdata.last.avg_med,
+          latestdata.last.avg_med,
+          latestdata.first.avg_med
+        ];
 
-      diff['안정감 점수'] = [
-        latestdata.last.avg_med - latestdata.first.avg_med,
-        latestdata.first.avg_med,
-        latestdata.last.avg_med
-      ];
+        diff.forEach((key, value) {
+          if (max < value[0]) {
+            max = value[0];
+            nameForMax = key;
+            dataForCamparing[
+                int.parse(latestdata.last.month.substring(4, 6))] = value[1];
+            dataForCamparing[int.parse(latestdata.first.month.substring(4, 6))] =
+                value[2];
+          }
+        });
 
-      diff.forEach((key, value) {
-        if (max < value.first) {
-          max = value.first;
-          nameForMax = key;
-          dataForCamparing[int.parse(latestdata.first.month.substring(4, 6))] = value[1];
-          dataForCamparing[int.parse(latestdata.last.month.substring(4, 6))] = value[2];
-        }
-      });
-
-      print("max : $nameForMax");
+        print("max : $nameForMax");
+      }else
+        max = -1;
       setState(() {
         loading_Brain = false;
       });

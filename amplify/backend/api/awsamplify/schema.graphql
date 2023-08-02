@@ -33,6 +33,7 @@ type MonthlyDBTest @model @auth(rules: [{allow: public}]){
 
 }
 
+
 type UserDBTest @model @auth(rules: [{allow: public}]) {
   id: ID!
   birth: Int!
@@ -43,4 +44,11 @@ type UserDBTest @model @auth(rules: [{allow: public}]) {
   updatedAt:AWSDateTime
 
 }
+
+
+type Query {
+  getLatestData(filter: ModelMonthlyDBTestFilterInput, limit: Int, nextToken: String): MonthlyDBTest
+
+}
+
 
