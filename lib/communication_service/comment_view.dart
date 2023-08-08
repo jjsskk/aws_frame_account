@@ -86,6 +86,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         // Use a Material design search bar
                         child: TextField(
+                          style: TextStyle(color: Colors.black),
                           controller: _searchController,
                           onChanged: (value) => _runFilter(value),
                           decoration: InputDecoration(
@@ -127,6 +128,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                           value: value,
                           child: Text(
                             value,
+                            style: TextStyle(color: Colors.black),
                           ),
                         );
                       }).toList(),
