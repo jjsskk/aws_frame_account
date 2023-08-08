@@ -18,12 +18,41 @@ class LoginState extends ChangeNotifier {
   late var _authService;
 
   get authService => _authService;
+
+  // protector info
   String _protectorEmail = '';
   String _protectorName = '';
   String _protectorPhonenumber = '';
   String _userNumber = '';
   String _institutionNumber = '';
   String _latestDataDate = '';
+
+  // user info
+  String _userId = '';
+  String _userBirth = '';
+  String _userName = '';
+
+  void resetVariables() {
+    print("provider!!!");
+    // protector info
+    _protectorEmail = '';
+    _protectorName = '';
+    _protectorPhonenumber = '';
+    _userNumber = '';
+    _institutionNumber = '';
+    _latestDataDate = '';
+    // user info
+    _userId = '';
+    _userBirth = '';
+    _userName = '';
+    // notifyListeners(); // don't use ->error occur
+  }
+
+  String get userId => _userId;
+
+  set userId(String value) {
+    _userId = value;
+  }
 
   String get userNumber => _userNumber;
 
@@ -47,7 +76,6 @@ class LoginState extends ChangeNotifier {
     this._authService = authService;
   }
 
-
   String get protectorName => _protectorName;
 
   set protectorName(String value) {
@@ -64,6 +92,18 @@ class LoginState extends ChangeNotifier {
 
   set institutionNumber(String value) {
     _institutionNumber = value;
+  }
+
+  String get userBirth => _userBirth;
+
+  set userBirth(String value) {
+    _userBirth = value;
+  }
+
+  String get userName => _userName;
+
+  set userName(String value) {
+    _userName = value;
   }
 
   LoginState() {

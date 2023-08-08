@@ -82,16 +82,17 @@ class _LoginSessionState extends State<LoginSession> {
     _storageService.getImages();
   }
 
-  // @override
-  // void dispose() {
-  //   _storageService.imageUrlsController.close();
-  //   super.dispose();
-  // }
-
+  @override
+  void dispose() {
+    _storageService.imageUrlsController.close();
+    super.dispose();
+  }
+  // final GlobalKey<NavigatorState> navigatorKey = GlobalKey()
   @override
   Widget build(BuildContext context) {
     // 4 _MyAppState와 마찬가지로 Navigator 위젯을 사용하여 세션에 대해 지정된 시간에 표시할 페이지를 결정합니다.
     return Navigator(
+      // key: navigatorKey,
       pages: _pages,
       onPopPage: (route, result) => route.didPop(result),
     );

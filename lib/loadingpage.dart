@@ -11,6 +11,9 @@ class LoadingPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(),
+            const SizedBox(
+              height: 20,
+            ),
             Text('로딩중...')
           ],
         ),
