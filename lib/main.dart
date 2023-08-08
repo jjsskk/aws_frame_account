@@ -1,12 +1,11 @@
-import 'package:aws_frame_account/auth_service.dart';
+import 'package:aws_frame_account/auth_flow/auth_service.dart';
 import 'package:aws_frame_account/find_password_page.dart';
-import 'package:aws_frame_account/loadingpage.dart';
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:aws_frame_account/login_session.dart';
 import 'package:aws_frame_account/login_page.dart';
-import 'package:aws_frame_account/provider_login/login_state.dart';
+import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:aws_frame_account/sign_up_page.dart';
 import 'package:aws_frame_account/verification_page.dart';
-import 'package:aws_frame_account/protector_service/protector_service.dart';
 import 'package:flutter/material.dart';
 
 // Amplify Flutter Packages
@@ -28,12 +27,11 @@ import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  initializeDateFormatting().then((_) =>   runApp(ChangeNotifierProvider(
+  initializeDateFormatting().then((_) => runApp(ChangeNotifierProvider(
       create: (context) => LoginState(),
       builder: (context, child) {
         return MyApp();
       })));
-
 }
 
 class MyApp extends StatefulWidget {
@@ -69,15 +67,33 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<LoginState>();
-    appState.set(_authService);
+    appState.authService = _authService;
     return MaterialApp(
-      title: 'Photo Gallery App',
+      title: 'protector app for showing brain signal',
       theme: ThemeData(
+        // colorScheme: ColorScheme(brightness: brightness, primary: primary, onPrimary: onPrimary, secondary: secondary, onSecondary: onSecondary, error: error, onError: onError, background: background, onBackground: onBackground, surface: surface, onSurface: onSurface),
+          // dividerColor: Colors.white,
+          // scaffoldBackgroundColor: Colors.black87,
+        primaryColorLight: Colors.indigo,
           primarySwatch: Colors.deepPurple,
+          snackBarTheme: SnackBarThemeData(
+            backgroundColor: Colors.indigoAccent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15.0),
+            ),
+          ),
+          textTheme: const TextTheme(
+              subtitle1:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              //textstyle used for login and signup and resetpassword page
+              subtitle2: TextStyle(
+                color: Colors.white,
+              )),
+          //textstyle used for login and signup and resetpassword page
+
           // useMaterial3: true,
           visualDensity: VisualDensity.adaptivePlatformDensity),
 
@@ -116,6 +132,7 @@ class _MyAppState extends State<MyApp> {
                         child: SignUpPage(
                       didProvideCredentials: _authService.signUpWithCredentials,
                       shouldShowLogin: _authService.showLogin,
+                          resendConfirmCode: _authService.resendConfirmCode,
                     )),
 
                   // Show Verification Code Page
@@ -123,8 +140,9 @@ class _MyAppState extends State<MyApp> {
                       AuthFlowStatus.verification)
                     MaterialPage(
                         child: VerificationPage(
-                            didProvideVerificationCode:
-                                _authService.verifyCode)),
+                      didProvideVerificationCode: _authService.verifyCode,
+                      shouldShowSignUp: _authService.showSignUp,
+                    )),
 
                   if (snapshot.data!.authFlowStatus ==
                       AuthFlowStatus.resetpassward)
@@ -135,7 +153,7 @@ class _MyAppState extends State<MyApp> {
                       confirmResetPassword: _authService.confirmResetPassword,
                     )),
 
-                  // Show Camera Flow
+                  // Show homepage
                   if (snapshot.data!.authFlowStatus == AuthFlowStatus.session)
                     MaterialPage(
                         child: LoginSession(shouldLogOut: _authService.logOut))
@@ -180,5 +198,4 @@ class _MyAppState extends State<MyApp> {
     final data = response.data;
     safePrint('data: $data');
   }
-
 }

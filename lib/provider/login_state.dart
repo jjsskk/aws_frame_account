@@ -1,47 +1,49 @@
-import 'package:aws_frame_account/globalkey.dart';
+import 'package:aws_frame_account/bottomappbar/globalkey.dart';
 import 'package:aws_frame_account/login_page.dart';
 import 'package:aws_frame_account/sign_up_page.dart';
 import 'package:aws_frame_account/verification_page.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:aws_frame_account/auth_service.dart';
+import 'package:aws_frame_account/auth_flow/auth_service.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_storage_s3/amplify_storage_s3.dart';
 import 'package:amplify_analytics_pinpoint/amplify_analytics_pinpoint.dart';
 import 'package:aws_frame_account/amplifyconfiguration.dart';
 import 'package:flutter/material.dart';
-import 'package:aws_frame_account/home_page.dart';
+import 'package:aws_frame_account/home/home_page.dart';
 
 class LoginState extends ChangeNotifier {
   // final _authService = AuthService();
   // final _amplify = Amplify;
   late var _authService;
 
+  set authService(value) {
+    _authService = value;
+  }
+
   get authService => _authService;
 
-  // protector info
+  // protector's attribute info
   String _protectorEmail = '';
   String _protectorName = '';
   String _protectorPhonenumber = '';
-  String _userNumber = '';
+  String _userNumber = ''; //= userId
   String _institutionNumber = '';
-  String _latestDataDate = '';
 
-  // user info
-  String _userId = '';
+  // user table info
+  String _userId = ''; // userNumber
   String _userBirth = '';
   String _userName = '';
 
   void resetVariables() {
     print("provider!!!");
-    // protector info
+    // protector's attribute info
     _protectorEmail = '';
     _protectorName = '';
     _protectorPhonenumber = '';
     _userNumber = '';
     _institutionNumber = '';
-    _latestDataDate = '';
-    // user info
+    // user table info
     _userId = '';
     _userBirth = '';
     _userName = '';
@@ -60,20 +62,11 @@ class LoginState extends ChangeNotifier {
     _userNumber = value;
   }
 
-  String get latestDataDate => _latestDataDate;
-
-  set latestDataDate(String value) {
-    _latestDataDate = value;
-  }
 
   String get protectorEmail => _protectorEmail;
 
   set protectorEmail(String value) {
     _protectorEmail = value;
-  }
-
-  void set(AuthService authService) {
-    this._authService = authService;
   }
 
   String get protectorName => _protectorName;
@@ -106,7 +99,9 @@ class LoginState extends ChangeNotifier {
     _userName = value;
   }
 
-  LoginState() {
+
+
+  // LoginState() {
     // _configureAmplify();
     // _authService.authStateController.stream.listen((snapshot) {
     //   final context = NavigationService.naviagatorState.currentState!.overlay!.context;
@@ -166,7 +161,7 @@ class LoginState extends ChangeNotifier {
     //   // });
     // }
     // );
-  }
+  // }
 
 // void init(){
 //   _configureAmplify();

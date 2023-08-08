@@ -4,19 +4,30 @@ import 'package:aws_frame_account/communication_service/instituition_info/instit
 import 'package:aws_frame_account/communication_service/user_activity.dart';
 import 'package:aws_frame_account/communication_service/user_care_information.dart';
 import 'package:aws_frame_account/drawer/drawer.dart';
-import 'package:aws_frame_account/globalkey.dart';
-import 'package:aws_frame_account/provider_login/login_state.dart';
+import 'package:aws_frame_account/bottomappbar/globalkey.dart';
+import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-final keyObj = KeyForBottomAppbar();
-final bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
-
-class CommunicationYardPage extends StatelessWidget {
+class CommunicationYardPage extends StatefulWidget {
   CommunicationYardPage({Key? key}) : super(key: key);
 
+  @override
+  State<CommunicationYardPage> createState() => _CommunicationYardPageState();
+}
+
+class _CommunicationYardPageState extends State<CommunicationYardPage> {
   FloatingActionButtonLocation _fabLocation =
       FloatingActionButtonLocation.centerDocked;
+
+  late final bottomappbar;
+  late final keyObj;
+  @override
+  void initState() {
+    super.initState();
+    keyObj = KeyForBottomAppbar();
+    bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
+  }
 
   @override
   Widget build(BuildContext context) {

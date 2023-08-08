@@ -1,7 +1,7 @@
 import 'package:aws_frame_account/camera_gallary/camera_page.dart';
 import 'package:aws_frame_account/camera_gallary/gallery_page.dart';
 import 'package:aws_frame_account/camera_gallary/graph_page.dart';
-import 'package:aws_frame_account/home_page.dart';
+import 'package:aws_frame_account/home/home_page.dart';
 import 'package:aws_frame_account/storage/storage_service.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';

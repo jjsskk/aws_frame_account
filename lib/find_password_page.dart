@@ -1,6 +1,8 @@
+import 'package:aws_frame_account/backey/backKey_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:aws_frame_account/auth_credentials.dart';
+import 'package:aws_frame_account/auth_flow/auth_credentials.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class Find_Password_Page extends StatefulWidget {
   Find_Password_Page(
@@ -40,8 +42,42 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
 
   bool showSpinner = false;
 
+  final iconColor = Colors.white;
+  final dividerColor = Colors.white;
+
+
+  @override
+  void initState() {
+    super.initState();
+    BackButtonInterceptor.add(backKeyInterceptor,
+        context: context);
+  }
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(backKeyInterceptor);
+    super.dispose();
+  }
+
+
+
+  // In this app, back key default function make app terminated, not page poped because of Navigator() in main page and login_sesssion page
+  Future<bool> backKeyInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    print("BACK BUTTON! "); // Do some stuff.
+    if (stopDefaultButtonEvent) return Future(() => true); // prevent
+
+
+    // return type is true -> run interceptor and return type is false -> don't run the interceptor( back key defaut function work)
+    widget.shouldShowLogin();// go to login page
+
+    return Future(() => true);
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    final textColor = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+
     return Scaffold(
       backgroundColor: Colors.black87,
       body: ModalProgressHUD(
@@ -55,28 +91,28 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
               const SizedBox(
                 height: 50,
               ),
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      width: 130,
-                      height: 130,
-                      child: CircleAvatar(
-                        backgroundImage: AssetImage('image/frame.png'),
-                      ),
-                    ),
-                  ]),
-              const SizedBox(height: 30,),
+              Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.width / 3,
+                  child: CircleAvatar(
+                    backgroundImage: AssetImage('image/frame.png'),
+                  ),
+                ),
+              ]),
+              const SizedBox(
+                height: 30,
+              ),
               // Login Form
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.0),
-                child: _verificationForm(),
+                child: _verificationForm(textColor),
               ),
 
               // 6
               // Sign Up Button
               Container(
-                  height: MediaQuery.of(context).size.height/6,
+                  height: MediaQuery.of(context).size.height / 6,
                   alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -85,14 +121,14 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                         onPressed: widget.shouldShowLogin,
                         label: Text(
                           'return to login',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: textColor.subtitle2,
                         ),
                         style: TextButton.styleFrom(
-                            primary: Colors.white,
+                            primary: iconColor,
                             minimumSize: Size(155, 40),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            backgroundColor: Colors.indigo),
+                            backgroundColor: theme.primaryColorLight),
                         icon: Icon(Icons.arrow_forward),
                       ),
                     ],
@@ -104,7 +140,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
     );
   }
 
-  Widget _verificationForm() {
+  Widget _verificationForm(TextTheme textColor) {
     return Form(
       key: _formKey,
       child: Column(
@@ -114,17 +150,17 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
             children: [
               Expanded(
                 child: TextFormField(
-                  style: const TextStyle(color: Colors.white),
+                  style: textColor.subtitle2,
                   controller: _emailController,
                   decoration: InputDecoration(
-                      hintStyle: TextStyle(color: Colors.white),
+                      hintStyle: textColor.subtitle2,
                       hintText: 'ex: FRAME@naver.com',
-                      icon: Icon(Icons.mail, color: Colors.white),
+                      icon: Icon(Icons.mail, color: iconColor),
                       labelText: '이메일',
-                      labelStyle: const TextStyle(color: Colors.white),
+                      labelStyle: textColor.subtitle2,
                       enabledBorder: UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: Colors.white, width: 2))),
+                              BorderSide(color: iconColor, width: 2))),
                 ),
               ),
               const SizedBox(
@@ -134,15 +170,20 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                   onPressed: _confirmemail,
                   child: Text(
                     'send',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: textColor.subtitle2,
                   ),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.deepPurple)),
             ],
           ),
           // _verificationcheck == false ? Text('') : Text('${_emailController.text.trim()}로 인증코드가 발송되었습니다.'),
-          const SizedBox(height: 20,),
-          Divider(thickness: 1.0,color: Colors.white,),
+          const SizedBox(
+            height: 20,
+          ),
+          Divider(
+            thickness: 1.0,
+            color: dividerColor,
+          ),
           // Verification Code TextField
           TextFormField(
             validator: (value) {
@@ -151,17 +192,17 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
               }
               return null;
             },
-            style: const TextStyle(color: Colors.white),
+            style: textColor.subtitle2,
             controller: _verificationCodeController,
             decoration: InputDecoration(
                 icon: Icon(
                   Icons.confirmation_number,
-                  color: Colors.white,
+                  color: iconColor,
                 ),
                 labelText: '인증 코드',
-                labelStyle: const TextStyle(color: Colors.white),
+                labelStyle: textColor.subtitle2,
                 enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2))),
+                    borderSide: BorderSide(color: iconColor, width: 2))),
           ),
           TextFormField(
             validator: (value) {
@@ -174,18 +215,18 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                 return '반드시 소문자와 숫자를 포함해서 최소 8글자 이상 입력해주세요';
               return null;
             },
-            style: const TextStyle(color: Colors.white),
+            style: textColor.subtitle2,
             controller: _passwordController,
             decoration: InputDecoration(
                 errorMaxLines: 2,
                 icon: Icon(
                   Icons.lock_open,
-                  color: Colors.white,
+                  color: iconColor,
                 ),
                 labelText: '새로운 비밀번호 ',
-                labelStyle: const TextStyle(color: Colors.white),
+                labelStyle: textColor.subtitle2,
                 enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2))),
+                    borderSide: BorderSide(color: iconColor, width: 2))),
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
           ),
@@ -193,17 +234,21 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
             height: 20,
           ),
           // Verify Button
-          const SizedBox(height: 30,),
+          const SizedBox(
+            height: 30,
+          ),
 
           Center(
             child: Container(
               padding: EdgeInsets.all(15),
-              height: 90,
-              width: 90,
+              height: MediaQuery.of(context).size.width / 4.5,
+              width: MediaQuery.of(context).size.width / 4.5,
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(50)),
+                  color: iconColor, borderRadius: BorderRadius.circular(50)),
               child: GestureDetector(
-                onTap: _verifycode,
+                onTap: () {
+                  _verifycode(textColor);
+                },
                 child: Container(
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -221,8 +266,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                   child: Center(
                     child: Text(
                       '인증',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                      style: textColor.subtitle1
                     ),
                   ),
                 ),
@@ -246,12 +290,12 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
     });
   }
 
-  void _verifycode() async {
+  void _verifycode(TextTheme textColor) async {
     if (!_verificationcheck) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
           '인증번호를 발송해주세요',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: textColor.subtitle2,
         ),
         backgroundColor: Colors.indigoAccent,
       ));

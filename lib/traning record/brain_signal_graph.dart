@@ -8,9 +8,8 @@ import 'package:fl_chart/fl_chart.dart';
 import '../models/MonthlyDBTest.dart';
 
 class BrainSignalPage extends StatefulWidget {
-  BrainSignalPage({Key? key,required this.latestDataDate}) : super(key: key);
+  BrainSignalPage({Key? key}) : super(key: key);
 
-  String latestDataDate;
 
   @override
   State<BrainSignalPage> createState() => _BrainSignalPageState();
@@ -319,13 +318,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     gql = GraphQLController.Obj;
 
     try {
-    //   gql.queryListMonthlyDBItems(int.parse(widget.latestDataDate)).then((result) {
-    //     print(result);
-    //   }).catchError((error) {
-    //     print(error);
-    //   });
 
-      final data = await gql.queryListMonthlyDBItems(int.parse(widget.latestDataDate));
+      final data = await gql.queryListMonthlyDBItems();
 
       print(data);
       print("Type of myResult: ${data.runtimeType}");

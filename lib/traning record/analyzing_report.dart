@@ -17,17 +17,14 @@ class AnalyzingReportPage extends StatefulWidget {
 }
 
 class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
-  bool darkMode = false;
-
   bool loading = true;
+
   var userbutton = '유저 데이터 추가';
   var brainbutton = '뇌파 데이터 추가';
   late final gql;
-  int usercount = 0;
-  int braincount = 0;
+  int usercount = 0; // DATA count added to USER DB
+  int braincount = 0; // DATA count added to MONTHLY DB
 
-  String state = 'Animation start';
-  bool isRunning = true;
   int CON_SCORE = 0;
 
   // 주의력 점수
@@ -52,9 +49,11 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   int ORIENT_SCORE = 0;
 
   int AVG_ATT = 0;
+
   //평균 집중력
 
-  int AVG_MED =0 ;
+  int AVG_MED = 0;
+
   //평균 안정감
 
   int CON_SCORE_AVG = 0; // 주의력 점수
@@ -73,22 +72,27 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
   int ORIENT_SCORE_AVG = 0; //지남력점수
 
-  int AVG_ATT_AVG = 0;//평균 집중력
+  int AVG_ATT_AVG = 0; //평균 집중력
 
-  int AVG_MED_AVG =0 ;//평균 안정감
+  int AVG_MED_AVG = 0; //평균 안정감
 
-  List<String> users = [];
+  List<String> users = [];// storing user Ids having similar ageEra
+
   List<Future<dynamic?>> futuresList = [];
   int ageEra = 0;
-  var month = 1;
-  var year = 2023;
-  int numberForonedata = 1;
+  var month = 1;  // for DropdownDatePicker
+  var year = 2023; // for DropdownDatePicker
+
+  int numberForonedata = 1; // for extractRequiredUserData()
+
+
+  Map<String, List<int>> allData = {}; // variable for _getBars()
 
   @override
   void initState() {
     super.initState();
     gql = GraphQLController.Obj;
-    extractLatestUserData();
+    extractLatestBrainData();
     // extractSimilarAge();
     // gql.queryListMonthlyDBItems.then((dynamic) {
     //   print(dynamic);
@@ -101,7 +105,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     //   });
   }
 
-  void extractLatestUserData() {
+  void extractLatestBrainData() {
     gql.queryMonthlyDBItem().then((value) {
       setState(() {
         CON_SCORE = value!.con_score;
@@ -122,7 +126,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     });
   }
 
-  Future<dynamic> extractRequiredUserData() {
+  Future<dynamic> extractRequiredBrainData() {
     int changeddate = year * 10000 + month * 100;
     numberForonedata = 0;
     Future<dynamic> future =
@@ -162,9 +166,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     int age = duration.years;
     print('Your age is ${age}'); // Your age is Years: 24, Months: 0, Days: 3
 
-    setState(() {
-      ageEra = ((duration.years ~/ 10) * 10);
-    });
+    ageEra = ((duration.years ~/ 10) * 10);
 
     int diff = age - ageEra;
 
@@ -176,6 +178,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     print(maxYear);
 
     gql.queryListUserDBItems(minYear, maxYear).then((result) {
+      // extract SimilarAge users Ids
       // print(result);
       result.forEach((value) {
         // print("${value.id}");
@@ -189,8 +192,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   }
 
   void calculateAverageSignal() async {
-
     // futuresList = [];
+    allData = {};
+
     int CON_SCORE_SUM = 0; // 주의력 점수
 
     int SPACETIME_SCORE_SUM = 0; //시공간 점수
@@ -207,9 +211,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
     int ORIENT_SCORE_SUM = 0; //지남력점수
 
-    int AVG_ATT_SUM=0;
+    int AVG_ATT_SUM = 0;
 
-    int AVG_MED_SUM=0;
+    int AVG_MED_SUM = 0;
 
     // String month = "20230701";
     // int monthint = int.parse(month.substring(0, 7));
@@ -226,28 +230,20 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         if (value != null) {
           numberForavg++;
           CON_SCORE_SUM += value.con_score as int;
-          // CON_SCORE_AVG = (CON_SCORE_SUM ~/ number); //135/3= 45
 
           SPACETIME_SCORE_SUM += value.spacetime_score as int;
-          // SPACETIME_SCORE_AVG = (SPACETIME_SCORE_SUM ~/ number);
 
           EXEC_SCORE_SUM += value.exec_score as int; //집행기능 점수
-          // EXEC_SCORE_AVG = (EXEC_SCORE_SUM ~/ number);
 
           MEM_SCORE_SUM += value.mem_score as int; // 기억력 점수
-          // MEM_SCORE_AVG = (MEM_SCORE_SUM ~/ number);
 
           LING_SCORE_SUM += value.ling_score as int; //언어기능 점수
-          // LING_SCORE_AVG = (LING_SCORE_SUM ~/ number);
 
           CAL_SCORE_SUM += value.cal_score as int; //계산력 점수
-          // CAL_SCORE_AVG = (CAL_SCORE_SUM ~/ number);
 
           REAC_SCORE_SUM += value.reac_score as int; //반응속도 점수
-          // REAC_SCORE_AVG = (REAC_SCORE_SUM ~/ number);
 
           ORIENT_SCORE_SUM += value.orient_score as int; //지남력점수
-          // ORIENT_SCORE_AVG = (ORIENT_SCORE_SUM ~/ number);
 
           AVG_ATT_SUM += value.avg_att as int;
 
@@ -268,26 +264,50 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     });
     setState(() {
       if (numberForavg > 0) {
+        if (numberForonedata == 0) {
+          CON_SCORE = 0;
+          SPACETIME_SCORE = 0;
+          EXEC_SCORE = 0;
+          MEM_SCORE = 0;
+          LING_SCORE = 0;
+          CAL_SCORE = 0;
+          REAC_SCORE = 0;
+          ORIENT_SCORE = 0;
+          AVG_ATT = 0;
+          AVG_MED = 0;
+          numberForonedata = 0;
+        }
+
         CON_SCORE_AVG = (CON_SCORE_SUM ~/ numberForavg); //135/3= 45
+        allData['주의력'] = [CON_SCORE, CON_SCORE_AVG];
 
         SPACETIME_SCORE_AVG = (SPACETIME_SCORE_SUM ~/ numberForavg);
+        allData['시공간'] = [SPACETIME_SCORE, SPACETIME_SCORE_AVG];
 
         EXEC_SCORE_AVG = (EXEC_SCORE_SUM ~/ numberForavg);
+        allData['집행기능'] = [EXEC_SCORE, EXEC_SCORE_AVG];
 
         MEM_SCORE_AVG = (MEM_SCORE_SUM ~/ numberForavg);
+        allData['기억력'] = [MEM_SCORE, MEM_SCORE_AVG];
 
         LING_SCORE_AVG = (LING_SCORE_SUM ~/ numberForavg); //언어기능 점수
+        allData['언어기능'] = [LING_SCORE, LING_SCORE_AVG];
 
         CAL_SCORE_AVG = (CAL_SCORE_SUM ~/ numberForavg); //계산력 점수
+        allData['계산력'] = [CAL_SCORE, CAL_SCORE_AVG];
 
         REAC_SCORE_AVG = (REAC_SCORE_SUM ~/ numberForavg); //반응속도 점수
+        allData['반응 속도'] = [REAC_SCORE, REAC_SCORE_AVG];
 
         ORIENT_SCORE_AVG = (ORIENT_SCORE_SUM ~/ numberForavg);
+        allData['지남력'] = [ORIENT_SCORE, ORIENT_SCORE_AVG];
 
         AVG_ATT_AVG = (AVG_ATT_SUM ~/ numberForavg);
+        allData['집중력'] = [AVG_ATT, AVG_ATT_AVG];
 
-        AVG_MED_AVG = (AVG_MED_SUM~/ numberForavg);
-
+        AVG_MED_AVG = (AVG_MED_SUM ~/ numberForavg);
+        allData['안정감'] = [AVG_MED, AVG_MED_AVG];
+      } else {
         if (numberForonedata == 0) {
           CON_SCORE = 0;
           SPACETIME_SCORE = 0;
@@ -297,44 +317,42 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           CAL_SCORE = 0;
           REAC_SCORE = 0;
           ORIENT_SCORE = 0;
-          AVG_ATT =0;
-          AVG_MED = 0;
           numberForonedata = 0;
+          AVG_ATT = 0;
+          AVG_MED = 0;
         }
-      } else {
+
         CON_SCORE_AVG = 0; //135/3= 45
+        allData['주의력'] = [CON_SCORE, CON_SCORE_AVG];
 
         SPACETIME_SCORE_AVG = 0;
+        allData['시공간'] = [SPACETIME_SCORE, SPACETIME_SCORE_AVG];
 
         EXEC_SCORE_AVG = 0;
+        allData['집행기능'] = [EXEC_SCORE, EXEC_SCORE_AVG];
 
         MEM_SCORE_AVG = 0;
+        allData['기억력'] = [MEM_SCORE, MEM_SCORE_AVG];
 
         LING_SCORE_AVG = 0; //언어기능 점수
+        allData['언어기능'] = [LING_SCORE, LING_SCORE_AVG];
 
         CAL_SCORE_AVG = 0; //계산력 점수
+        allData['계산력'] = [CAL_SCORE, CAL_SCORE_AVG];
 
         REAC_SCORE_AVG = 0; //반응속도 점수
+        allData['반응 속도'] = [REAC_SCORE, REAC_SCORE_AVG];
 
         ORIENT_SCORE_AVG = 0;
+        allData['지남력'] = [ORIENT_SCORE, ORIENT_SCORE_AVG];
 
-        AVG_ATT_AVG =0;
+        AVG_ATT_AVG = 0;
+        allData['집중력'] = [AVG_ATT, AVG_ATT_AVG];
 
-        AVG_MED_AVG =0;
+        AVG_MED_AVG = 0;
+        allData['안정감'] = [AVG_MED, AVG_MED_AVG];
 
-        if (numberForonedata == 0) {
-          CON_SCORE = 0;
-          SPACETIME_SCORE = 0;
-          EXEC_SCORE = 0;
-          MEM_SCORE = 0;
-          LING_SCORE = 0;
-          CAL_SCORE = 0;
-          REAC_SCORE = 0;
-          ORIENT_SCORE = 0;
-          numberForonedata = 0;
-          AVG_ATT =0;
-          AVG_MED = 0;
-        }
+
       }
       loading = false;
     });
@@ -386,7 +404,6 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
       body: loading
           ? Center(child: CircularProgressIndicator())
           : Container(
-              color: darkMode ? Colors.black : Colors.white,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -446,119 +463,40 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                                 loading = true;
                               });
                               futuresList = [];
-                              futuresList.add(extractRequiredUserData());
+                              futuresList.add(extractRequiredBrainData());
 
                               calculateAverageSignal();
                             },
                             icon: Icon(Icons.search))
                       ],
                     ),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () async {
-                            await gql.createUserData();
-                            setState(() {
-                              usercount++;
-                              userbutton = "$usercount번 추가";
-                            });
-                          },
-                          child: Text(userbutton),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        TextButton(
-                          onPressed: () async {
-                            await gql.createMonthlyData();
-                            setState(() {
-                              braincount++;
-                              brainbutton = "$braincount번 추가";
-                            });
-                          },
-                          child: Text(brainbutton),
-                        ),
-                      ],
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.start,
-                    //     children: [
-                    //       darkMode
-                    //           ? Text(
-                    //               'Light mode',
-                    //               style: TextStyle(color: Colors.white),
-                    //             )
-                    //           : Text(
-                    //               'Dark mode',
-                    //               style: TextStyle(color: Colors.black),
-                    //             ),
-                    //       Switch(
-                    //         value: this.darkMode,
-                    //         onChanged: (value) {
-                    //           setState(() {
-                    //             darkMode = value;
-                    //           });
-                    //         },
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.start,
-                    //     children: [
-                    //       useSides
-                    //           ? Text(
-                    //               'Polygon border',
-                    //               style: darkMode
-                    //                   ? TextStyle(color: Colors.white)
-                    //                   : TextStyle(color: Colors.black),
-                    //             )
-                    //           : Text(
-                    //               'Circular border',
-                    //               style: darkMode
-                    //                   ? TextStyle(color: Colors.white)
-                    //                   : TextStyle(color: Colors.black),
-                    //             ),
-                    //       Switch(
-                    //         value: this.useSides,
-                    //         onChanged: (value) {
-                    //           setState(() {
-                    //             useSides = value;
-                    //           });
-                    //         },
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // Padding(
-                    //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.end,
-                    //     children: <Widget>[
-                    //       Text(
-                    //         'Number of features',
-                    //         style: TextStyle(
-                    //             color: darkMode ? Colors.white : Colors.black),
-                    //       ),
-                    //       Expanded(
-                    //         child: Slider(
-                    //           value: this.numberOfFeatures,
-                    //           min: 3,
-                    //           max: 8,
-                    //           divisions: 5,
-                    //           onChanged: (value) {
-                    //             setState(() {
-                    //               numberOfFeatures = value;
-                    //             });
-                    //           },
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
+                    // BUTTONS for adding artificial data to DB
+                    // Row(
+                    //   children: [
+                    //     TextButton(
+                    //       onPressed: () async {
+                    //         await gql.createUserData();
+                    //         setState(() {
+                    //           usercount++;
+                    //           userbutton = "$usercount번 추가";
+                    //         });
+                    //       },
+                    //       child: Text(userbutton),
+                    //     ),
+                    //     const SizedBox(
+                    //       width: 10,
+                    //     ),
+                    //     TextButton(
+                    //       onPressed: () async {
+                    //         await gql.createMonthlyData();
+                    //         setState(() {
+                    //           braincount++;
+                    //           brainbutton = "$braincount번 추가";
+                    //         });
+                    //       },
+                    //       child: Text(brainbutton),
+                    //     ),
+                    //   ],
                     // ),
                     Padding(
                       padding: EdgeInsets.zero,
@@ -578,328 +516,330 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                       child: ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         shrinkWrap: true,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('주의력'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: CON_SCORE / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$CON_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.redAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$CON_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          CON_SCORE_AVG <= CON_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('시공간'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: SPACETIME_SCORE / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$SPACETIME_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.orangeAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$SPACETIME_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          SPACETIME_SCORE_AVG <= SPACETIME_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('집행기능'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: EXEC_SCORE/ 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$EXEC_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.yellowAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$EXEC_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          EXEC_SCORE_AVG <= EXEC_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('기억력'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: MEM_SCORE / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$MEM_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.greenAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$MEM_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          MEM_SCORE_AVG <= MEM_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('언어기능'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: LING_SCORE / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$LING_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.blueAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$LING_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          LING_SCORE_AVG <= LING_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('계산력'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: CAL_SCORE / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$CAL_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.indigoAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$CAL_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          CAL_SCORE_AVG <= CAL_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('반응속도'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: REAC_SCORE / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$REAC_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.purpleAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$REAC_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          REAC_SCORE_AVG <= REAC_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('지남력'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: ORIENT_SCORE / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$ORIENT_SCORE"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.greenAccent,
-                                    maskFilter:
-                                        MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$ORIENT_SCORE_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          ORIENT_SCORE_AVG <= ORIENT_SCORE
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('집중력'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: AVG_ATT / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$AVG_ATT"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.greenAccent,
-                                    maskFilter:
-                                    MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$AVG_ATT_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          AVG_ATT_AVG <= AVG_ATT
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('안정감'),
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    lineHeight: 20.0,
-                                    animationDuration: 2000,
-                                    percent: AVG_MED / 100,
-                                    animateFromLastPercent: true,
-                                    center: Text("$AVG_MED"),
-                                    isRTL: false,
-                                    barRadius: Radius.elliptical(5, 15),
-                                    progressColor: Colors.greenAccent,
-                                    maskFilter:
-                                    MaskFilter.blur(BlurStyle.solid, 3),
-                                  ),
-                                ),
-                                Text("$AVG_MED_AVG"),
-                                Text('(평균연령 $ageEra)'),
-                              ],
-                            ),
-                          ),
-                          AVG_MED_AVG <= AVG_MED
-                              ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
-                              : Text('평균보다 점수가부족합니다. 강해지세요!'),
-                          Divider(
-                            thickness: 2.0,
-                          ),
-                        ],
+                        children: _getBars(), // dynamic coding way
+                        //hard coding way
+                        // [
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('주의력'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: CON_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$CON_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.redAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$CON_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   CON_SCORE_AVG <= CON_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('시공간'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: SPACETIME_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$SPACETIME_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.orangeAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$SPACETIME_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   SPACETIME_SCORE_AVG <= SPACETIME_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('집행기능'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: EXEC_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$EXEC_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.yellowAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$EXEC_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   EXEC_SCORE_AVG <= EXEC_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('기억력'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: MEM_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$MEM_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.greenAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$MEM_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   MEM_SCORE_AVG <= MEM_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('언어기능'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: LING_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$LING_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.blueAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$LING_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   LING_SCORE_AVG <= LING_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('계산력'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: CAL_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$CAL_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.indigoAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$CAL_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   CAL_SCORE_AVG <= CAL_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('반응속도'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: REAC_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$REAC_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.purpleAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$REAC_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   REAC_SCORE_AVG <= REAC_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('지남력'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: ORIENT_SCORE / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$ORIENT_SCORE"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.greenAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$ORIENT_SCORE_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   ORIENT_SCORE_AVG <= ORIENT_SCORE
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('집중력'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: AVG_ATT / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$AVG_ATT"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.greenAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$AVG_ATT_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   AVG_ATT_AVG <= AVG_ATT
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        //   Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 15.0),
+                        //     child: Row(
+                        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //       children: [
+                        //         Text('안정감'),
+                        //         Expanded(
+                        //           child: LinearPercentIndicator(
+                        //             animation: true,
+                        //             lineHeight: 20.0,
+                        //             animationDuration: 2000,
+                        //             percent: AVG_MED / 100,
+                        //             animateFromLastPercent: true,
+                        //             center: Text("$AVG_MED"),
+                        //             isRTL: false,
+                        //             barRadius: Radius.elliptical(5, 15),
+                        //             progressColor: Colors.greenAccent,
+                        //             maskFilter:
+                        //                 MaskFilter.blur(BlurStyle.solid, 3),
+                        //           ),
+                        //         ),
+                        //         Text("$AVG_MED_AVG"),
+                        //         Text('(평균연령 $ageEra)'),
+                        //       ],
+                        //     ),
+                        //   ),
+                        //   AVG_MED_AVG <= AVG_MED
+                        //       ? Text('평균보다 점수가 높으시군요. 훌륭합니다!')
+                        //       : Text('평균보다 점수가부족합니다. 강해지세요!'),
+                        //   Divider(
+                        //     thickness: 2.0,
+                        //   ),
+                        // ],
                       ),
                     ),
                   ],
@@ -907,5 +847,71 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
               ),
             ),
     );
+  }
+
+  List<Widget> _getBars() {
+    List<Widget> data = [];
+    List<MaterialAccentColor> color = [
+      Colors.redAccent,
+      Colors.orangeAccent,
+      Colors.yellowAccent,
+      Colors.greenAccent,
+      Colors.blueAccent,
+      Colors.indigoAccent,
+      Colors.purpleAccent,
+      Colors.redAccent,
+      Colors.orangeAccent,
+      Colors.yellowAccent,
+      Colors.greenAccent
+    ];
+    int index = 0;
+    allData.forEach((key, value) {
+      String higher = '평균보다 점수가 높으시군요. 훌륭합니다!';
+      String smaller = '평균보다 점수가부족합니다. 강해지세요!';
+
+      //according to key, you can edit text
+      /*
+      if(key == '주의력'){
+        higher = '';
+        smaller = '';
+      }else if (key == '시공간'){
+        higher = '';
+        smaller = '';
+      }
+      */
+      data.add(Padding(
+        padding: EdgeInsets.symmetric(vertical: 15.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(key),
+            Expanded(
+              child: LinearPercentIndicator(
+                animation: true,
+                lineHeight: 20.0,
+                animationDuration: 2000,
+                percent: (value.first) / 100,
+                animateFromLastPercent: true,
+                center: Text("${value.first}"),
+                // user's one data
+                isRTL: false,
+                barRadius: Radius.elliptical(5, 15),
+                progressColor: color[index],
+                maskFilter: MaskFilter.blur(BlurStyle.solid, 3),
+              ),
+            ),
+            Text("${value.last}"), //average
+            Text('(평균연령 $ageEra)'),
+          ],
+        ),
+      ));
+      data.add(value.last <= value.first ? Text(higher) : Text(smaller));
+      data.add(Divider(
+        thickness: 2.0,
+      ));
+
+      index++;
+    });
+    return data;
   }
 }

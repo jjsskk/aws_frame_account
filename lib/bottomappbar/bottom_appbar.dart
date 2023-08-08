@@ -1,4 +1,4 @@
-import 'package:aws_frame_account/globalkey.dart';
+import 'package:aws_frame_account/bottomappbar/globalkey.dart';
 import 'package:flutter/material.dart';
 
 class GlobalBottomAppBar extends StatelessWidget {

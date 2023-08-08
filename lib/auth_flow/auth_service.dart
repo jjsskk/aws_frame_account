@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aws_frame_account/auth_credentials.dart';
+import 'package:aws_frame_account/auth_flow/auth_credentials.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_core/amplify_core.dart';
@@ -21,7 +21,7 @@ class AuthState {
 class AuthService {
   // 4 authStateController는 관찰할 새로운 AuthState의 다운스트림 전송을 담당합니다
   final authStateController = StreamController<AuthState>();
-  AuthCredentials? _credentials;
+  AuthCredentials? _credentials = null;
   late BuildContext context;
 
   // 5 이는 AuthState 스트림을 signUp으로 업데이트하는 간단한 함수입니다.
@@ -56,6 +56,12 @@ class AuthService {
         authStateController.add(state);
       } else {
         // 4
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            '입력하신 ID는 현재 로그인 할 수 없습니다. 기관에 문의해주세요',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ));
         print('User could not be signed in');
       }
     } on AuthException catch (authError) {
@@ -64,10 +70,9 @@ class AuthService {
       //위젯이 사라지는 순간 조건이 false가 됨
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          'please check your email and password',
+          '올바른 이메일 혹은 비밀번호를 입력해주세요',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.indigoAccent,
       ));
     }
   }
@@ -82,7 +87,8 @@ class AuthService {
       final userAttributes = {
         CognitoUserAttributeKey.name: credentials.name,
         CognitoUserAttributeKey.phoneNumber: credentials.phonenumber,
-        CognitoUserAttributeKey.custom("institutionNumber") : credentials.institutionnumber,
+        CognitoUserAttributeKey.custom("institutionNumber"):
+            credentials.institutionnumber,
         CognitoUserAttributeKey.custom("userNumber"): credentials.usernumber
       }; // aws 가이드 라인이랑 틀림 (인증추가 기능구현)
 
@@ -108,12 +114,14 @@ class AuthService {
       // 7 어떤 이유로든 등록이 실패하면 로그에 오류를 출력하기만 하면 됩니다.
     } on AuthException catch (authError) {
       print('Failed to sign up - ${authError.recoverySuggestion}');
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
-          '유효한 이메일을 입력해주세요',
+          '${authError.recoverySuggestion}'.contains('enter another username')
+              ? '이미 가입된 아이디 입니다.'
+              : '유효한 이메일 혹은 전화번호를 입력해주세요.',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.indigoAccent,
       ));
     }
   }
@@ -122,7 +130,7 @@ class AuthService {
   //   final state = AuthState(authFlowStatus: AuthFlowStatus.session);
   //   authStateController.add(state);
   // }
-  Future<void> verifyCode(String verificationCode, BuildContext context) async {
+  Future<bool> verifyCode(String verificationCode, BuildContext context) async {
     try {
       // 2
       final result = await Amplify.Auth.confirmSignUp(
@@ -130,10 +138,25 @@ class AuthService {
 
       // 3
       if (result.isSignUpComplete) {
-        loginWithCredentials(_credentials!, context);
+        if (_credentials!.password != '') {
+          //signupcredential is alive
+          await loginWithCredentials(_credentials!, context);
+          return true;
+        } else {
+          //logincredential created
+          showLogin();
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+              '이메일이 인증되었습니다. 입력하신 정보로 로그인 해주세요.',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ));
+          return true;
+        }
       } else {
         // 4
         // Follow more steps
+        return true;
       }
     } on AuthException catch (authError) {
       print('Could not verify code - ${authError.recoverySuggestion}');
@@ -142,8 +165,42 @@ class AuthService {
           '인증번호가 올바르지 않습니다.',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.indigoAccent,
       ));
+      return true;
+    }
+  }
+
+  Future<bool> resendConfirmCode(String email, BuildContext context) async {
+    try {
+      // 2
+      await Amplify.Auth.resendSignUpCode(username: email);
+      {
+        if (_credentials == null || _credentials!.username != email)
+          _credentials = LoginCredentials(username: email, password: '');
+        // (siupcredential is not alive) or (alive signupcredential's email != email checked that email exist or not in signup page)
+        final state = AuthState(authFlowStatus: AuthFlowStatus.verification);
+        authStateController.add(state);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+            '회원가입후 인증이 완료되지 않은 이메일입니다. 인증을 완료해주세요.',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ));
+        return true;
+      }
+    } on AuthException catch (authError) {
+      print('Could not resend code - ${authError.underlyingException}');
+      bool check = false;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          (check = '${authError.underlyingException}'
+                  .contains('Username/client id combination not found'))
+              ? '등록되지 않은 이메일로 사용 가능합니다.'
+              : '이미 가입된 이메일 입니다.',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ));
+      return check;
     }
   }
 
@@ -179,7 +236,6 @@ class AuthService {
           ' 인증코드가 발송되었습니다',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.indigoAccent,
       ));
       checkvelification(true);
     } on AuthException catch (e) {
@@ -190,7 +246,6 @@ class AuthService {
           ' 이메일이 올바르지 않거나 가입된 이메일이 아닙니다.',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.indigoAccent,
       ));
     }
   }
@@ -212,7 +267,6 @@ class AuthService {
           '비밀번호가 변경되었습니다 다시 로그인 해주세요.',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.indigoAccent,
       ));
 
       // safePrint('Password reset complete: ${result.isPasswordReset}');
@@ -223,7 +277,6 @@ class AuthService {
           '올바른 인증번호를 입력해주세요',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.indigoAccent,
       ));
     }
   }
@@ -248,6 +301,15 @@ class AuthService {
       print(authError);
       final state = AuthState(authFlowStatus: AuthFlowStatus.login);
       authStateController.add(state);
+    }
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      await Amplify.Auth.deleteUser();
+      safePrint('Delete user succeeded');
+    } on AuthException catch (e) {
+      safePrint('Delete user failed with error: $e');
     }
   }
 }

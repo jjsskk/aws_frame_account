@@ -1,7 +1,8 @@
 import 'package:aws_frame_account/analytics/analytics_events.dart';
 import 'package:aws_frame_account/analytics/analytics_service.dart';
-import 'package:aws_frame_account/auth_credentials.dart';
-import 'package:aws_frame_account/provider_login/login_state.dart';
+import 'package:aws_frame_account/auth_flow/auth_credentials.dart';
+import 'package:aws_frame_account/backey/backKey_dialog.dart';
+import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +10,7 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback shouldShowSignUp;
@@ -37,31 +39,40 @@ class _LoginPageState extends State<LoginPage> {
   bool showSpinner = false; //로그인 or signup시 대기시간동안 스핀이 돌도록....
   String _cacheid = '';
   late SharedPreferences _prefs;
-
   bool isChecked_id = true;
-  bool isChecked_autologin = false;
+  bool isChecked_autologin = true;
   bool providerReset = false;
 
-  // 캐시에 있는 데이터를 불러오는 함수
-  // 이 함수의 기능으로, 어플을 끄고 켜도 데이터가 유지된다.
-  _loadId() async {
-    _prefs = await SharedPreferences.getInstance(); // 캐시에 저장되어있는 값을 불러온다.
-    setState(() {
-      // 캐시에 저장된 값을 반영하여 현재 상태를 설정한다.
-      // SharedPreferences에 id, pw로 저장된 값을 읽어 필드에 저장. 없을 경우 0으로 대입
-      _cacheid = (_prefs.getString('id') ?? '');
-      display_cacheId();
-      print('cache id :$_cacheid'); // Run 기록으로 id와 pw의 값을 확인할 수 있음.
-    });
-  }
+  final iconColor = Colors.white;
 
   late var appState;
 
   @override
   void initState() {
     super.initState();
-    Get.deleteAll();
+    // Get.deleteAll();
+    BackButtonInterceptor.add(backKeyInterceptor, context: context);
     _loadId();
+  }
+
+  @override
+  void dispose() {
+    BackButtonInterceptor.remove(backKeyInterceptor);
+    super.dispose();
+  }
+
+  // In this app, back key default function make app terminated, not page poped because of Navigator() in main page and login_sesssion page
+  Future<bool> backKeyInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
+    print("BACK BUTTON! "); // Do some stuff.
+    if (stopDefaultButtonEvent) return Future(() => true); // prevent
+
+    // If a dialog (or any other route) is open, don't run the interceptor.
+    // return type is true -> run interceptor and return type is false -> don't run the interceptor( back key defaut function work)
+    if (info.ifRouteChanged(context)) {
+      Navigator.of(context).pop();
+      return Future(() => true);
+    }
+    return GlobalBackKeyDialog.getBackKeyDialog(context);
   }
 
   Color getColor(Set<MaterialState> states) {
@@ -76,6 +87,19 @@ class _LoginPageState extends State<LoginPage> {
     return Colors.blueAccent;
   }
 
+  // 캐시에 있는 데이터를 불러오는 함수
+  // 이 함수의 기능으로, 어플을 끄고 켜도 데이터가 유지된다.
+  _loadId() async {
+    _prefs = await SharedPreferences.getInstance(); // 캐시에 저장되어있는 값을 불러온다.
+    setState(() {
+      // 캐시에 저장된 값을 반영하여 현재 상태를 설정한다.
+      // SharedPreferences에 id, pw로 저장된 값을 읽어 필드에 저장. 없을 경우 ""으로 대입
+      _cacheid = (_prefs.getString('id') ?? '');
+      display_cacheId();
+      print('cache id :$_cacheid'); // Run 기록으로 id와 pw의 값을 확인할 수 있음.
+    });
+  }
+
   void display_cacheId() {
     if (_cacheid == '')
       _emailController = TextEditingController();
@@ -85,6 +109,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final textColor = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
     appState = context.watch<LoginState>();
     if (!providerReset) {
       appState.resetVariables();
@@ -96,20 +122,23 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.black87,
       // 3
       body: ModalProgressHUD(
+        // loading image on entire screen
         inAsyncCall: showSpinner,
         child: GestureDetector(
+          // if you touch any point on screen, keyboard is automatically down
           onTap: () {
             FocusScope.of(context).unfocus();
           },
           child: SafeArea(
-            child: ListView(children: [
+            child: ListView(
+                children: [
               const SizedBox(
                 height: 50,
               ),
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                  width: 130,
-                  height: 130,
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.width / 3,
                   child: CircleAvatar(
                     backgroundImage: AssetImage('image/frame.png'),
                   ),
@@ -121,31 +150,28 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.0),
-                child: _loginForm(),
+                child: _loginForm(textColor),
               ),
               // 6
               // Sign Up Button
+              // Expanded(
+              //   child: Align(
+              //     alignment: Alignment.bottomCenter,
               Container(
-                  height: MediaQuery.of(context).size.height / 5,
+                  height: MediaQuery.of(context).size.height / 6,
                   alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton.icon(
-                        onPressed: widget.shouldShowSignUp,
-                        label: Text(
-                          'Don\'t have an account? Sign up.',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            minimumSize: Size(155, 40),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            backgroundColor: Colors.indigo),
-                        icon: Icon(Icons.arrow_forward),
-                      ),
-                    ],
+                  child: TextButton.icon(
+                    onPressed: widget.shouldShowSignUp,
+                    label: Text(
+                      'Don\'t have an account? Sign up.',
+                      style: textColor.subtitle2,
+                    ),
+                    style: TextButton.styleFrom(
+                        primary: iconColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                        backgroundColor: theme.primaryColorLight),
+                    icon: Icon(Icons.arrow_forward),
                   ))
             ]),
           ),
@@ -155,7 +181,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // 5
-  Widget _loginForm() {
+  Widget _loginForm(TextTheme textColor) {
     return Form(
       key: _formKey,
       child: Column(
@@ -164,7 +190,7 @@ class _LoginPageState extends State<LoginPage> {
           Row(
             children: [
               Checkbox(
-                checkColor: Colors.white,
+                checkColor: iconColor,
                 fillColor: MaterialStateProperty.resolveWith(getColor),
                 value: isChecked_autologin,
                 onChanged: (bool? value) {
@@ -175,10 +201,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Text(
                 '자동 로그인',
-                style: TextStyle(color: Colors.white),
+                style: textColor.subtitle2,
               ),
               Checkbox(
-                checkColor: Colors.white,
+                checkColor: iconColor,
                 fillColor: MaterialStateProperty.resolveWith(getColor),
                 value: isChecked_id,
                 onChanged: (bool? value) {
@@ -189,7 +215,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Text(
                 '아이디 저장',
-                style: TextStyle(color: Colors.white),
+                style: textColor.subtitle2,
               ),
             ],
           ),
@@ -201,17 +227,17 @@ class _LoginPageState extends State<LoginPage> {
               }
               return null;
             },
-            style: const TextStyle(color: Colors.white),
+            style: textColor.subtitle2,
             controller: _emailController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 icon: Icon(
                   Icons.mail,
-                  color: Colors.white,
+                  color: iconColor,
                 ),
                 labelText: '이메일',
-                labelStyle: const TextStyle(color: Colors.white),
+                labelStyle: textColor.subtitle2,
                 enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2))),
+                    borderSide: BorderSide(color: iconColor, width: 2))),
           ),
 
           // Password TextField
@@ -222,28 +248,39 @@ class _LoginPageState extends State<LoginPage> {
               }
               return null;
             },
-            style: const TextStyle(color: Colors.white),
+            style: textColor.subtitle2,
             controller: _passwordController,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
                 icon: Icon(
                   Icons.lock_open,
-                  color: Colors.white,
+                  color: iconColor,
                 ),
                 labelText: '비밀번호',
-                labelStyle: const TextStyle(color: Colors.white),
+                labelStyle: textColor.subtitle2,
                 enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 2))),
+                    borderSide: BorderSide(color: iconColor, width: 2))),
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButton(onPressed: () {}, child: Text('아이디 찾기')),
-              Text(' / '),
+              TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '아이디 찾기',
+                    style: textColor.subtitle2,
+                  )),
+              Text(
+                ' / ',
+                style: textColor.subtitle2,
+              ),
               TextButton(
                   onPressed: widget.shouldShowsresetpassword,
-                  child: Text('비밀번호 찾기')),
+                  child: Text(
+                    '비밀번호 찾기',
+                    style: textColor.subtitle2,
+                  )),
             ],
           ),
           SizedBox(
@@ -254,10 +291,10 @@ class _LoginPageState extends State<LoginPage> {
           Center(
             child: Container(
               padding: EdgeInsets.all(15),
-              height: 90,
-              width: 90,
+              height: MediaQuery.of(context).size.width / 4.5,
+              width: MediaQuery.of(context).size.width / 4.5,
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(50)),
+                  color: iconColor, borderRadius: BorderRadius.circular(50)),
               child: GestureDetector(
                 onTap: _login,
                 child: Container(
@@ -276,9 +313,8 @@ class _LoginPageState extends State<LoginPage> {
                       ]),
                   child: Center(
                     child: Text(
-                      'login',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                      '로그인',
+                      style: textColor.subtitle1,
                     ),
                   ),
                 ),
@@ -302,13 +338,13 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text.trim();
     if (isChecked_id)
       _prefs.setString(
-          'id', Email); // id를 키로 가지고 있는 값에 입력받은 _id(email)를 넣어줌. = 캐시에 넣어줌
+          'id', Email); // id를 키로 가지고 있는 값에 입력받은 _id(email)를 넣어줌. = cache에 넣어줌
     else
       _prefs.remove('id');
 
     if (isChecked_autologin)
       _prefs.setBool('autologin',
-          true); // id를 키로 가지고 있는 값에 입력받은 _id(email)를 넣어줌. = 캐시에 넣어줌
+          true); // id를 키로 가지고 있는 값에 입력받은 _id(email)를 넣어줌. = cache에 넣어줌
     else
       _prefs.remove('autologin');
 

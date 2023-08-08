@@ -1,7 +1,7 @@
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
 import 'package:aws_frame_account/drawer/drawer.dart';
-import 'package:aws_frame_account/globalkey.dart';
-import 'package:aws_frame_account/provider_login/login_state.dart';
+import 'package:aws_frame_account/bottomappbar/globalkey.dart';
+import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,9 +11,6 @@ class CommentViewPage extends StatefulWidget {
   @override
   State<CommentViewPage> createState() => _CommentViewPageState();
 }
-
-final keyObj = KeyForBottomAppbar();
-final bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
 
 const List<String> _filterlist = ['날짜', '내용'];
 
@@ -69,19 +66,10 @@ class _CommentViewPageState extends State<CommentViewPage> {
   Widget build(BuildContext context) {
     var appState = context.watch<LoginState>();
     return Scaffold(
-      drawer: GlobalDrawer.getDrawer(context, appState),
-      key: keyObj.key,
       appBar: AppBar(
-          title: Text('코멘트 모아보기'),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back,
-            ),
-          )),
+        title: Text('코멘트 모아보기'),
+        centerTitle: true,
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -162,17 +150,6 @@ class _CommentViewPageState extends State<CommentViewPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        tooltip: 'Create',
-        child: CircleAvatar(
-          radius: 28,
-          backgroundImage: AssetImage('image/frame.png'),
-          backgroundColor: Colors.white,
-        ),
-      ),
-      floatingActionButtonLocation: _fabLocation,
-      bottomNavigationBar: bottomappbar,
     );
     ;
   }

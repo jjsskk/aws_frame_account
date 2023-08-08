@@ -1,20 +1,17 @@
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
+import 'package:aws_frame_account/backey/backKey_dialog.dart';
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
 import 'package:aws_frame_account/camera_gallary/graph_page.dart';
 import 'package:aws_frame_account/communication_service/communication_yard.dart';
 import 'package:aws_frame_account/drawer/drawer.dart';
-import 'package:aws_frame_account/globalkey.dart';
-import 'package:aws_frame_account/linechart.dart';
-import 'package:aws_frame_account/loadingpage.dart';
+import 'package:aws_frame_account/bottomappbar/globalkey.dart';
+import 'package:aws_frame_account/home/hompage_linechart.dart';
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:aws_frame_account/login_session.dart';
-import 'package:aws_frame_account/mainpage/mainpage.dart';
-import 'package:aws_frame_account/provider_login/login_state.dart';
+import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:aws_frame_account/traning%20record/traning_report.dart';
 import 'package:flutter/material.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
-import 'communication_service/communication_service.dart';
-import 'protector_service/protector_service.dart';
-import 'traning record/record_manage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:back_button_interceptor/back_button_interceptor.dart';
@@ -38,31 +35,32 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-
   // final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   late final bottomappbar;
   late final keyObj;
   late var appState;
   final gql = GraphQLController.Obj;
+
   bool loading_User = true;
   bool loading_Brain = true;
-  List<Future<dynamic?>> futuresList = [];
+
   var latestdata = [];
-  int max = 0;
-  String nameForMax = '';
+  int max = 0; // the most elevated value
+  String nameForMax = ''; //the most elevated data name
   Map<int, int> dataForCamparing = {};
+
+  bool checkAttribute = false; //  to call getProtectorAttributes() once
 
   @override
   void initState() {
     super.initState();
-    BackButtonInterceptor.add(backKeyInterceptor, context: context);// for back key
+    BackButtonInterceptor.add(backKeyInterceptor,
+        context: context); // for back key
     keyObj = KeyForBottomAppbar();
     bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
   }
 
-  bool checkAttribute = false;
 
   @override
   void dispose() {
@@ -70,15 +68,8 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-
   void getProtectorAttributes() async {
     try {
-      // var result = await Amplify.Auth.fetchAuthSession();
-      //   while(!(result.isSignedIn)){
-      //   print("here: ${result.isSignedIn}");
-      //   result = await Amplify.Auth.fetchAuthSession();
-      // }
-      //   await  Future.delayed(const Duration(milliseconds: 5000));
       checkAttribute = true;
       var attribute = await Amplify.Auth.fetchUserAttributes();
       attribute.forEach((element) {
@@ -141,16 +132,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getMonthlyDBComparingData(String id) async {
-
-        gql.customqueryMonthlyDBLatestTwoItems().then((value) {
+      gql.queryMonthlyDBLatestTwoItems().then((value) { // already sorted two data fetched using query
       // print("value: $value");
-      if( value.length == 2)
-        {
-        // value.sort((a, b) {
-        //   var aa = int.parse(a.month);
-        //   var bb = int.parse(b.month);
-        //   return aa.compareTo(bb);
-        // });
+      if (value.length == 2) {
+
         latestdata = value.sublist(value.length - 2);
         print("here :$latestdata");
         Map<String, List<int>> diff = {};
@@ -218,15 +203,15 @@ class _HomePageState extends State<HomePage> {
           if (max < value[0]) {
             max = value[0];
             nameForMax = key;
+            dataForCamparing[int.parse(latestdata.last.month.substring(4, 6))] =
+                value[1];
             dataForCamparing[
-                int.parse(latestdata.last.month.substring(4, 6))] = value[1];
-            dataForCamparing[int.parse(latestdata.first.month.substring(4, 6))] =
-                value[2];
+                int.parse(latestdata.first.month.substring(4, 6))] = value[2];
           }
         });
 
         print("max : $nameForMax");
-      }else
+      } else
         max = -1;
       setState(() {
         loading_Brain = false;
@@ -234,35 +219,12 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  Future<bool> _onBackKey() async {
-    return await showDialog(
-            context: context,
-            useRootNavigator: false,
-            // without this, info.ifRouteChanged(context) dont recognize context change. check page stack
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('끝내겠습니까?'),
-                actions: [
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, false);
-                      },
-                      child: Text('네')),
-                  TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, true);
-                      },
-                      child: Text('아니요'))
-                ],
-              );
-            }) ??
-        Future(() => true);
-  }
 
   // In this app, back key default function make app terminated, not page poped because of Navigator() in main page and login_sesssion page
   Future<bool> backKeyInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
-    print("BACK BUTTON!"); // Do some stuff.
+    print("BACK BUTTON! "); // Do some stuff.
     if (stopDefaultButtonEvent) return Future(() => true); // prevent
+
 
     // If a dialog (or any other route) is open, don't run the interceptor.
     // return type is true -> run interceptor and return type is false -> don't run the interceptor( back key defaut function work)
@@ -270,7 +232,7 @@ class _HomePageState extends State<HomePage> {
       Navigator.of(context).pop();
       return Future(() => true);
     }
-    return _onBackKey();
+    return GlobalBackKeyDialog.getBackKeyDialog(context);
   }
 
   @override
@@ -320,13 +282,15 @@ class _HomePageState extends State<HomePage> {
                             height: 10,
                           ),
                           // GraphPage(),
-                          Linechart(
-                            data: dataForCamparing,
-                            dataName: nameForMax,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                          max > 0
+                              ? Linechart(
+                                  data: dataForCamparing,
+                                  dataName: nameForMax,
+                                )
+                              : SizedBox( // 비교 데이터가 없거나 상승 데이터가 없을 떄 차트 대신 나올 asset으로 꾸미면 좋을듯
+                                  height:
+                                      MediaQuery.of(context).size.height / 3,
+                                ),
                           const SizedBox(
                             height: 20,
                           ),
