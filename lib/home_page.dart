@@ -54,37 +54,37 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     // getCurrentuser();
     keyObj = KeyForBottomAppbar();
-    bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
+    bottomappbar = GlobalBottomAppBar(keyObj: keyObj); // 위에서 글로벌 키를 가져와서 bottomappbar을 생성한다.
   }
 
   void getCurrentuser() async {
     try {
       // final result = await Amplify.Auth.getCurrentUser();
-      final attribute = await Amplify.Auth.fetchUserAttributes();
-      attribute.forEach((element) {
+      final attribute = await Amplify.Auth.fetchUserAttributes(); // 이걸 통해서 사용자의 속성을 가져 옴
+      attribute.forEach((element) { // 요소 별로 속성 키를 사용해서 특정 속성을 찾을 거임
         if (element.userAttributeKey.key == "name")
           setState(() {
             // username = element.value;
-            appState.protectorName = (element.value) ?? "no result";
+            appState.protectorName = (element.value) ?? "no result"; //보호자의 이름은 현재 값
           });
 
         if (element.userAttributeKey.key == "phone_number")
           setState(() {
             // userphonenumber = element.value;
-            appState.protectorPhonenumber = (element.value) ?? " no result";
+            appState.protectorPhonenumber = (element.value) ?? " no result"; // 보호자의 폰번
           });
 
         if (element.userAttributeKey.key == "email")
           setState(() {
             // useremail = element.value;
-            appState.protectorEmail = (element.value) ?? "no result";
+            appState.protectorEmail = (element.value) ?? "no result"; // 보호자의 이메일
           });
 
         if (element.userAttributeKey.key.toLowerCase() ==
             "custom:institutionNumber".toLowerCase())
           setState(() {
             // useremail = element.value;
-            appState.institutionNumber = (element.value) ?? "no result";
+            appState.institutionNumber = (element.value) ?? "no result"; //이거랑 밑에 거는 모르겠당
           });
 
         if (element.userAttributeKey.key.toLowerCase() ==

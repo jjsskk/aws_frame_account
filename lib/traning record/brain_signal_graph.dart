@@ -15,12 +15,13 @@ class BrainSignalPage extends StatefulWidget {
   @override
   State<BrainSignalPage> createState() => _BrainSignalPageState();
 }
-
 class _BrainSignalPageState extends State<BrainSignalPage> {
 
   String? selectedLabel;
   bool useSides = false;
-  List<Color> buttonColors = [
+
+  //그래프 버튼마다 색상을 다르게 하기 위해 존재함 각각 그래프의 색상!
+  List<Color> buttomColors = [
     Color(0xff237ACF), // Dark Blue
     Color(0xff905C7E), // Orchid
     Color(0xffAA7F39), // Golden Brown
@@ -36,7 +37,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
 
 
 
-
+  // 이 코드는 그래프의 x축의 값을 나타내는 위젯입니다. 각 월을 반환합니다.
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     // value가 0 또는 양수이고 값이 리스트 범위 내에 있음을 확인합니다.
     if (value >= 0 && value < results.length) {
@@ -62,8 +63,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
 
 
 
-
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
+  //이 위젯은 그래프의 각 y축의 값을 나타내는 위젯입니다.
+    Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Color(0xff67727d),
       fontWeight: FontWeight.bold,
@@ -91,6 +92,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     );
   }
 
+  // 버튼의 각 라벨들을 매핑해주는 것들입니다. 왼쪽에 있는 것은 db를 통해서 불러온 값이고 오른쪽이 보여주고자 하는 값입니다.
   Map<String, String> buttonLabels = {
     "avg_att": "평균\n집중도",
     "avg_med": "평균\n안정감",
@@ -104,6 +106,10 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     "orient_score": "지남력",
   }; //버튼 이름
 
+  //그래프의 데이터를 가져오는 메서드 입니다.
+  //twelveMonthsAgo이라는 변수를 통해서 최근 1년까지를 설정하고 버튼을 눌렀을때 그 이름에 따른 데이터를 가져오게 됩니다.
+  //그래프 데이터를 각각 수집한 것을 graphData라는 리스트에 넣어 반환하게 됩니다.
+  //TODO: 현재시각으로부터 1년을 설정하는 것이 아니라 12개의 데이터를 찾아야하는 건지 질문하기
   List<double> _getGraphData(String label,int colorIndex) {
     List<double> graphData = [];
     DateTime twelveMonthsAgo = DateTime.now().subtract(Duration(days: 365 * 1));
@@ -159,6 +165,11 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     return graphData;
   }
 
+  //그래프 데이터를 통해서 각 값을 가져오고 보여주는 부분입니다.
+  // 라인 차트의 디자인을 변경하고 싶다면 이 부분을 수정하면 될 것입니다.
+  // selectedGradientColors 여기서 그라데이션 색상이 정해집니다. 두가지로 구성이 되어있는데 하나는 위에서 정한 색상으로 하고 다른 하나는
+  // 정한 색상에 투명도를 0.8로 줍니다. 컬러 인덱스와 라벨 인덱스는 동일하게 갑니다.
+  // CHART의 디자인을 변경하고 싶다면 LineChartData를 수정하면 됩니다.
   LineChartData _getLineChartData() {
     List<double> graphData = [];
     int colorIndex = 0;
@@ -166,8 +177,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       colorIndex = buttonLabels.keys.toList().indexOf(selectedLabel!);
       graphData = _getGraphData(selectedLabel!, colorIndex);
     }
-    List<Color> selectedGradientColors = [      buttonColors[colorIndex],
-      buttonColors[colorIndex].withOpacity(0.8),
+    List<Color> selectedGradientColors = [      buttomColors[colorIndex],
+      buttomColors[colorIndex].withOpacity(0.8),
     ];
 
 
@@ -233,6 +244,9 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
         ]);
   }
 
+  //이 위젯은 컨테이너를 생성하고 그 안에 PADDING을 넣고 LineChart를 그리게 됩니다.
+  // 정리하면 _buildLineChart는 LineChart를 불러오고 LineChart는 _getLineChartData함수를 통해서 _getGraphData이 데이터를 불러와
+  //buttonColors를 통해 그래프의 색을 정하고, leftTitleWidgets를 통해 Y축을 정하고 bottomTitleWidgets으로 x축의 값을 정해 그리게 됩니다.
   Widget _buildLineChart() {
     return Container(
       width: MediaQuery.of(context).size.width,
@@ -244,15 +258,18 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     );
   }
 
+  //그래프 위에 버튼을 구성하는 위젯입니다.
+  //그리드를 통해 버튼을 2행으로 구성해서 총 10개를 보여주게 됩니다. 그래서 1행당 5개의 버튼이 존재하게 됩니다.
+  // 버튼의 모양을 수정하고 싶다면 이 부분을 수정하면 될 것입니다.
   Widget _buildButtons() {
     return GridView.count(
-      crossAxisCount: 5,  // 3열을 만듦
+      crossAxisCount: 5,  // 2행을 만듦
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(), // 스크롤을 막음
       padding: EdgeInsets.all(1.0),
       children: buttonLabels.keys.map((label) => ElevatedButton(
         style: ElevatedButton.styleFrom(
-          shape: CircleBorder(),
+          shape: CircleBorder(), // 이 부분을 통해서 원형으로 구성하게 됩니다.
 
           fixedSize: Size(10.0, 5.0), // 원하는 버튼 width와 height를 설
         ),
@@ -319,11 +336,6 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     gql = GraphQLController.Obj;
 
     try {
-    //   gql.queryListMonthlyDBItems(int.parse(widget.latestDataDate)).then((result) {
-    //     print(result);
-    //   }).catchError((error) {
-    //     print(error);
-    //   });
 
       final data = await gql.queryListMonthlyDBItems(int.parse(widget.latestDataDate));
 
@@ -376,12 +388,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
 
-
-    // features = features.sublist(0, numberOfFeatures.floor());
-    // data = data
-    //     .map((graph) => graph.sublist(0, numberOfFeatures.floor()))
-    //     .toList();
-
+    // 빌드하는 부분입니다. 이 곳에서는 그래프가 들어가는 box의 쉐입을 정하는 곳입니다. 그래프가 있는 곳 박스를 수정하고 싶다면 이 곳을 수정하시면 됩니다.
     return Scaffold(
       appBar: AppBar(
         title: Text('뇌 신호 그래프'),
