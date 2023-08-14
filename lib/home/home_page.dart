@@ -19,10 +19,10 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 class HomePage extends StatefulWidget {
   HomePage(
       {Key? key,
-      required this.didtogglegallery,
-      // required this.didtogglegraph,
-      required this.pickedimageurl,
-      required this.shouldLogOut})
+        required this.didtogglegallery,
+        // required this.didtogglegraph,
+        required this.pickedimageurl,
+        required this.shouldLogOut})
       : super(key: key);
   final VoidCallback didtogglegallery;
 
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void getMonthlyDBComparingData(String id) async {
-      gql.queryMonthlyDBLatestTwoItems().then((value) { // already sorted two data fetched using query
+    gql.queryMonthlyDBLatestTwoItems().then((value) { // already sorted two data fetched using query
       // print("value: $value");
       if (value.length == 2) {
 
@@ -204,9 +204,9 @@ class _HomePageState extends State<HomePage> {
             max = value[0];
             nameForMax = key;
             dataForCamparing[int.parse(latestdata.last.month.substring(4, 6))] =
-                value[1];
+            value[1];
             dataForCamparing[
-                int.parse(latestdata.first.month.substring(4, 6))] = value[2];
+            int.parse(latestdata.first.month.substring(4, 6))] = value[2];
           }
         });
 
@@ -246,27 +246,27 @@ class _HomePageState extends State<HomePage> {
     return (loading_User || loading_Brain)
         ? LoadingPage()
         : Scaffold(
-            drawer: GlobalDrawer.getDrawer(context, appState),
-            key: keyObj.key,
-            appBar: AppBar(
-              title: Text(
-                '${appState.userName}님의 동반자 ${appState.protectorName}님 안녕하세요',
-                style: TextStyle(fontSize: 15),
+        drawer: GlobalDrawer.getDrawer(context, appState),
+        key: keyObj.key,
+        appBar: AppBar(
+          title: Text(
+            '${appState.userName}님의 동반자 ${appState.protectorName}님 안녕하세요',
+            style: TextStyle(fontSize: 15),
+          ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.logout,
+                semanticLabel: 'logout',
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.logout,
-                    semanticLabel: 'logout',
-                  ),
-                  onPressed: widget.shouldLogOut,
-                ),
-              ],
-              automaticallyImplyLeading:
-                  false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
+              onPressed: widget.shouldLogOut,
             ),
-            body: Center(
-                child: Column(
+          ],
+          automaticallyImplyLeading:
+          false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
+        ),
+        body: Center(
+            child: Column(
               children: [
                 Expanded(
                   child: SingleChildScrollView(
@@ -284,21 +284,21 @@ class _HomePageState extends State<HomePage> {
                           // GraphPage(),
                           max > 0
                               ? Linechart(
-                                  data: dataForCamparing,
-                                  dataName: nameForMax,
-                                )
+                            data: dataForCamparing,
+                            dataName: nameForMax,
+                          )
                               : SizedBox( // 비교 데이터가 없거나 상승 데이터가 없을 떄 차트 대신 나올 asset으로 꾸미면 좋을듯
-                                  height:
-                                      MediaQuery.of(context).size.height / 3,
-                                ),
+                            height:
+                            MediaQuery.of(context).size.height / 3,
+                          ),
                           const SizedBox(
                             height: 20,
                           ),
                           max > 0
                               ? Text(
-                                  '${appState.userName}님 지난달보다 $nameForMax $max 상승!')
+                              '${appState.userName}님 지난달보다 $nameForMax $max 상승!')
                               : Text(
-                                  '${appState.userName}님 지난달보다 상승된 데이터가 없습니다ㅠㅠ!'),
+                              '${appState.userName}님 지난달보다 상승된 데이터가 없습니다ㅠㅠ!'),
                           const SizedBox(
                             height: 20,
                           ),
@@ -385,17 +385,17 @@ class _HomePageState extends State<HomePage> {
                 // )
               ],
             )),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              tooltip: 'Create',
-              child: CircleAvatar(
-                radius: 28,
-                backgroundImage: AssetImage('image/frame.png'),
-                backgroundColor: Colors.white,
-              ),
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            bottomNavigationBar: bottomappbar);
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          tooltip: 'Create',
+          child: CircleAvatar(
+            radius: 28,
+            backgroundImage: AssetImage('image/frame.png'),
+            backgroundColor: Colors.white,
+          ),
+        ),
+        floatingActionButtonLocation:
+        FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: bottomappbar);
   }
 }
