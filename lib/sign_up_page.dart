@@ -55,8 +55,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   String dropdownValue = _emaillist.first;
 
-  final iconColor = Colors.white;
-  final dividerColor = Colors.white;
+  final iconColor = Colors.black;
+  final dividerColor = Colors.black;
 
   @override
   void initState() {
@@ -99,8 +99,14 @@ class _SignUpPageState extends State<SignUpPage> {
     final textColor = Theme.of(context).textTheme;
     final ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Colors.black87,
-      body: ModalProgressHUD(
+        body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+          fit: BoxFit.cover, // 이미지가 전체 화면을 커버하도록 설정합니다.
+        ),
+      ),
+      child: ModalProgressHUD(
         inAsyncCall: showspiner,
         child: GestureDetector(
           onTap: () {
@@ -116,7 +122,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: MediaQuery.of(context).size.width / 3,
                   height: MediaQuery.of(context).size.width / 3,
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('image/frame.png'),
+                    backgroundImage: AssetImage('image/ui (6).png'),
                   ),
                 ),
               ]),
@@ -129,7 +135,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('약관동의', style: textColor.subtitle2),
+                    Text('약관동의', style: TextStyle(color: Colors.indigoAccent,fontWeight: FontWeight.bold)),
                     Row(
                       children: [
                         Checkbox(
@@ -217,7 +223,7 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _signUpForm(TextTheme textColor) {
@@ -498,7 +504,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Text(
                       '회원가입',
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                          color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),

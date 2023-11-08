@@ -269,7 +269,6 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       children: buttonLabels.keys.map((label) => ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: CircleBorder(), // 이 부분을 통해서 원형으로 구성하게 됩니다.
-
           fixedSize: Size(10.0, 5.0), // 원하는 버튼 width와 height를 설
         ),
         onPressed: () {

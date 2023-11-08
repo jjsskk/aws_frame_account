@@ -250,8 +250,8 @@ class _HomePageState extends State<HomePage> {
         key: keyObj.key,
         appBar: AppBar(
           title: Text(
-            '${appState.userName}님의 동반자 ${appState.protectorName}님 안녕하세요',
-            style: TextStyle(fontSize: 15),
+            ' ${appState.userName}님의 동반자 ${appState.protectorName}님 안녕하세요!',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           actions: [
             IconButton(
@@ -275,11 +275,11 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         children: [
                           const SizedBox(
-                            height: 10,
+                            height: 40,
                           ),
-                          Text('${appState.userName}님 훈련 데이터'),
+                          Text('${appState.userName} 님의 훈련 데이터',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                           const SizedBox(
-                            height: 10,
+                            height: 4,
                           ),
                           // GraphPage(),
                           max > 0
@@ -296,52 +296,71 @@ class _HomePageState extends State<HomePage> {
                           ),
                           max > 0
                               ? Text(
-                              '${appState.userName}님 지난달보다 $nameForMax $max 상승!')
+                              '지난달보다 $nameForMax $max 상승!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
                               : Text(
-                              '${appState.userName}님 지난달보다 상승된 데이터가 없습니다ㅠㅠ!'),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ElevatedButton(
+                              '지난달보다 상승된 데이터가 없습니다ㅠㅠ!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+
+                          SizedBox(
+                            width: 400.0, // 원하는 너비로 조절
+                            height: 100.0, // 원하는 높이로 조절
+                            child: IconButton(
+                              icon: Image.asset('image/mainmenu (8).png'),
+                              iconSize: 40.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
                               onPressed: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          TraningReportPage()),
+                                    builder: (context) => TraningReportPage(),
+                                  ),
                                 );
                               },
-                              child: Text('훈련결과 보러가기')),
-                          const SizedBox(
-                            height: 20,
+                            ),
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton.icon(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.accessibility_new_rounded),
-                                  label: Text('오늘의 활동기록')),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              TextButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              CommunicationYardPage()),
-                                    );
-                                  },
-                                  icon: Icon(Icons.account_box),
-                                  label: Text('소통마당')),
-                            ],
+                          const SizedBox(
+                            height: 10,
                           ),
                         ],
                       ),
                     ),
                   ),
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    SizedBox(
+                      width: 200.0, // 원하는 너비로 조절
+                      height: 200.0, // 원하는 높이로 조절
+                      child: IconButton(
+                        icon: Image.asset('image/mainmenu (1).png'),
+                        iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommunicationYardPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: 200.0, // 원하는 너비로 조절
+                      height: 200.0, // 원하는 높이로 조절
+                      child: IconButton(
+                        icon: Image.asset('image/mainmenu (7).png'),
+                        iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CommunicationYardPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 // Expanded(
                 //   child: Align(
@@ -389,8 +408,8 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {},
           tooltip: 'Create',
           child: CircleAvatar(
-            radius: 28,
-            backgroundImage: AssetImage('image/frame.png'),
+            radius: 30,
+            backgroundImage: AssetImage('image/ui (14).png'),
             backgroundColor: Colors.white,
           ),
         ),

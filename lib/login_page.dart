@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isChecked_autologin = true;
   bool providerReset = false;
 
-  final iconColor = Colors.white;
+  final iconColor = Colors.black;
 
   late var appState;
 
@@ -119,29 +119,30 @@ class _LoginPageState extends State<LoginPage> {
     // display_cacheId();
     // 2
     return Scaffold(
-      backgroundColor: Colors.black87,
-      // 3
-      body: ModalProgressHUD(
-        // loading image on entire screen
-        inAsyncCall: showSpinner,
-        child: GestureDetector(
-          // if you touch any point on screen, keyboard is automatically down
-          onTap: () {
-            FocusScope.of(context).unfocus();
-          },
-          child: SafeArea(
-            child: ListView(
-                children: [
-              const SizedBox(
-                height: 50,
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+                fit: BoxFit.cover, // 이미지가 전체 화면을 커버하도록 설정합니다.
+              ),
+            ),
+            child: ModalProgressHUD(
+              inAsyncCall: showSpinner,
+                child: GestureDetector(
+                  onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SafeArea(
+                child: ListView(
+                  children: [
+                    const SizedBox(
+                      height: 50,
               ),
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                  width: MediaQuery.of(context).size.width / 3,
-                  height: MediaQuery.of(context).size.width / 3,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage('image/frame.png'),
-                  ),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.width/1.5,
+                  child: Image.asset('image/ui (7).png'),
                 ),
               ]),
               // Login Form
@@ -163,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                   child: TextButton.icon(
                     onPressed: widget.shouldShowSignUp,
                     label: Text(
-                      'Don\'t have an account? Sign up.',
+                      '회원가입 ',
                       style: textColor.subtitle2,
                     ),
                     style: TextButton.styleFrom(
@@ -177,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   // 5
@@ -201,7 +202,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Text(
                 '자동 로그인',
-                style: textColor.subtitle2,
+                style: TextStyle(color: Colors.black),
               ),
               Checkbox(
                 checkColor: iconColor,
@@ -215,7 +216,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Text(
                 '아이디 저장',
-                style: textColor.subtitle2,
+                style: TextStyle(color: Colors.black),
               ),
             ],
           ),
@@ -227,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
               }
               return null;
             },
-            style: textColor.subtitle2,
+            style: TextStyle(color: Colors.black),
             controller: _emailController,
             decoration: InputDecoration(
                 icon: Icon(
@@ -235,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                   color: iconColor,
                 ),
                 labelText: '이메일',
-                labelStyle: textColor.subtitle2,
+                labelStyle: TextStyle(color: Colors.grey),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: iconColor, width: 2))),
           ),
@@ -248,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
               }
               return null;
             },
-            style: textColor.subtitle2,
+            style: TextStyle(color: Colors.black),
             controller: _passwordController,
             decoration: InputDecoration(
                 icon: Icon(
@@ -256,12 +257,40 @@ class _LoginPageState extends State<LoginPage> {
                   color: iconColor,
                 ),
                 labelText: '비밀번호',
-                labelStyle: textColor.subtitle2,
+                labelStyle: TextStyle(color: Colors.grey),
                 enabledBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: iconColor, width: 2))),
             obscureText: true,
             keyboardType: TextInputType.visiblePassword,
           ),
+
+          SizedBox(
+            height: 30,
+          ),
+
+          // Login Button
+          Align(
+            alignment: Alignment.centerRight,
+            child: GestureDetector(
+              onTap: _login,
+              child: Container(
+                height: MediaQuery.of(context).size.width / 4.5,
+                width: MediaQuery.of(context).size.width / 4.5,
+                decoration: BoxDecoration(
+                  color: null,
+                  borderRadius: BorderRadius.circular(50),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    'image/login (3).png', // 이미지 파일의 경로로 변경
+                    fit: BoxFit.fitWidth, // 이미지가 버튼에 맞게 맞춰지도록 설정
+                  ),
+                ),
+              ),
+            ),
+          ),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -269,58 +298,20 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {},
                   child: Text(
                     '아이디 찾기',
-                    style: textColor.subtitle2,
+                    style: TextStyle(color: Colors.indigoAccent,fontWeight: FontWeight.bold),
                   )),
               Text(
                 ' / ',
-                style: textColor.subtitle2,
+                style: TextStyle(color: Colors.indigoAccent,fontWeight: FontWeight.bold),
               ),
               TextButton(
                   onPressed: widget.shouldShowsresetpassword,
                   child: Text(
                     '비밀번호 찾기',
-                    style: textColor.subtitle2,
+                    style: TextStyle(color: Colors.indigoAccent,fontWeight: FontWeight.bold),
                   )),
             ],
           ),
-          SizedBox(
-            height: 30,
-          ),
-
-          // Login Button
-          Center(
-            child: Container(
-              padding: EdgeInsets.all(15),
-              height: MediaQuery.of(context).size.width / 4.5,
-              width: MediaQuery.of(context).size.width / 4.5,
-              decoration: BoxDecoration(
-                  color: iconColor, borderRadius: BorderRadius.circular(50)),
-              child: GestureDetector(
-                onTap: _login,
-                child: Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          colors: [Colors.deepPurple, Colors.indigo],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight),
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.3),
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: Offset(0, 1))
-                      ]),
-                  child: Center(
-                    child: Text(
-                      '로그인',
-                      style: textColor.subtitle1,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          )
         ],
       ),
     );

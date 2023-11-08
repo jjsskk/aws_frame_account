@@ -42,36 +42,31 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
 
   bool showSpinner = false;
 
-  final iconColor = Colors.white;
-  final dividerColor = Colors.white;
-
+  final iconColor = Colors.black;
+  final dividerColor = Colors.black;
 
   @override
   void initState() {
     super.initState();
-    BackButtonInterceptor.add(backKeyInterceptor,
-        context: context);
+    BackButtonInterceptor.add(backKeyInterceptor, context: context);
   }
+
   @override
   void dispose() {
     BackButtonInterceptor.remove(backKeyInterceptor);
     super.dispose();
   }
 
-
-
   // In this app, back key default function make app terminated, not page poped because of Navigator() in main page and login_sesssion page
   Future<bool> backKeyInterceptor(bool stopDefaultButtonEvent, RouteInfo info) {
     print("BACK BUTTON! "); // Do some stuff.
     if (stopDefaultButtonEvent) return Future(() => true); // prevent
 
-
     // return type is true -> run interceptor and return type is false -> don't run the interceptor( back key defaut function work)
-    widget.shouldShowLogin();// go to login page
+    widget.shouldShowLogin(); // go to login page
 
     return Future(() => true);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +74,14 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      backgroundColor: Colors.black87,
-      body: ModalProgressHUD(
+        body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+          fit: BoxFit.cover, // 이미지가 전체 화면을 커버하도록 설정합니다.
+        ),
+      ),
+      child: ModalProgressHUD(
         inAsyncCall: showSpinner,
         child: GestureDetector(
           onTap: () {
@@ -96,7 +97,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                   width: MediaQuery.of(context).size.width / 3,
                   height: MediaQuery.of(context).size.width / 3,
                   child: CircleAvatar(
-                    backgroundImage: AssetImage('image/frame.png'),
+                    backgroundImage: AssetImage('image/ui (6).png'),
                   ),
                 ),
               ]),
@@ -137,7 +138,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _verificationForm(TextTheme textColor) {
@@ -159,8 +160,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                       labelText: '이메일',
                       labelStyle: textColor.subtitle2,
                       enabledBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: iconColor, width: 2))),
+                          borderSide: BorderSide(color: iconColor, width: 2))),
                 ),
               ),
               const SizedBox(
@@ -173,7 +173,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                     style: textColor.subtitle2,
                   ),
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple)),
+                      backgroundColor: Colors.indigoAccent)),
             ],
           ),
           // _verificationcheck == false ? Text('') : Text('${_emailController.text.trim()}로 인증코드가 발송되었습니다.'),
@@ -252,7 +252,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                 child: Container(
                   decoration: BoxDecoration(
                       gradient: LinearGradient(
-                          colors: [Colors.deepPurple, Colors.indigo],
+                          colors: [Colors.indigoAccent, Colors.indigo],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight),
                       borderRadius: BorderRadius.circular(30),
@@ -264,10 +264,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                             offset: Offset(0, 1))
                       ]),
                   child: Center(
-                    child: Text(
-                      '인증',
-                      style: textColor.subtitle1
-                    ),
+                    child: Text('인증', style: textColor.subtitle1),
                   ),
                 ),
               ),

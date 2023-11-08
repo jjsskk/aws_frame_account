@@ -38,7 +38,8 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
       drawer: GlobalDrawer.getDrawer(context, appState),
       key: keyObj.key,
       appBar: AppBar(
-          title: Text('소통마당'),
+          title: Text('소통마당',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           centerTitle: true,
           leading: IconButton(
             onPressed: () {
@@ -58,37 +59,67 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UserCareInfoPage()),
-                            );
-                          },
-                          icon: Icon(Icons.accessibility_new_rounded),
-                          label: Text('이용자 \n돌봄 정보')),
-                    ),
+                        child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserCareInfoPage()),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                      ),
+                      child: Column(
+                        mainAxisSize:
+                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
+                        mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                        children: <Widget>[
+                          Image.asset(
+                            'image/community (2).png',
+                            width: 120,
+                            height: 120,
+                          ), // 아이콘
+                          Text('이용자 돌봄 정보',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)), // 텍스트
+                        ],
+                      ),
+                    )),
                     Container(
                       width: 1.0, // Width of the vertical divider
                       color: colorScheme.primary,
                     ),
                     Expanded(
-                      child: TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => UserActivityPage()),
-                            );
-                          },
-                          icon: Icon(Icons.accessibility_rounded),
-                          label: Text(
-                            '이용자 \n활동 기록',
-                            maxLines: 2,
-                            softWrap: true,
-                          )),
-                    ),
+                        child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UserActivityPage()),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                      ),
+                      child: Column(
+                        mainAxisSize:
+                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
+                        mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                        children: <Widget>[
+                          Image.asset(
+                            'image/community (8).png',
+                            width: 120,
+                            height: 120,
+                          ), // 아이콘
+                          Text('이용자 활동 기록',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)), // 텍스트
+                        ],
+                      ),
+                    )),
                   ],
                 ),
               ),
@@ -108,33 +139,67 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Expanded(
-                      child: TextButton.icon(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CommentViewPage()),
-                            );
-                          },
-                          icon: Icon(Icons.report),
-                          label: Text('코멘트 \n모아보기')),
-                    ),
+                        child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CommentViewPage()),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                      ),
+                      child: Column(
+                        mainAxisSize:
+                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
+                        mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                        children: <Widget>[
+                          Image.asset(
+                            'image/community (16).png',
+                            width: 120,
+                            height: 120,
+                          ), // 아이콘
+                          Text('코멘트 모아보기',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)), // 텍스트
+                        ],
+                      ),
+                    )),
                     Container(
                       width: 1.0, // Width of the vertical divider
                       color: colorScheme.primary,
                     ),
                     Expanded(
-                        child: TextButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InstitutionInfoPage()),
-                        );
-                      },
-                      icon: Icon(Icons.analytics),
-                      label: Text('기관 정보'),
-                    )),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => InstitutionInfoPage()),
+                            );
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                          ),
+                          child: Column(
+                            mainAxisSize:
+                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
+                            mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                            children: <Widget>[
+                              Image.asset(
+                                'image/community (16).png',
+                                width: 120,
+                                height: 120,
+                              ), // 아이콘
+                              Text('기관 정보',
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)), // 텍스트
+                            ],
+                          ),
+                        )),
                   ],
                 ),
               ),
@@ -190,7 +255,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
         tooltip: 'Create',
         child: CircleAvatar(
           radius: 28,
-          backgroundImage: AssetImage('image/frame.png'),
+          backgroundImage: AssetImage('image/ui (14).png'),
           backgroundColor: Colors.white,
         ),
       ),

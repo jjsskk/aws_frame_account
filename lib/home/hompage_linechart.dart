@@ -50,7 +50,7 @@ class _LinechartState extends State<Linechart> {
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-        color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 11);
+        color: Color(0xff000000), fontWeight: FontWeight.bold, fontSize: 11);
 
     String text = widget.data.keys.toList()[value.toInt()].toString();
     text = text + '월';
@@ -64,7 +64,7 @@ class _LinechartState extends State<Linechart> {
 
   Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
-      color: Color(0xff67727d),
+      color: Color(0xff000000),
       fontWeight: FontWeight.bold,
       fontSize: 15,
     );
@@ -103,13 +103,13 @@ class _LinechartState extends State<Linechart> {
           Stack(
             children: [
               AspectRatio(
-                aspectRatio: 3 / 2,
+                aspectRatio: 4 / 3,
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
-                      color: Color(0xff232d37)),
+                      color: Color(0xffe7e9f2)),
                   child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
                     child: LineChart(mainChart()),
@@ -118,7 +118,7 @@ class _LinechartState extends State<Linechart> {
               ),
               SizedBox(
                 width: 80,
-                height: 34,
+                height: 32,
                 child: TextButton(
                   onPressed: () {
                     print('click');
@@ -152,13 +152,13 @@ class _LinechartState extends State<Linechart> {
         drawVerticalLine: true,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: Color(0xff37434d),
+            color: Color(0x2437434d),
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: Color(0xff37434d),
+            color: Color(0x2437434d),
             strokeWidth: 1,
           );
         },
@@ -186,7 +186,7 @@ class _LinechartState extends State<Linechart> {
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
       borderData: FlBorderData(
           show: true,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
+          border: Border.all(color: const Color(0xffffff), width: 1)),
       minX: 0,
       maxX: widget.data.length - 1,
       minY: 0,

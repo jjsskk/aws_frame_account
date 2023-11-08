@@ -92,7 +92,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
         key: keyObj.key,
         drawer: GlobalDrawer.getDrawer(context, appState),
         appBar: AppBar(
-            title: Text('훈련보고서'),
+            title: Text('훈련보고서', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             centerTitle: true,
             leading: IconButton(
               onPressed: () {
@@ -114,36 +114,37 @@ class _TraningReportPageState extends State<TraningReportPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text("${appState.userName}님의 두뇌나이"),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
+                        Text("${appState.userName} 님의 두뇌나이", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Container(
-                              width: 130,
-                              height: 130,
-                              child: CircleAvatar(
-                                backgroundImage: AssetImage('image/brain.jpg'),
+                              width: 400,
+                              height: 320,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('image/report (25).png'),
+                                ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text('${appState.userName}의 두뇌 \n나이는 10세!')
+                            Text('${appState.userName} 님의 두뇌는 \'27세\' 입니다!',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
                           ],
                         ),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+
                         Divider(
                           thickness: 2.0,
                         ),
                         const SizedBox(
-                          height: 10,
+                          height: 20,
                         ),
-                        Text("최근 훈련 참여도"),
-                        const SizedBox(
-                          height: 10,
-                        ),
+                        /*
+                        Text("최근 훈련 참여도", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -151,24 +152,24 @@ class _TraningReportPageState extends State<TraningReportPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text('영역별 성취도'),
+                                Text('영역별 성취도', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
-                                  children: [Text('Top1')],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top2')],
+                                  children: [Text('Top1', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
-                                  children: [Text('Top3')],
+                                  children: [Text('Top2', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [Text('Top3', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
                                 )
                               ],
                             ),
@@ -184,29 +185,214 @@ class _TraningReportPageState extends State<TraningReportPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text('영역별 수행도'),
+                                Text('영역별 수행도', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
-                                  children: [Text('Top1')],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top2')],
+                                  children: [Text('Top1', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
                                 ),
                                 const SizedBox(
                                   height: 10,
                                 ),
                                 Row(
-                                  children: [Text('Top3')],
+                                  children: [Text('Top2', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [Text('Top3', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
                                 )
                               ],
                             )
                           ],
                         ),
+                        */
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                        Stack(
+                          children: <Widget>[
+
+                            Image.asset(
+                              'image/report (17).png', // 이미지 경로
+                              width: 400, // 필요에 따라 조절
+                              height: 250, // 필요에 따라 조절
+                              //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
+                            ),
+
+
+                            Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 65,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        width: 65,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(ORIENT_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                          //Text('지남력 점수'),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 48,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(CON_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                          //Text('주의력 점수'),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 50,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(SPACETIME_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                          //Text('시공간 점수'),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 50,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(EXEC_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold) ),
+                                          //Text('집행기능 점수'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 65,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        width: 65,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(MEM_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                          //Text('기억력 점수'),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 48,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(LING_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                          //Text('언어기능 점수'),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 50,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(CAL_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                          //Text('계산력 점수'),
+                                        ],
+                                      ),
+                                      const SizedBox(
+                                        width: 50,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text(REAC_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                          //Text('반응속도 점수'),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ]
+                            )
+
+                    ]
+                        ),
+
+                        const SizedBox(
+                          height: 10,
+                        ),
+
+                    Stack(
+                      children: <Widget>[
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
+                              const SizedBox(
+                                width: 110,
+                              ),
+
+                              Image.asset(
+                                'image/report (26).png', // 이미지 경로
+                                width: 70, // 필요에 따라 조절
+                                height: 70,
+                                //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
+                              ),
+
+
+                              Image.asset(
+                                'image/report (27).png', // 이미지 경로
+                                width: 70, // 필요에 따라 조절
+                                height: 70, // 필요에 따라 조절
+
+                                //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
+                              ),
+                              const SizedBox(
+                                width: 110,
+                              ),
+
+                            ]
+                        ),
+
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Text(AVG_ATT, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text('집중력', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            const SizedBox(
+                              width: 35,
+                            ),
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Text(AVG_MED, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Text('안정감', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                          ],
+                        ),
+                        ]
+                    ),
+
+
                         const SizedBox(
                           height: 10,
                         ),
@@ -216,155 +402,50 @@ class _TraningReportPageState extends State<TraningReportPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text("영역별 평균 점수"),
+                        Text("세부 결과 보기", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                         const SizedBox(
                           height: 10,
                         ),
+
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(CON_SCORE),
-                                Text('주의력 점수'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(SPACETIME_SCORE),
-                                Text('시공간 점수'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(EXEC_SCORE),
-                                Text('집행기능 점수'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(MEM_SCORE),
-                                Text('기억력 점수'),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(LING_SCORE),
-                                Text('언어기능 점수'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(CAL_SCORE),
-                                Text('계산력 점수'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(REAC_SCORE),
-                                Text('반응속도 점수'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(ORIENT_SCORE),
-                                Text('지남력 점수'),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                Text(AVG_ATT),
-                                Text('집중력 점수'),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              children: [
-                                Text(AVG_MED),
-                                Text('안정감 점수'),
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Divider(
-                          thickness: 2.0,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text("세부 결과 그래프"),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton.icon(
+                          children: <Widget>[
+                            SizedBox(
+                              width: 180.0, // 원하는 너비로 조절
+                              height: 120.0, // 원하는 높이로 조절
+                              child: IconButton(
+                                icon: Image.asset('image/report (19).png'),
+                                iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            AnalyzingReportPage()),
+                                      builder: (context) => AnalyzingReportPage(),
+                                    ),
                                   );
                                 },
-                                icon: Icon(Icons.analytics),
-                                label: Text('분석 보고서')),
-                            const SizedBox(
-                              width: 10,
+                              ),
                             ),
-                            TextButton.icon(
+                            SizedBox(
+                              width: 180.0, // 원하는 너비로 조절
+                              height: 120.0, // 원하는 높이로 조절
+                              child: IconButton(
+                                icon: Image.asset('image/report (3).png'),
+                                iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
                                 onPressed: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            BrainSignalPage()),
+                                      builder: (context) => BrainSignalPage(),
+                                    ),
                                   );
                                 },
-                                icon: Icon(Icons.graphic_eq),
-                                label: Text('뇌 신호 그래프')),
+                              ),
+                            ),
                           ],
                         ),
+
                       ],
                     ),
                   ),
@@ -375,7 +456,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
           tooltip: 'Create',
           child: CircleAvatar(
             radius: 28,
-            backgroundImage: AssetImage('image/frame.png'),
+            backgroundImage: AssetImage('image/ui (14).png'),
             backgroundColor: Colors.white,
           ),
         ),
