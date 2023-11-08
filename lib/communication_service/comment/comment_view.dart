@@ -14,25 +14,19 @@ class CommentViewPage extends StatefulWidget {
   State<CommentViewPage> createState() => _CommentViewPageState();
 }
 
-const List<String> _filterlist = ['날짜', '제목', '훈련자'];
+const List<String> _filterlist = ['날짜', '제목'];
 
 class _CommentViewPageState extends State<CommentViewPage> {
   final TextEditingController _searchController = TextEditingController();
 
+  late var year;
+  late var current_year;
+  late var month;
+  late var current_month;
   List<Map<String, dynamic>> _comments = [];
-
-  //   {"date": "2023/7/16", "title": "안녕하세요"},
-  //   {"date": "2023/7/17", "title": "운동하세요"},
-  //   {"date": "2023/6/17", "title": "살려줘"}
-  // ];
 
   List<Map<String, dynamic>> _foundComments = [];
 
-  // List<Map<String, dynamic>> _foundComments = [
-  //   {"date": "2023/7/16", "title": "안녕하세요"},
-  //   {"date": "2023/7/17", "title": "운동하세요"},
-  //   {"date": "2023/6/17", "title": "살려줘"}
-  // ];
 
   String dropdownValue = _filterlist.first;
 
@@ -59,18 +53,14 @@ class _CommentViewPageState extends State<CommentViewPage> {
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()))
             .toList();
-      else if (dropdownValue == '제목')
+      else
         results = _comments
             .where((comment) => comment["title"]
                 .toLowerCase()
                 .contains(enteredKeyword.toLowerCase()))
             .toList();
-      else
-        results = _comments
-            .where((comment) => comment["username"]
-                .toLowerCase()
-                .contains(enteredKeyword.toLowerCase()))
-            .toList();
+
+
       print(results);
       // we use the toLowerCase() method to make it case-insensitive
     }
@@ -79,6 +69,32 @@ class _CommentViewPageState extends State<CommentViewPage> {
     setState(() {
       _foundComments = results;
     });
+  }
+
+  void storeAndSort(var result) {
+    _comments = [];
+    _foundComments = [];
+    result.forEach((value) {
+      // print(value.createdAt.toString().substring(0,10));
+      _comments.add({
+        'date': value.createdAt.toString().substring(0, 10)?? '',
+        'title': value.TITLE?? '',
+        'username': value.USERNAME?? '',
+        'user_id': value.USER_ID?? '',
+        'board_id': value.BOARD_ID?? '',
+        'new_conversation': value.NEW_CONVERSATION_INST,
+        'new_conversation_createdat':
+        value.NEW_CONVERSATION_CREATEDAT.toString()
+      });
+    });
+    _comments.sort((a, b) {
+      String aa = a['new_conversation_createdat'];
+
+      String bb = b['new_conversation_createdat'];
+      return bb.compareTo(aa);
+    });
+    _foundComments = List.from(_comments);
+
   }
 
   void subscribeCommentChange() {
@@ -137,42 +153,70 @@ class _CommentViewPageState extends State<CommentViewPage> {
   void initState() {
     super.initState();
     int index = 0;
+    year = DateTime.now().year;
+    month = DateTime.now().month;
+    current_year = year;
+    current_month = month;
+    // gql.listInstitutionCommentBoard('1234').then((result) {
+    //   print(result);
+    //   result.forEach((value) {
+    //     // print(value.createdAt.toString().substring(0,10));
+    //     _comments.add({
+    //       'date': value.createdAt.toString().substring(0, 10)?? '',
+    //       'title': value.TITLE?? '',
+    //       'username': value.USERNAME?? '',
+    //       'user_id': value.USER_ID?? '',
+    //       'board_id': value.BOARD_ID?? '',
+    //       'new_conversation': value.NEW_CONVERSATION_INST,
+    //       'new_conversation_createdat':
+    //           value.NEW_CONVERSATION_CREATEDAT.toString()
+    //     });
+    //     // _foundComments.add({
+    //     //   'date': value.createdAt.toString().substring(0, 10),
+    //     //   'title': value.TITLE,
+    //     //   'username': value.USERNAME,
+    //     //   'user_id': value.USER_ID,
+    //     //   'board_id': value.BOARD_ID,
+    //     //   'new_conversation_createdat': value.NEW_CONVERSATION_CREATEDAT
+    //     //       .toString()
+    //     // });
+    //   });
+    //
+    //   _comments.sort((a, b) {
+    //     String aa = a['new_conversation_createdat'];
+    //
+    //     String bb = b['new_conversation_createdat'];
+    //     return bb.compareTo(aa);
+    //   });
+    //   _foundComments = List.from(_comments);
+    //   setState(() {
+    //     loading = false;
+    //   });
+    // });
 
-    gql.listInstitutionCommentBoard('1234').then((result) {
+    gql
+        .listInstitutionCommentBoard('USER_ID', '1', '$year',
+        month < 10 ? '0${month}' : '$month',
+        nextToken: null) //institution_id
+        .then((result) {
       print(result);
-      result.forEach((value) {
-        // print(value.createdAt.toString().substring(0,10));
-        _comments.add({
-          'date': value.createdAt.toString().substring(0, 10)?? '',
-          'title': value.TITLE?? '',
-          'username': value.USERNAME?? '',
-          'user_id': value.USER_ID?? '',
-          'board_id': value.BOARD_ID?? '',
-          'new_conversation': value.NEW_CONVERSATION_INST,
-          'new_conversation_createdat':
-              value.NEW_CONVERSATION_CREATEDAT.toString()
+      if (result.isNotEmpty) {
+        storeAndSort(result);
+
+        month--;
+        if (month == 0) {
+          month = 12;
+          year--;
+        }
+      }
+      print('year : $year');
+      print('month : $month');
+
+      if (mounted) {
+        setState(() {
+          loading = false;
         });
-        // _foundComments.add({
-        //   'date': value.createdAt.toString().substring(0, 10),
-        //   'title': value.TITLE,
-        //   'username': value.USERNAME,
-        //   'user_id': value.USER_ID,
-        //   'board_id': value.BOARD_ID,
-        //   'new_conversation_createdat': value.NEW_CONVERSATION_CREATEDAT
-        //       .toString()
-        // });
-      });
-
-      _comments.sort((a, b) {
-        String aa = a['new_conversation_createdat'];
-
-        String bb = b['new_conversation_createdat'];
-        return bb.compareTo(aa);
-      });
-      _foundComments = List.from(_comments);
-      setState(() {
-        loading = false;
-      });
+      }
     });
     stream = gql.subscribeInstitutionCommentBoard("1234");
     print(stream);

@@ -47,7 +47,6 @@ class LoginState extends ChangeNotifier {
     _userId = '';
     _userBirth = '';
     _userName = '';
-    // notifyListeners(); // don't use ->error occur
   }
 
   String get userId => _userId;

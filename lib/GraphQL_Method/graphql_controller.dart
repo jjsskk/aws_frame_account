@@ -14,11 +14,17 @@ import 'package:amplify_flutter/amplify_flutter.dart';
 import 'dart:math';
 
 class GraphQLController {
-  GraphQLController();
-
-  static final _Obj = GraphQLController();
+  static final _Obj = GraphQLController._internal();
 
   static get Obj => _Obj;
+
+  factory GraphQLController() {
+    return _Obj;
+  }
+
+  // It'll be called exactly once, by the static property assignment above
+  // it's also private, so it can only be called in this clas
+  GraphQLController._internal();
 
   //user
   var birth = 19640101;
@@ -27,6 +33,82 @@ class GraphQLController {
 
   //brain signal
   var brainmonth = "20230101";
+
+  // protector's attribute info
+  String _protectorEmail = '';
+  String _protectorName = '';
+  String _protectorPhonenumber = '';
+  String _userNumber = ''; //= userId
+  String _institutionNumber = '';
+
+  // user table info
+  String _userId = ''; // userNumber
+  String _userBirth = '';
+  String _userName = '';
+
+  void resetVariables() {
+    print("provider!!!");
+    // protector's attribute info
+    _protectorEmail = '';
+    _protectorName = '';
+    _protectorPhonenumber = '';
+    _userNumber = '';
+    _institutionNumber = '';
+    // user table info
+    _userId = '';
+    _userBirth = '';
+    _userName = '';
+  }
+  String get userId => _userId;
+
+  set userId(String value) {
+    _userId = value;
+  }
+
+  String get userNumber => _userNumber;
+
+  set userNumber(String value) {
+    _userNumber = value;
+  }
+
+
+  String get protectorEmail => _protectorEmail;
+
+  set protectorEmail(String value) {
+    _protectorEmail = value;
+  }
+
+  String get protectorName => _protectorName;
+
+  set protectorName(String value) {
+    _protectorName = value;
+  }
+
+  String get protectorPhonenumber => _protectorPhonenumber;
+
+  set protectorPhonenumber(String value) {
+    _protectorPhonenumber = value;
+  }
+
+  String get institutionNumber => _institutionNumber;
+
+  set institutionNumber(String value) {
+    _institutionNumber = value;
+  }
+
+  String get userBirth => _userBirth;
+
+  set userBirth(String value) {
+    _userBirth = value;
+  }
+
+  String get userName => _userName;
+
+  set userName(String value) {
+    _userName = value;
+  }
+
+
   // 병찬
 
 
@@ -602,64 +684,144 @@ class GraphQLController {
     }
   }
 
-  Future<List<InstitutionCommentBoardTable>?> listInstitutionCommentBoard(
-      String institutionId) async {
-    // String inst_id = 'aaa';
-    // int dateNext = int.parse(date);
-    // dateNext += 40;
+
+  Future<List<InstitutionCommentBoardTable?>> listInstitutionCommentBoard(
+      String filterName, String Id, String year, String month,
+      {String? nextToken}) async {
+    final time = '${TemporalDateTime.now()}';
+    var remain = time.substring(12);
+    var start = '$year-$month-00$remain';
+    var end = '$year-$month-40$remain';
+
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
-          apiName: "Protector_API",
+          apiName: "Institution_API_NEW",
           document: """
-      query listInstitutionCommentBoardTables(\$filter: TableInstitutionCommentBoardTableFilterInput) {
-        listInstitutionCommentBoardTables(
-          filter: \$filter,
-        ) {
-          items {
-	                  BOARD_ID
-	                  USER_ID
-	                  WRITER
-	                  TITLE
-	                  USERNAME
-	                  INSTITUTION_ID
-	                  NEW_CONVERSATION_PROTECTOR
-	                  NEW_CONVERSATION_INST
-	                  NEW_CONVERSATION_CREATEDAT
-	                  createdAt
-	                  updatedAt
+          query ListInstitutionCommentBoardTables(\$filter: TableInstitutionCommentBoardTableFilterInput, \$limit: Int, \$nextToken: String) {
+            listInstitutionCommentBoardTables(
+              filter: \$filter,
+              limit: \$limit,
+              nextToken: \$nextToken
+            ) {
+              items {
+                BOARD_ID
+                USER_ID
+                WRITER
+                TITLE
+                USERNAME
+                INSTITUTION_ID
+                NEW_CONVERSATION_PROTECTOR
+                NEW_CONVERSATION_INST
+                NEW_CONVERSATION_CREATEDAT
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
           }
-        }
-      }
-    """,
+        """,
           variables: {
             "filter": {
-              "INSTITUTION_ID": {"eq": institutionId},
+              filterName: {"eq": Id},
+              "NEW_CONVERSATION_CREATEDAT": {
+                "between": [start, end]
+              },
             },
+            "limit": 1000,
+            "nextToken": nextToken,
           },
         ),
       );
 
       var response = await operation.response;
-      print(response.data);
-      List<InstitutionCommentBoardTable> comments =
-          (jsonDecode(response.data)['listInstitutionCommentBoardTables']
-                  ['items'] as List)
-              .map((item) => InstitutionCommentBoardTable.fromJson(item))
-              .toList();
-      if (comments == null ||
-          jsonDecode(response.data)['listInstitutionCommentBoardTables']
-                  ['items'] ==
-              null) {
-        safePrint('errors: ${response.errors}');
-        return const [];
+      {
+        var data = jsonDecode(response.data);
+        var items = data['listInstitutionCommentBoardTables']['items'];
+        if (response.data == null || items == null) {
+          print('errors: ${response.errors}');
+          return const [];
+        }
+        List<InstitutionCommentBoardTable?> comments = (items as List)
+            .map((item) => InstitutionCommentBoardTable.fromJson(item))
+            .toList();
+        var newNextToken =
+        data['listInstitutionCommentBoardTables']['nextToken'];
+
+        if (newNextToken != null) {
+          // recursive call for next page's data
+          var nextComments = await listInstitutionCommentBoard(
+              filterName, Id, year, month,
+              nextToken: newNextToken);
+          comments.addAll(nextComments!);
+        }
+
+        return comments;
       }
-      return comments;
     } on ApiException catch (e) {
       print('Query failed: $e');
       return const [];
     }
   }
+
+  // Future<List<InstitutionCommentBoardTable>?> listInstitutionCommentBoard(
+  //     String institutionId) async {
+  //   // String inst_id = 'aaa';
+  //   // int dateNext = int.parse(date);
+  //   // dateNext += 40;
+  //   try {
+  //     var operation = Amplify.API.query(
+  //       request: GraphQLRequest(
+  //         apiName: "Protector_API",
+  //         document: """
+  //     query listInstitutionCommentBoardTables(\$filter: TableInstitutionCommentBoardTableFilterInput) {
+  //       listInstitutionCommentBoardTables(
+  //         filter: \$filter,
+  //       ) {
+  //         items {
+	//                   BOARD_ID
+	//                   USER_ID
+	//                   WRITER
+	//                   TITLE
+	//                   USERNAME
+	//                   INSTITUTION_ID
+	//                   NEW_CONVERSATION_PROTECTOR
+	//                   NEW_CONVERSATION_INST
+	//                   NEW_CONVERSATION_CREATEDAT
+	//                   createdAt
+	//                   updatedAt
+  //         }
+  //       }
+  //     }
+  //   """,
+  //         variables: {
+  //           "filter": {
+  //             "INSTITUTION_ID": {"eq": institutionId},
+  //           },
+  //         },
+  //       ),
+  //     );
+  //
+  //     var response = await operation.response;
+  //     print(response.data);
+  //     List<InstitutionCommentBoardTable> comments =
+  //         (jsonDecode(response.data)['listInstitutionCommentBoardTables']
+  //                 ['items'] as List)
+  //             .map((item) => InstitutionCommentBoardTable.fromJson(item))
+  //             .toList();
+  //     if (comments == null ||
+  //         jsonDecode(response.data)['listInstitutionCommentBoardTables']
+  //                 ['items'] ==
+  //             null) {
+  //       safePrint('errors: ${response.errors}');
+  //       return const [];
+  //     }
+  //     return comments;
+  //   } on ApiException catch (e) {
+  //     print('Query failed: $e');
+  //     return const [];
+  //   }
+  // }
 
   Future<InstitutionCommentBoardTable?> getInstitutionCommentBoard(
       String user_id, String board_id) async {

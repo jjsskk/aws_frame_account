@@ -114,7 +114,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text("${appState.userName}님의 두뇌나이"),
+                        Text("${gql.userName}님의 두뇌나이"),
                         const SizedBox(
                           height: 10,
                         ),
