@@ -13,10 +13,10 @@ import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'dart:math';
 
-class GraphQLController {
-  GraphQLController();
+class GraphQLController_OLD {
+  GraphQLController_OLD();
 
-  static final _Obj = GraphQLController();
+  static final _Obj = GraphQLController_OLD();
 
   static get Obj => _Obj;
 
@@ -27,14 +27,6 @@ class GraphQLController {
 
   //brain signal
   var brainmonth = "20230101";
-  // 병찬
-
-
-
-
-
-
-  // 진수
 
   Future<void> createUserData() async {
     try {
@@ -79,8 +71,8 @@ class GraphQLController {
       final request = ModelMutations.create(row);
       final response = await Amplify.API
           .mutate(
-            request: request,
-          )
+        request: request,
+      )
           .response;
       int month = int.parse(brainmonth);
       month += 100;
@@ -101,7 +93,7 @@ class GraphQLController {
     try {
       var ID = '3';
       int limit =
-          1; // Fetch the latest 1 data items, you can change this value to fetch more or less
+      1; // Fetch the latest 1 data items, you can change this value to fetch more or less
       String sortDirection =
           "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
 
@@ -202,7 +194,7 @@ class GraphQLController {
     try {
       var ID = '3';
       int limit =
-          12; // Fetch the latest 12 data items, you can change this value to fetch more or less
+      12; // Fetch the latest 12 data items, you can change this value to fetch more or less
       String sortDirection =
           "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
 
@@ -253,9 +245,9 @@ class GraphQLController {
       // Map<String, dynamic> json = jsonDecode(response.data);
       // in Dart, you can use the jsonDecode function from the dart:convert library. The jsonDecode function parses a JSON string and returns the corresponding Dart object.
       List<MonthlyDBTest> monthlyDBTests =
-          (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
-              .map((item) => MonthlyDBTest.fromJson(item))
-              .toList();
+      (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
+          .map((item) => MonthlyDBTest.fromJson(item))
+          .toList();
       if (monthlyDBTests == null) {
         print('errors: ${response.errors}');
         return const [];
@@ -303,7 +295,7 @@ class GraphQLController {
     try {
       var ID = '3';
       int limit =
-          2; // Fetch the latest 2 data items, you can change this value to fetch more or less
+      2; // Fetch the latest 2 data items, you can change this value to fetch more or less
       String sortDirection =
           "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
 
@@ -354,9 +346,9 @@ class GraphQLController {
       // Map<String, dynamic> json = jsonDecode(response.data);
       // in Dart, you can use the jsonDecode function from the dart:convert library. The jsonDecode function parses a JSON string and returns the corresponding Dart object.
       List<MonthlyDBTest> monthlyDBTests =
-          (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
-              .map((item) => MonthlyDBTest.fromJson(item))
-              .toList();
+      (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
+          .map((item) => MonthlyDBTest.fromJson(item))
+          .toList();
       if (monthlyDBTests == null) {
         print('errors: ${response.errors}');
         return const [];
@@ -453,7 +445,7 @@ class GraphQLController {
           return null;
         }
         UserDBTest user =
-            UserDBTest.fromJson(jsonDecode(response.data)['getUserDBTest']);
+        UserDBTest.fromJson(jsonDecode(response.data)['getUserDBTest']);
         if (user == null) {
           safePrint('errors: ${response.errors}');
           return null;
@@ -471,7 +463,7 @@ class GraphQLController {
     final queryPredicate = UserDBTest.BIRTH.between(start, end);
     try {
       final request =
-          ModelQueries.list(UserDBTest.classType, where: queryPredicate);
+      ModelQueries.list(UserDBTest.classType, where: queryPredicate);
       final response = await Amplify.API.query(request: request).response;
 
       final items = response.data?.items;
@@ -506,12 +498,12 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              variables: {
-                'input': row,
-              },
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          variables: {
+            'input': row,
+          },
+          document: '''
             mutation createInstitutionCommentBoardTable(\$input: CreateInstitutionCommentBoardTableInput!) {
                   createInstitutionCommentBoardTable(input: \$input) {
 	                  BOARD_ID
@@ -529,8 +521,8 @@ class GraphQLController {
                }  
               }
             ''',
-            ),
-          )
+        ),
+      )
           .response;
       {
         final createdData = response.data;
@@ -580,7 +572,7 @@ class GraphQLController {
           print("subscription success");
         },
       ).handleError(
-        (Object error) {
+            (Object error) {
           safePrint('Error in subscription stream: $error');
         },
       );
@@ -643,13 +635,13 @@ class GraphQLController {
       var response = await operation.response;
       print(response.data);
       List<InstitutionCommentBoardTable> comments =
-          (jsonDecode(response.data)['listInstitutionCommentBoardTables']
-                  ['items'] as List)
-              .map((item) => InstitutionCommentBoardTable.fromJson(item))
-              .toList();
+      (jsonDecode(response.data)['listInstitutionCommentBoardTables']
+      ['items'] as List)
+          .map((item) => InstitutionCommentBoardTable.fromJson(item))
+          .toList();
       if (comments == null ||
           jsonDecode(response.data)['listInstitutionCommentBoardTables']
-                  ['items'] ==
+          ['items'] ==
               null) {
         safePrint('errors: ${response.errors}');
         return const [];
@@ -702,8 +694,8 @@ class GraphQLController {
           return null;
         }
         InstitutionCommentBoardTable comment =
-            InstitutionCommentBoardTable.fromJson(
-                jsonDecode(response.data)['getInstitutionCommentBoardTable']);
+        InstitutionCommentBoardTable.fromJson(
+            jsonDecode(response.data)['getInstitutionCommentBoardTable']);
         if (comment == null) {
           print('errors: ${response.errors}');
           return null;
@@ -729,12 +721,12 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              variables: {
-                'input': row,
-              },
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          variables: {
+            'input': row,
+          },
+          document: '''
             mutation updateInstitutionCommentBoardTable(\$input: UpdateInstitutionCommentBoardTableInput!) {
                   updateInstitutionCommentBoardTable(input: \$input) {
 	                  BOARD_ID
@@ -745,8 +737,8 @@ class GraphQLController {
                }  
               }
             ''',
-            ),
-          )
+        ),
+      )
           .response;
       {
         final updatedData = response.data;
@@ -767,9 +759,9 @@ class GraphQLController {
   }
 
   Future<bool?> deleteCommentBoarddata(
-    String user_id,
-    String board_id,
-  ) async {
+      String user_id,
+      String board_id,
+      ) async {
     final row = {
       'USER_ID': user_id,
       'BOARD_ID': board_id,
@@ -777,9 +769,9 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          document: '''
             mutation deleteInstitutionCommentBoardTable(\$input: DeleteInstitutionCommentBoardTableInput!) {
                   deleteInstitutionCommentBoardTable(input: \$input) {
                     USER_ID
@@ -787,11 +779,11 @@ class GraphQLController {
                }  
               }
             ''',
-              variables: {
-                'input': row,
-              },
-            ),
-          )
+          variables: {
+            'input': row,
+          },
+        ),
+      )
           .response;
       {
         final deletedData = response.data;
@@ -827,12 +819,12 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              variables: {
-                'input': row,
-              },
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          variables: {
+            'input': row,
+          },
+          document: '''
             mutation createInstitutionCommentConversationTable(\$input: CreateInstitutionCommentConversationTableInput!) {
                   createInstitutionCommentConversationTable(input: \$input) {
 	                  BOARD_ID
@@ -845,14 +837,14 @@ class GraphQLController {
                }  
               }
             ''',
-            ),
-          )
+        ),
+      )
           .response;
       {
         final createdData = response.data;
         if (createdData == null ||
             jsonDecode(createdData!)[
-                    'createInstitutionCommentConversationTable'] ==
+            'createInstitutionCommentConversationTable'] ==
                 null) {
           safePrint('errors: ${response.errors}');
           return false;
@@ -978,10 +970,10 @@ class GraphQLController {
   }
 
   Future<bool?> updateCommentConversationdata(
-    String board_id,
-    String conversation_id,
-    String content,
-  ) async {
+      String board_id,
+      String conversation_id,
+      String content,
+      ) async {
     final time = '${TemporalDateTime.now()}';
     final row = {
       'BOARD_ID': board_id,
@@ -992,12 +984,12 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              variables: {
-                'input': row,
-              },
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          variables: {
+            'input': row,
+          },
+          document: '''
             mutation updateInstitutionCommentConversationTable(\$input: UpdateInstitutionCommentConversationTableInput!) {
                   updateInstitutionCommentConversationTable(input: \$input) {
 	            	    BOARD_ID
@@ -1010,14 +1002,14 @@ class GraphQLController {
                }  
               }
             ''',
-            ),
-          )
+        ),
+      )
           .response;
       {
         final updatedData = response.data;
         if (updatedData == null ||
             jsonDecode(updatedData!)[
-                    'updateInstitutionCommentConversationTable'] ==
+            'updateInstitutionCommentConversationTable'] ==
                 null) {
           safePrint('errors: ${response.errors}');
           return false;
@@ -1033,9 +1025,9 @@ class GraphQLController {
   }
 
   Future<bool?> deleteCommentConversationdata(
-    String board_id,
-    String conversation_id,
-  ) async {
+      String board_id,
+      String conversation_id,
+      ) async {
     final time = '${TemporalDateTime.now()}';
     final row = {
       'BOARD_ID': board_id,
@@ -1044,12 +1036,12 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              variables: {
-                'input': row,
-              },
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          variables: {
+            'input': row,
+          },
+          document: '''
             mutation deleteInstitutionCommentConversationTable(\$input: DeleteInstitutionCommentConversationTableInput!) {
                   deleteInstitutionCommentConversationTable(input: \$input) {
 	            	    BOARD_ID
@@ -1062,14 +1054,14 @@ class GraphQLController {
                }  
               }
             ''',
-            ),
-          )
+        ),
+      )
           .response;
       {
         final deletedData = response.data;
         if (deletedData == null ||
             jsonDecode(deletedData!)[
-                    'deleteInstitutionCommentConversationTable'] ==
+            'deleteInstitutionCommentConversationTable'] ==
                 null) {
           safePrint('errors: ${response.errors}');
           return false;
@@ -1096,12 +1088,12 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              variables: {
-                'input': row,
-              },
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          variables: {
+            'input': row,
+          },
+          document: '''
             mutation updateInstitutionCommentBoardTable(\$input: UpdateInstitutionCommentBoardTableInput!) {
                   updateInstitutionCommentBoardTable(input: \$input) {
 	                  BOARD_ID
@@ -1112,8 +1104,8 @@ class GraphQLController {
                }  
               }
             ''',
-            ),
-          )
+        ),
+      )
           .response;
       {
         final updatedData = response.data;
@@ -1144,12 +1136,12 @@ class GraphQLController {
     try {
       final response = await Amplify.API
           .mutate(
-            request: GraphQLRequest<String>(
-              apiName: "Protector_API",
-              variables: {
-                'input': row,
-              },
-              document: '''
+        request: GraphQLRequest<String>(
+          apiName: "Protector_API",
+          variables: {
+            'input': row,
+          },
+          document: '''
             mutation updateInstitutionCommentBoardTable(\$input: UpdateInstitutionCommentBoardTableInput!) {
                   updateInstitutionCommentBoardTable(input: \$input) {
 	                  BOARD_ID
@@ -1160,8 +1152,8 @@ class GraphQLController {
                }  
               }
             ''',
-            ),
-          )
+        ),
+      )
           .response;
       {
         final updatedData = response.data;

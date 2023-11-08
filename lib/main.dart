@@ -190,7 +190,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> mutateByApiName() async {
     final operation = Amplify.API.mutate<String>(
       request: GraphQLRequest(
-        document: 'schemaTest.graphql',
+        document: 'schema.graphql',
         apiName: 'awsamplify',
       ),
     );

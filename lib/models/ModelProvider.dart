@@ -19,29 +19,73 @@
 
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
-import 'package:amplify_core/amplify_core.dart';
+import 'package:amplify_core/amplify_core.dart' as amplify_core;
 import 'MonthlyDBTest.dart';
 import 'Test.dart';
 import 'Todo.dart';
 import 'UserDBTest.dart';
+import 'InstitutionAnnouncementTable.dart';
+import 'InstitutionAnnouncementTableConnection.dart';
+import 'InstitutionCommentBoardTable.dart';
+import 'InstitutionCommentBoardTableConnection.dart';
+import 'InstitutionCommentConversationTable.dart';
+import 'InstitutionCommentConversationTableConnection.dart';
+import 'InstitutionEssentialCareTable.dart';
+import 'InstitutionEssentialCareTableConnection.dart';
+import 'InstitutionEventScheduleTable.dart';
+import 'InstitutionEventScheduleTableConnection.dart';
+import 'InstitutionFoodMenuTable.dart';
+import 'InstitutionFoodMenuTableConnection.dart';
+import 'InstitutionNewsTable.dart';
+import 'InstitutionNewsTableConnection.dart';
+import 'InstitutionScheduleTable.dart';
+import 'InstitutionScheduleTableConnection.dart';
+import 'InstitutionShuttleTimeTable.dart';
+import 'InstitutionShuttleTimeTableConnection.dart';
+import 'MonthlyBrainSignalTable.dart';
+import 'MonthlyBrainSignalTableConnection.dart';
+import 'UserTable.dart';
+import 'UserTableConnection.dart';
 
+export 'InstitutionAnnouncementTable.dart';
+export 'InstitutionAnnouncementTableConnection.dart';
+export 'InstitutionCommentBoardTable.dart';
+export 'InstitutionCommentBoardTableConnection.dart';
+export 'InstitutionCommentConversationTable.dart';
+export 'InstitutionCommentConversationTableConnection.dart';
+export 'InstitutionEssentialCareTable.dart';
+export 'InstitutionEssentialCareTableConnection.dart';
+export 'InstitutionEventScheduleTable.dart';
+export 'InstitutionEventScheduleTableConnection.dart';
+export 'InstitutionFoodMenuTable.dart';
+export 'InstitutionFoodMenuTableConnection.dart';
+export 'InstitutionNewsTable.dart';
+export 'InstitutionNewsTableConnection.dart';
+export 'InstitutionScheduleTable.dart';
+export 'InstitutionScheduleTableConnection.dart';
+export 'InstitutionShuttleTimeTable.dart';
+export 'InstitutionShuttleTimeTableConnection.dart';
+export 'MonthlyBrainSignalTable.dart';
+export 'MonthlyBrainSignalTableConnection.dart';
 export 'MonthlyDBTest.dart';
 export 'Test.dart';
 export 'Todo.dart';
 export 'UserDBTest.dart';
+export 'UserTable.dart';
+export 'UserTableConnection.dart';
 
-class ModelProvider implements ModelProviderInterface {
+class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "5805572b4716ae62584eb98abe568104";
+  String version = "d1f2023fa1dc87698001ba431e4f2031";
   @override
-  List<ModelSchema> modelSchemas = [MonthlyDBTest.schema, Test.schema, Todo.schema, UserDBTest.schema];
+  List<amplify_core.ModelSchema> modelSchemas = [MonthlyDBTest.schema, Test.schema, Todo.schema, UserDBTest.schema];
+  @override
+  List<amplify_core.ModelSchema> customTypeSchemas = [InstitutionAnnouncementTable.schema, InstitutionAnnouncementTableConnection.schema, InstitutionCommentBoardTable.schema, InstitutionCommentBoardTableConnection.schema, InstitutionCommentConversationTable.schema, InstitutionCommentConversationTableConnection.schema, InstitutionEssentialCareTable.schema, InstitutionEssentialCareTableConnection.schema, InstitutionEventScheduleTable.schema, InstitutionEventScheduleTableConnection.schema, InstitutionFoodMenuTable.schema, InstitutionFoodMenuTableConnection.schema, InstitutionNewsTable.schema, InstitutionNewsTableConnection.schema, InstitutionScheduleTable.schema, InstitutionScheduleTableConnection.schema, InstitutionShuttleTimeTable.schema, InstitutionShuttleTimeTableConnection.schema, MonthlyBrainSignalTable.schema, MonthlyBrainSignalTableConnection.schema, UserTable.schema, UserTableConnection.schema];
   static final ModelProvider _instance = ModelProvider();
-  @override
-  List<ModelSchema> customTypeSchemas = [];
 
   static ModelProvider get instance => _instance;
   
-  ModelType getModelTypeByModelName(String modelName) {
+  amplify_core.ModelType getModelTypeByModelName(String modelName) {
     switch(modelName) {
       case "MonthlyDBTest":
         return MonthlyDBTest.classType;
@@ -55,4 +99,11 @@ class ModelProvider implements ModelProviderInterface {
         throw Exception("Failed to find model in model provider for model name: " + modelName);
     }
   }
+}
+
+
+class ModelFieldValue<T> {
+  const ModelFieldValue.value(this.value);
+
+  final T value;
 }
