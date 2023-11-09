@@ -1,3 +1,4 @@
+import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/analytics/analytics_events.dart';
 import 'package:aws_frame_account/analytics/analytics_service.dart';
 import 'package:aws_frame_account/auth_flow/auth_credentials.dart';
@@ -41,11 +42,13 @@ class _LoginPageState extends State<LoginPage> {
   late SharedPreferences _prefs;
   bool isChecked_id = true;
   bool isChecked_autologin = true;
-  bool providerReset = false;
+  // bool providerReset = false;
 
   final iconColor = Colors.black;
 
   late var appState;
+
+  final gql = GraphQLController.Obj;
 
   @override
   void initState() {
@@ -53,6 +56,7 @@ class _LoginPageState extends State<LoginPage> {
     // Get.deleteAll();
     BackButtonInterceptor.add(backKeyInterceptor, context: context);
     _loadId();
+    gql.resetVariables();
   }
 
   @override
@@ -112,10 +116,7 @@ class _LoginPageState extends State<LoginPage> {
     final textColor = Theme.of(context).textTheme;
     final theme = Theme.of(context);
     appState = context.watch<LoginState>();
-    if (!providerReset) {
-      appState.resetVariables();
-      providerReset = true;
-    }
+
     // display_cacheId();
     // 2
     return Scaffold(

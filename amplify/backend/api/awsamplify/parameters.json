@@ -2,5 +2,11 @@
   "AppSyncApiName": "awsamplify",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-07-10T11:45:58.492Z"
+  "AuthModeLastUpdated": "2023-09-25T16:21:43.199Z",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authawsamplify",
+      "Outputs.UserPoolId"
+    ]
+  }
 }

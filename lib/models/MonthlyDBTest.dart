@@ -19,13 +19,12 @@
 
 // ignore_for_file: public_member_api_docs, annotate_overrides, dead_code, dead_codepublic_member_api_docs, depend_on_referenced_packages, file_names, library_private_types_in_public_api, no_leading_underscores_for_library_prefixes, no_leading_underscores_for_local_identifiers, non_constant_identifier_names, null_check_on_nullable_type_parameter, prefer_adjacent_string_concatenation, prefer_const_constructors, prefer_if_null_operators, prefer_interpolation_to_compose_strings, slash_for_doc_comments, sort_child_properties_last, unnecessary_const, unnecessary_constructor_name, unnecessary_late, unnecessary_new, unnecessary_null_aware_assignments, unnecessary_nullable_for_final_variable_declarations, unnecessary_string_interpolations, use_build_context_synchronously
 
-import 'package:amplify_core/amplify_core.dart';
-import 'package:flutter/foundation.dart';
+import 'ModelProvider.dart';
+import 'package:amplify_core/amplify_core.dart' as amplify_core;
 
 
 /** This is an auto generated class representing the MonthlyDBTest type in your schema. */
-@immutable
-class MonthlyDBTest extends Model {
+class MonthlyDBTest extends amplify_core.Model {
   static const classType = const _MonthlyDBTestModelType();
   final String id;
   final String? _month;
@@ -44,8 +43,8 @@ class MonthlyDBTest extends Model {
   final int? _cal_score;
   final int? _reac_score;
   final int? _orient_score;
-  final TemporalDateTime? _createdAt;
-  final TemporalDateTime? _updatedAt;
+  final amplify_core.TemporalDateTime? _createdAt;
+  final amplify_core.TemporalDateTime? _updatedAt;
 
   @override
   getInstanceType() => classType;
@@ -61,10 +60,10 @@ class MonthlyDBTest extends Model {
         month: _month!
       );
     } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -74,10 +73,10 @@ class MonthlyDBTest extends Model {
     try {
       return _month!;
     } catch(e) {
-      throw new AmplifyCodeGenModelException(
-          AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
+      throw amplify_core.AmplifyCodeGenModelException(
+          amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastExceptionMessage,
           recoverySuggestion:
-            AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
+            amplify_core.AmplifyExceptionMessages.codeGenRequiredFieldForceCastRecoverySuggestion,
           underlyingException: e.toString()
           );
     }
@@ -143,19 +142,19 @@ class MonthlyDBTest extends Model {
     return _orient_score;
   }
   
-  TemporalDateTime? get createdAt {
+  amplify_core.TemporalDateTime? get createdAt {
     return _createdAt;
   }
   
-  TemporalDateTime? get updatedAt {
+  amplify_core.TemporalDateTime? get updatedAt {
     return _updatedAt;
   }
   
   const MonthlyDBTest._internal({required this.id, required month, total_time, avg_att, avg_med, firsts_name, first_amt, second_name, second_amt, con_score, spacetime_score, exec_score, mem_score, ling_score, cal_score, reac_score, orient_score, createdAt, updatedAt}): _month = month, _total_time = total_time, _avg_att = avg_att, _avg_med = avg_med, _firsts_name = firsts_name, _first_amt = first_amt, _second_name = second_name, _second_amt = second_amt, _con_score = con_score, _spacetime_score = spacetime_score, _exec_score = exec_score, _mem_score = mem_score, _ling_score = ling_score, _cal_score = cal_score, _reac_score = reac_score, _orient_score = orient_score, _createdAt = createdAt, _updatedAt = updatedAt;
   
-  factory MonthlyDBTest({String? id, required String month, int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score, TemporalDateTime? createdAt, TemporalDateTime? updatedAt}) {
+  factory MonthlyDBTest({String? id, required String month, int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score, amplify_core.TemporalDateTime? createdAt, amplify_core.TemporalDateTime? updatedAt}) {
     return MonthlyDBTest._internal(
-      id: id == null ? UUID.getUUID() : id,
+      id: id == null ? amplify_core.UUID.getUUID() : id,
       month: month,
       total_time: total_time,
       avg_att: avg_att,
@@ -172,8 +171,8 @@ class MonthlyDBTest extends Model {
       cal_score: cal_score,
       reac_score: reac_score,
       orient_score: orient_score,
-      createdAt: createdAt==null ? TemporalDateTime.now() : createdAt,
-      updatedAt: updatedAt==null ? TemporalDateTime.now() : updatedAt);
+      createdAt: createdAt,
+      updatedAt: updatedAt);
   }
   
   bool equals(Object other) {
@@ -237,7 +236,7 @@ class MonthlyDBTest extends Model {
     return buffer.toString();
   }
   
-  MonthlyDBTest copyWith({int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score, TemporalDateTime? createdAt, TemporalDateTime? updatedAt}) {
+  MonthlyDBTest copyWith({int? total_time, int? avg_att, int? avg_med, String? firsts_name, int? first_amt, String? second_name, int? second_amt, int? con_score, int? spacetime_score, int? exec_score, int? mem_score, int? ling_score, int? cal_score, int? reac_score, int? orient_score, amplify_core.TemporalDateTime? createdAt, amplify_core.TemporalDateTime? updatedAt}) {
     return MonthlyDBTest._internal(
       id: id,
       month: month,
@@ -260,6 +259,48 @@ class MonthlyDBTest extends Model {
       updatedAt: updatedAt ?? this.updatedAt);
   }
   
+  MonthlyDBTest copyWithModelFieldValues({
+    ModelFieldValue<int?>? total_time,
+    ModelFieldValue<int?>? avg_att,
+    ModelFieldValue<int?>? avg_med,
+    ModelFieldValue<String?>? firsts_name,
+    ModelFieldValue<int?>? first_amt,
+    ModelFieldValue<String?>? second_name,
+    ModelFieldValue<int?>? second_amt,
+    ModelFieldValue<int?>? con_score,
+    ModelFieldValue<int?>? spacetime_score,
+    ModelFieldValue<int?>? exec_score,
+    ModelFieldValue<int?>? mem_score,
+    ModelFieldValue<int?>? ling_score,
+    ModelFieldValue<int?>? cal_score,
+    ModelFieldValue<int?>? reac_score,
+    ModelFieldValue<int?>? orient_score,
+    ModelFieldValue<amplify_core.TemporalDateTime?>? createdAt,
+    ModelFieldValue<amplify_core.TemporalDateTime?>? updatedAt
+  }) {
+    return MonthlyDBTest._internal(
+      id: id,
+      month: month,
+      total_time: total_time == null ? this.total_time : total_time.value,
+      avg_att: avg_att == null ? this.avg_att : avg_att.value,
+      avg_med: avg_med == null ? this.avg_med : avg_med.value,
+      firsts_name: firsts_name == null ? this.firsts_name : firsts_name.value,
+      first_amt: first_amt == null ? this.first_amt : first_amt.value,
+      second_name: second_name == null ? this.second_name : second_name.value,
+      second_amt: second_amt == null ? this.second_amt : second_amt.value,
+      con_score: con_score == null ? this.con_score : con_score.value,
+      spacetime_score: spacetime_score == null ? this.spacetime_score : spacetime_score.value,
+      exec_score: exec_score == null ? this.exec_score : exec_score.value,
+      mem_score: mem_score == null ? this.mem_score : mem_score.value,
+      ling_score: ling_score == null ? this.ling_score : ling_score.value,
+      cal_score: cal_score == null ? this.cal_score : cal_score.value,
+      reac_score: reac_score == null ? this.reac_score : reac_score.value,
+      orient_score: orient_score == null ? this.orient_score : orient_score.value,
+      createdAt: createdAt == null ? this.createdAt : createdAt.value,
+      updatedAt: updatedAt == null ? this.updatedAt : updatedAt.value
+    );
+  }
+  
   MonthlyDBTest.fromJson(Map<String, dynamic> json)  
     : id = json['id'],
       _month = json['month'],
@@ -278,169 +319,188 @@ class MonthlyDBTest extends Model {
       _cal_score = (json['cal_score'] as num?)?.toInt(),
       _reac_score = (json['reac_score'] as num?)?.toInt(),
       _orient_score = (json['orient_score'] as num?)?.toInt(),
-      _createdAt = json['createdAt'] != null ? TemporalDateTime.fromString(json['createdAt']) : null,
-      _updatedAt = json['updatedAt'] != null ? TemporalDateTime.fromString(json['updatedAt']) : null;
+      _createdAt = json['createdAt'] != null ? amplify_core.TemporalDateTime.fromString(json['createdAt']) : null,
+      _updatedAt = json['updatedAt'] != null ? amplify_core.TemporalDateTime.fromString(json['updatedAt']) : null;
   
   Map<String, dynamic> toJson() => {
     'id': id, 'month': _month, 'total_time': _total_time, 'avg_att': _avg_att, 'avg_med': _avg_med, 'firsts_name': _firsts_name, 'first_amt': _first_amt, 'second_name': _second_name, 'second_amt': _second_amt, 'con_score': _con_score, 'spacetime_score': _spacetime_score, 'exec_score': _exec_score, 'mem_score': _mem_score, 'ling_score': _ling_score, 'cal_score': _cal_score, 'reac_score': _reac_score, 'orient_score': _orient_score, 'createdAt': _createdAt?.format(), 'updatedAt': _updatedAt?.format()
   };
   
   Map<String, Object?> toMap() => {
-    'id': id, 'month': _month, 'total_time': _total_time, 'avg_att': _avg_att, 'avg_med': _avg_med, 'firsts_name': _firsts_name, 'first_amt': _first_amt, 'second_name': _second_name, 'second_amt': _second_amt, 'con_score': _con_score, 'spacetime_score': _spacetime_score, 'exec_score': _exec_score, 'mem_score': _mem_score, 'ling_score': _ling_score, 'cal_score': _cal_score, 'reac_score': _reac_score, 'orient_score': _orient_score, 'createdAt': _createdAt, 'updatedAt': _updatedAt
+    'id': id,
+    'month': _month,
+    'total_time': _total_time,
+    'avg_att': _avg_att,
+    'avg_med': _avg_med,
+    'firsts_name': _firsts_name,
+    'first_amt': _first_amt,
+    'second_name': _second_name,
+    'second_amt': _second_amt,
+    'con_score': _con_score,
+    'spacetime_score': _spacetime_score,
+    'exec_score': _exec_score,
+    'mem_score': _mem_score,
+    'ling_score': _ling_score,
+    'cal_score': _cal_score,
+    'reac_score': _reac_score,
+    'orient_score': _orient_score,
+    'createdAt': _createdAt,
+    'updatedAt': _updatedAt
   };
 
-  static final QueryModelIdentifier<MonthlyDBTestModelIdentifier> MODEL_IDENTIFIER = QueryModelIdentifier<MonthlyDBTestModelIdentifier>();
-  static final QueryField ID = QueryField(fieldName: "id");
-  static final QueryField MONTH = QueryField(fieldName: "month");
-  static final QueryField TOTAL_TIME = QueryField(fieldName: "total_time");
-  static final QueryField AVG_ATT = QueryField(fieldName: "avg_att");
-  static final QueryField AVG_MED = QueryField(fieldName: "avg_med");
-  static final QueryField FIRSTS_NAME = QueryField(fieldName: "firsts_name");
-  static final QueryField FIRST_AMT = QueryField(fieldName: "first_amt");
-  static final QueryField SECOND_NAME = QueryField(fieldName: "second_name");
-  static final QueryField SECOND_AMT = QueryField(fieldName: "second_amt");
-  static final QueryField CON_SCORE = QueryField(fieldName: "con_score");
-  static final QueryField SPACETIME_SCORE = QueryField(fieldName: "spacetime_score");
-  static final QueryField EXEC_SCORE = QueryField(fieldName: "exec_score");
-  static final QueryField MEM_SCORE = QueryField(fieldName: "mem_score");
-  static final QueryField LING_SCORE = QueryField(fieldName: "ling_score");
-  static final QueryField CAL_SCORE = QueryField(fieldName: "cal_score");
-  static final QueryField REAC_SCORE = QueryField(fieldName: "reac_score");
-  static final QueryField ORIENT_SCORE = QueryField(fieldName: "orient_score");
-  static final QueryField CREATEDAT = QueryField(fieldName: "createdAt");
-  static final QueryField UPDATEDAT = QueryField(fieldName: "updatedAt");
-  static var schema = Model.defineSchema(define: (ModelSchemaDefinition modelSchemaDefinition) {
+  static final amplify_core.QueryModelIdentifier<MonthlyDBTestModelIdentifier> MODEL_IDENTIFIER = amplify_core.QueryModelIdentifier<MonthlyDBTestModelIdentifier>();
+  static final ID = amplify_core.QueryField(fieldName: "id");
+  static final MONTH = amplify_core.QueryField(fieldName: "month");
+  static final TOTAL_TIME = amplify_core.QueryField(fieldName: "total_time");
+  static final AVG_ATT = amplify_core.QueryField(fieldName: "avg_att");
+  static final AVG_MED = amplify_core.QueryField(fieldName: "avg_med");
+  static final FIRSTS_NAME = amplify_core.QueryField(fieldName: "firsts_name");
+  static final FIRST_AMT = amplify_core.QueryField(fieldName: "first_amt");
+  static final SECOND_NAME = amplify_core.QueryField(fieldName: "second_name");
+  static final SECOND_AMT = amplify_core.QueryField(fieldName: "second_amt");
+  static final CON_SCORE = amplify_core.QueryField(fieldName: "con_score");
+  static final SPACETIME_SCORE = amplify_core.QueryField(fieldName: "spacetime_score");
+  static final EXEC_SCORE = amplify_core.QueryField(fieldName: "exec_score");
+  static final MEM_SCORE = amplify_core.QueryField(fieldName: "mem_score");
+  static final LING_SCORE = amplify_core.QueryField(fieldName: "ling_score");
+  static final CAL_SCORE = amplify_core.QueryField(fieldName: "cal_score");
+  static final REAC_SCORE = amplify_core.QueryField(fieldName: "reac_score");
+  static final ORIENT_SCORE = amplify_core.QueryField(fieldName: "orient_score");
+  static final CREATEDAT = amplify_core.QueryField(fieldName: "createdAt");
+  static final UPDATEDAT = amplify_core.QueryField(fieldName: "updatedAt");
+  static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
     modelSchemaDefinition.name = "MonthlyDBTest";
     modelSchemaDefinition.pluralName = "MonthlyDBTests";
     
     modelSchemaDefinition.authRules = [
-      AuthRule(
-        authStrategy: AuthStrategy.PUBLIC,
-        operations: [
-          ModelOperation.CREATE,
-          ModelOperation.UPDATE,
-          ModelOperation.DELETE,
-          ModelOperation.READ
+      amplify_core.AuthRule(
+        authStrategy: amplify_core.AuthStrategy.PRIVATE,
+        provider: amplify_core.AuthRuleProvider.USERPOOLS,
+        operations: const [
+          amplify_core.ModelOperation.CREATE,
+          amplify_core.ModelOperation.UPDATE,
+          amplify_core.ModelOperation.DELETE,
+          amplify_core.ModelOperation.READ
         ])
     ];
     
     modelSchemaDefinition.indexes = [
-      ModelIndex(fields: const ["id", "month"], name: null)
+      amplify_core.ModelIndex(fields: const ["id", "month"], name: null)
     ];
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.id());
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.id());
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.MONTH,
       isRequired: true,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.TOTAL_TIME,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.AVG_ATT,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.AVG_MED,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.FIRSTS_NAME,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.FIRST_AMT,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.SECOND_NAME,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.string)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.string)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.SECOND_AMT,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.CON_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.SPACETIME_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.EXEC_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.MEM_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.LING_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.CAL_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.REAC_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.ORIENT_SCORE,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.int)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.int)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.CREATEDAT,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
     ));
     
-    modelSchemaDefinition.addField(ModelFieldDefinition.field(
+    modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.field(
       key: MonthlyDBTest.UPDATEDAT,
       isRequired: false,
-      ofType: ModelFieldType(ModelFieldTypeEnum.dateTime)
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.dateTime)
     ));
   });
 }
 
-class _MonthlyDBTestModelType extends ModelType<MonthlyDBTest> {
+class _MonthlyDBTestModelType extends amplify_core.ModelType<MonthlyDBTest> {
   const _MonthlyDBTestModelType();
   
   @override
@@ -458,8 +518,7 @@ class _MonthlyDBTestModelType extends ModelType<MonthlyDBTest> {
  * This is an auto generated class representing the model identifier
  * of [MonthlyDBTest] in your schema.
  */
-@immutable
-class MonthlyDBTestModelIdentifier implements ModelIdentifier<MonthlyDBTest> {
+class MonthlyDBTestModelIdentifier implements amplify_core.ModelIdentifier<MonthlyDBTest> {
   final String id;
   final String month;
 

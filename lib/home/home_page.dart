@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
   String nameForMax = ''; //the most elevated data name
   Map<int, int> dataForCamparing = {};
 
-  bool checkAttribute = false; //  to call getProtectorAttributes() once
+  // bool checkAttribute = false; //  to call getProtectorAttributes() once
 
   @override
   void initState() {
@@ -59,6 +59,7 @@ class _HomePageState extends State<HomePage> {
         context: context); // for back key
     keyObj = KeyForBottomAppbar();
     bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
+    getProtectorAttributes();
   }
 
 
@@ -70,25 +71,25 @@ class _HomePageState extends State<HomePage> {
 
   void getProtectorAttributes() async {
     try {
-      checkAttribute = true;
+      // checkAttribute = true;
       var attribute = await Amplify.Auth.fetchUserAttributes();
       attribute.forEach((element) {
         if (element.userAttributeKey.key == "name")
           setState(() {
             // username = element.value;
-            appState.protectorName = (element.value) ?? "no result";
+            gql.protectorName = (element.value) ?? "no result";
           });
 
         if (element.userAttributeKey.key == "phone_number")
           setState(() {
             // userphonenumber = element.value;
-            appState.protectorPhonenumber = (element.value) ?? " no result";
+            gql.protectorPhonenumber = (element.value) ?? " no result";
           });
 
         if (element.userAttributeKey.key == "email")
           setState(() {
             // useremail = element.value;
-            appState.protectorEmail = (element.value) ?? "no result";
+            gql.protectorEmail = (element.value) ?? "no result";
             // loading = false;
           });
 
@@ -96,14 +97,14 @@ class _HomePageState extends State<HomePage> {
             "custom:institutionNumber".toLowerCase())
           setState(() {
             // useremail = element.value;
-            appState.institutionNumber = (element.value) ?? "no result";
+            gql.institutionNumber = (element.value) ?? "no result";
           });
 
         if (element.userAttributeKey.key.toLowerCase() ==
             "custom:userNumber".toLowerCase())
           setState(() {
             // useremail = element.value;
-            appState.userNumber = (element.value) ?? "no result";
+            gql.userNumber = (element.value) ?? "no result";
             getUserData(element.value);
             getMonthlyDBComparingData(element.value);
             print(attribute.toString());
@@ -116,9 +117,9 @@ class _HomePageState extends State<HomePage> {
 
   void getUserData(String id) async {
     final data = gql.queryUserDBItem(id).then((value) {
-      appState.userId = value.id;
-      appState.userBirth = "${value.birth}";
-      appState.userName = value.name;
+      gql.userId = value.id;
+      gql.userBirth = "${value.birth}";
+      gql.userName = value.name;
       print("value : $value");
       setState(() {
         loading_User = false;
@@ -130,7 +131,6 @@ class _HomePageState extends State<HomePage> {
     //   loading = false;
     // });
   }
-
   void getMonthlyDBComparingData(String id) async {
     gql.queryMonthlyDBLatestTwoItems().then((value) { // already sorted two data fetched using query
       // print("value: $value");
@@ -241,7 +241,6 @@ class _HomePageState extends State<HomePage> {
     var theme = Theme.of(context);
     appState = context.watch<LoginState>();
 
-    if (!checkAttribute) getProtectorAttributes();
 
     return (loading_User || loading_Brain)
         ? LoadingPage()
@@ -250,7 +249,7 @@ class _HomePageState extends State<HomePage> {
         key: keyObj.key,
         appBar: AppBar(
           title: Text(
-            ' ${appState.userName}님의 동반자 ${appState.protectorName}님 안녕하세요!',
+            ' ${gql.userName}님의 동반자 ${gql.protectorName}님 안녕하세요!',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           actions: [
@@ -277,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(
                             height: 40,
                           ),
-                          Text('${appState.userName} 님의 훈련 데이터',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                          Text('${gql.userName} 님의 훈련 데이터',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                           const SizedBox(
                             height: 4,
                           ),

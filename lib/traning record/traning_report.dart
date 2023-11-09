@@ -114,7 +114,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text("${appState.userName} 님의 두뇌나이", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                        Text("${gql.userName} 님의 두뇌나이", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -128,7 +128,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                 ),
                               ),
                             ),
-                            Text('${appState.userName} 님의 두뇌는 \'27세\' 입니다!',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                            Text('${gql.userName} 님의 두뇌는 \'27세\' 입니다!',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
                           ],
                         ),
 
