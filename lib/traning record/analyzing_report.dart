@@ -3,6 +3,7 @@ import 'dart:core';
 
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/models/ModelProvider.dart';
+import 'package:aws_frame_account/traning%20record/custom_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:age_calculator/age_calculator.dart';
@@ -76,15 +77,14 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
   int AVG_MED_AVG = 0; //평균 안정감
 
-  List<String> users = [];// storing user Ids having similar ageEra
+  List<String> users = []; // storing user Ids having similar ageEra
 
   List<Future<dynamic?>> futuresList = [];
   int ageEra = 0;
-  var month = 1;  // for DropdownDatePicker
+  var month = 1; // for DropdownDatePicker
   var year = 2023; // for DropdownDatePicker
 
   int numberForonedata = 1; // for extractRequiredUserData()
-
 
   Map<String, List<int>> allData = {}; // variable for _getBars()
 
@@ -130,7 +130,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     int changeddate = year * 10000 + month * 100;
     numberForonedata = 0;
     Future<dynamic> future =
-        gql.queryMonthlyDBRequiredItem("3", changeddate).then((value) {
+        gql.queryMonthlyDBRequiredItem(changeddate).then((value) {
       if (value != null) {
         setState(() {
           numberForonedata++;
@@ -351,8 +351,6 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
         AVG_MED_AVG = 0;
         allData['안정감'] = [AVG_MED, AVG_MED_AVG];
-
-
       }
       loading = false;
     });
@@ -373,8 +371,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
       "계산력($CAL_SCORE)",
       "반응속도($REAC_SCORE)",
       "지남력($ORIENT_SCORE)",
-      "집중력($AVG_ATT)",
-      "안정감($AVG_MED)",
+      // "집중력($AVG_ATT)",
+      // "안정감($AVG_MED)",
     ];
     var data = [
       [
@@ -386,8 +384,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         CAL_SCORE,
         REAC_SCORE,
         ORIENT_SCORE,
-        AVG_ATT,
-        AVG_MED,
+        // AVG_ATT,
+        // AVG_MED,
       ]
     ];
 
@@ -398,7 +396,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('분석 보고서'),
+        title: Text('분석 보고서',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: loading
@@ -498,16 +497,28 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                     //     ),
                     //   ],
                     // ),
-                    Padding(
-                      padding: EdgeInsets.zero,
+                    // RadarChart.light(
+                    //   ticks: ticks,
+                    //   features: features,
+                    //   data: data,
+                    //   reverseAxis: false,
+                    //   useSides: true,
+                    // ),
+
+                    Container(
+                      height: MediaQuery.of(context).size.height / 2.15,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        image: AssetImage("image/report (18).png"),
+                        // 여기에 배경 이미지 경로를 지정합니다.
+                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                      )),
                       child: Container(
-                        height: MediaQuery.of(context).size.height / 3.5,
-                        child: RadarChart.light(
+                        child: RadarChart(
+                          data: data,
                           ticks: ticks,
                           features: features,
-                          data: data,
                           reverseAxis: false,
-                          useSides: true,
                         ),
                       ),
                     ),

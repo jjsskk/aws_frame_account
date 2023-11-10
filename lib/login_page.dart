@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   late SharedPreferences _prefs;
   bool isChecked_id = true;
   bool isChecked_autologin = true;
+
   // bool providerReset = false;
 
   final iconColor = Colors.black;
@@ -120,29 +121,28 @@ class _LoginPageState extends State<LoginPage> {
     // display_cacheId();
     // 2
     return Scaffold(
-          body: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
-                fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-              ),
-            ),
-            child: ModalProgressHUD(
-              inAsyncCall: showSpinner,
-                child: GestureDetector(
-                  onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: SafeArea(
-                child: ListView(
-                  children: [
-                    const SizedBox(
-                      height: 50,
+        body: Container(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+          fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+        ),
+      ),
+      child: ModalProgressHUD(
+        inAsyncCall: showSpinner,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: SafeArea(
+            child: ListView(children: [
+              const SizedBox(
+                height: 50,
               ),
               Column(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.width/1.5,
+                  height: MediaQuery.of(context).size.width / 1.5,
                   child: Image.asset('image/ui (7).png'),
                 ),
               ]),
@@ -166,14 +166,14 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: widget.shouldShowSignUp,
                     label: Text(
                       '회원가입 ',
-                      style: textColor.subtitle2,
+                      style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
                     ),
                     style: TextButton.styleFrom(
                         primary: iconColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                         backgroundColor: theme.primaryColorLight),
-                    icon: Icon(Icons.arrow_forward),
+                    icon: Icon(Icons.arrow_forward,color: Colors.white,),
                   ))
             ]),
           ),
@@ -191,29 +191,52 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           Row(
             children: [
-              Checkbox(
-                checkColor: iconColor,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                value: isChecked_autologin,
-                onChanged: (bool? value) {
+              InkWell(
+                onTap: () {
                   setState(() {
-                    isChecked_autologin = value!;
+                    isChecked_autologin = !isChecked_autologin;
                   });
                 },
+                child: Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(isChecked_autologin
+                            ? "image/login (10).png"
+                            : "image/login (1).png"),
+                        // 여기에 배경 이미지 경로를 지정합니다.
+                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                      ),
+                    ),
+                    child: Text('')),
               ),
               Text(
                 '자동 로그인',
                 style: TextStyle(color: Colors.black),
               ),
-              Checkbox(
-                checkColor: iconColor,
-                fillColor: MaterialStateProperty.resolveWith(getColor),
-                value: isChecked_id,
-                onChanged: (bool? value) {
+              const SizedBox(
+                width: 10,
+              ),
+              InkWell(
+                onTap: () {
                   setState(() {
-                    isChecked_id = value!;
+                    isChecked_id = !isChecked_id;
                   });
                 },
+                child: Container(
+                    height: 35,
+                    width: 35,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(isChecked_id
+                            ? "image/login (10).png"
+                            : "image/login (1).png"),
+                        // 여기에 배경 이미지 경로를 지정합니다.
+                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                      ),
+                    ),
+                    child: Text('')),
               ),
               Text(
                 '아이디 저장',
@@ -222,47 +245,91 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
           // Username TextField
-          TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return '이메일을 입력해주세요';
-              }
-              return null;
-            },
-            style: TextStyle(color: Colors.black),
-            controller: _emailController,
-            decoration: InputDecoration(
-                icon: Icon(
-                  Icons.mail,
-                  color: iconColor,
-                ),
-                labelText: '이메일',
-                labelStyle: TextStyle(color: Colors.grey),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: iconColor, width: 2))),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '이메일',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
           ),
-
+          Container(
+            constraints: BoxConstraints(
+              maxHeight: double.infinity, // container 길이를 text에 맞게 유연하게 늘릴수 있다.
+            ),
+            // height: MediaQuery.of(context).size.height / 10,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("image/ui (8).png"),
+                // 여기에 배경 이미지 경로를 지정합니다.
+                fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+              ),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '이메일을 입력해주세요';
+                  }
+                  return null;
+                },
+                style: TextStyle(color: Colors.black),
+                controller: _emailController,
+                decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: iconColor, width: 2))),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '비밀번호',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
           // Password TextField
-          TextFormField(
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return '비밀번호를 입력해주세요';
-              }
-              return null;
-            },
-            style: TextStyle(color: Colors.black),
-            controller: _passwordController,
-            decoration: InputDecoration(
-                icon: Icon(
-                  Icons.lock_open,
-                  color: iconColor,
-                ),
-                labelText: '비밀번호',
-                labelStyle: TextStyle(color: Colors.grey),
-                enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: iconColor, width: 2))),
-            obscureText: true,
-            keyboardType: TextInputType.visiblePassword,
+          Container(
+            constraints: BoxConstraints(
+              maxHeight: double.infinity, // container 길이를 text에 맞게 유연하게 늘릴수 있다.
+            ),
+            // height: MediaQuery.of(context).size.height / 10,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("image/ui (9).png"),
+                // 여기에 배경 이미지 경로를 지정합니다.
+                fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+              ),
+            ),
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 2.0, horizontal: 15.0),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return '비밀번호를 입력해주세요';
+                  }
+                  return null;
+                },
+                style: TextStyle(color: Colors.black),
+                controller: _passwordController,
+                decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.grey),
+                    enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: iconColor, width: 2))),
+                obscureText: true,
+                keyboardType: TextInputType.visiblePassword,
+              ),
+            ),
           ),
 
           SizedBox(
@@ -299,17 +366,22 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () {},
                   child: Text(
                     '아이디 찾기',
-                    style: TextStyle(color: Colors.indigoAccent,fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.indigoAccent,
+                        fontWeight: FontWeight.bold),
                   )),
               Text(
                 ' / ',
-                style: TextStyle(color: Colors.indigoAccent,fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.indigoAccent, fontWeight: FontWeight.bold),
               ),
               TextButton(
                   onPressed: widget.shouldShowsresetpassword,
                   child: Text(
                     '비밀번호 찾기',
-                    style: TextStyle(color: Colors.indigoAccent,fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.indigoAccent,
+                        fontWeight: FontWeight.bold),
                   )),
             ],
           ),

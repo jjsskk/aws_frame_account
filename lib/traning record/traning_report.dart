@@ -92,7 +92,8 @@ class _TraningReportPageState extends State<TraningReportPage> {
         key: keyObj.key,
         drawer: GlobalDrawer.getDrawer(context, appState),
         appBar: AppBar(
-            title: Text('훈련보고서', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            title: Text('훈련보고서',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             centerTitle: true,
             leading: IconButton(
               onPressed: () {

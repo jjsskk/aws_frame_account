@@ -82,6 +82,20 @@ input CreateInstitutionCommentConversationTableInput {
 	updatedAt: AWSDateTime
 }
 
+input CreateInstitutionEssentialCareTableInput {
+	INSTITUTION_ID: String!
+	USER_ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	MEDICATION: String
+	MEDICATION_WAY: String
+	NAME: String
+	IMAGE: String
+	PHONE_NUMBER: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
 input CreateInstitutionEventScheduleTableInput {
 	INSTITUTION_ID: String!
 	SCHEDULE_ID: String!
@@ -133,6 +147,11 @@ input DeleteInstitutionCommentBoardTableInput {
 input DeleteInstitutionCommentConversationTableInput {
 	BOARD_ID: String!
 	CONVERSATION_ID: String!
+}
+
+input DeleteInstitutionEssentialCareTableInput {
+	INSTITUTION_ID: String!
+	USER_ID: String!
 }
 
 input DeleteInstitutionEventScheduleTableInput {
@@ -203,6 +222,25 @@ type InstitutionCommentConversationTable {
 
 type InstitutionCommentConversationTableConnection {
 	items: [InstitutionCommentConversationTable]
+	nextToken: String
+}
+
+type InstitutionEssentialCareTable {
+	INSTITUTION_ID: String!
+	USER_ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	MEDICATION: String
+	MEDICATION_WAY: String
+	NAME: String
+	IMAGE: String
+	PHONE_NUMBER: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+type InstitutionEssentialCareTableConnection {
+	items: [InstitutionEssentialCareTable]
 	nextToken: String
 }
 
@@ -331,6 +369,20 @@ input TableInstitutionCommentConversationTableFilterInput {
 	updatedAt: TableStringFilterInput
 }
 
+input TableInstitutionEssentialCareTableFilterInput {
+	INSTITUTION_ID: TableStringFilterInput
+	USER_ID: TableStringFilterInput
+	BIRTH: TableStringFilterInput
+	INSTITUTION: TableStringFilterInput
+	MEDICATION: TableStringFilterInput
+	MEDICATION_WAY: TableStringFilterInput
+	NAME: TableStringFilterInput
+	IMAGE: TableStringFilterInput
+	PHONE_NUMBER: TableStringFilterInput
+	createdAt: TableStringFilterInput
+	updatedAt: TableStringFilterInput
+}
+
 input TableInstitutionEventScheduleTableFilterInput {
 	INSTITUTION_ID: TableStringFilterInput
 	SCHEDULE_ID: TableStringFilterInput
@@ -431,6 +483,20 @@ input UpdateInstitutionCommentConversationTableInput {
 	updatedAt: AWSDateTime
 }
 
+input UpdateInstitutionEssentialCareTableInput {
+	INSTITUTION_ID: String!
+	USER_ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	MEDICATION: String
+	MEDICATION_WAY: String
+	NAME: String
+	IMAGE: String
+	PHONE_NUMBER: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
 input UpdateInstitutionEventScheduleTableInput {
 	INSTITUTION_ID: String!
 	SCHEDULE_ID: String!
@@ -491,6 +557,9 @@ type Mutation {
 	createInstitutionShuttleTimeTable(input: CreateInstitutionShuttleTimeTableInput!): InstitutionShuttleTimeTable
 	updateInstitutionShuttleTimeTable(input: UpdateInstitutionShuttleTimeTableInput!): InstitutionShuttleTimeTable
 	deleteInstitutionShuttleTimeTable(input: DeleteInstitutionShuttleTimeTableInput!): InstitutionShuttleTimeTable
+	createInstitutionEssentialCareTable(input: CreateInstitutionEssentialCareTableInput!): InstitutionEssentialCareTable
+	updateInstitutionEssentialCareTable(input: UpdateInstitutionEssentialCareTableInput!): InstitutionEssentialCareTable
+	deleteInstitutionEssentialCareTable(input: DeleteInstitutionEssentialCareTableInput!): InstitutionEssentialCareTable
 }
 
 type Query {
@@ -508,6 +577,8 @@ type Query {
 	listInstitutionFoodTables(filter: TableInstitutionFoodTableFilterInput, limit: Int, nextToken: String): InstitutionFoodTableConnection
 	getInstitutionShuttleTimeTable(INSTITUTION_ID: String!): InstitutionShuttleTimeTable
 	listInstitutionShuttleTimeTables(filter: TableInstitutionShuttleTimeTableFilterInput, limit: Int, nextToken: String): InstitutionShuttleTimeTableConnection
+	getInstitutionEssentialCareTable(INSTITUTION_ID: String!, USER_ID: String!): InstitutionEssentialCareTable
+	listInstitutionEssentialCareTables(filter: TableInstitutionEssentialCareTableFilterInput, limit: Int, nextToken: String): InstitutionEssentialCareTableConnection
 }
 
 type Subscription {
@@ -692,7 +763,28 @@ type Subscription {
 		updatedAt: AWSDateTime
 	): InstitutionShuttleTimeTable
 		@aws_subscribe(mutations: ["deleteInstitutionShuttleTimeTable"])
+	onCreateInstitutionEssentialCareTable(
+		INSTITUTION_ID: String,
+		USER_ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		MEDICATION: String
+	): InstitutionEssentialCareTable
+		@aws_subscribe(mutations: ["createInstitutionEssentialCareTable"])
+	onUpdateInstitutionEssentialCareTable(
+		INSTITUTION_ID: String,
+		USER_ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		MEDICATION: String
+	): InstitutionEssentialCareTable
+		@aws_subscribe(mutations: ["updateInstitutionEssentialCareTable"])
+	onDeleteInstitutionEssentialCareTable(
+		INSTITUTION_ID: String,
+		USER_ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		MEDICATION: String
+	): InstitutionEssentialCareTable
+		@aws_subscribe(mutations: ["deleteInstitutionEssentialCareTable"])
 }
-
-
-

@@ -222,7 +222,7 @@ class GraphQLController {
           }
         """,
           variables: {
-            "id": ID,
+            "id": userId,
             "limit": limit,
             "sortDirection": sortDirection,
           },
@@ -451,11 +451,11 @@ class GraphQLController {
   }
 
   Future<MonthlyDBTest?> queryMonthlyDBRequiredItem(
-      String id, int yearMonth) async {
+      int yearMonth) async {
     print(yearMonth + 40);
     final queryPredicateDate = MonthlyDBTest.MONTH
         .between(yearMonth.toString(), (yearMonth + 40).toString());
-    final queryPredicateboth = MonthlyDBTest.ID.eq(id).and(queryPredicateDate);
+    final queryPredicateboth = MonthlyDBTest.ID.eq(userId).and(queryPredicateDate);
 
     try {
       final request = ModelQueries.list<MonthlyDBTest>(
@@ -554,7 +554,7 @@ class GraphQLController {
     try {
       final request =
       ModelQueries.list(UserDBTest.classType, where: queryPredicate);
-      final response = await Amplify.API.query(request: request).response;
+      final response = await Amplify.API.query(request: request,).response;
 
       final items = response.data?.items;
       if (items == null) {
