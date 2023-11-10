@@ -1,5 +1,6 @@
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
 import 'package:aws_frame_account/communication_service/comment/comment_view.dart';
+import 'package:aws_frame_account/communication_service/instituition_info/essential_care_information.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
 import 'package:aws_frame_account/communication_service/user_activity.dart';
 import 'package:aws_frame_account/communication_service/user_care_information.dart';
@@ -64,7 +65,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => UserCareInfoPage()),
+                              builder: (context) => EssentialCareInfoPage()),
                         );
                       },
                       style: TextButton.styleFrom(
@@ -253,10 +254,12 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         tooltip: 'Create',
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         child: CircleAvatar(
           radius: 28,
           backgroundImage: AssetImage('image/ui (14).png'),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
         ),
       ),
       floatingActionButtonLocation: _fabLocation,

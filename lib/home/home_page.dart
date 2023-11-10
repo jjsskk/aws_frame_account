@@ -406,10 +406,12 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           tooltip: 'Create',
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           child: CircleAvatar(
-            radius: 30,
+            radius: 28,
             backgroundImage: AssetImage('image/ui (14).png'),
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.transparent,
           ),
         ),
         floatingActionButtonLocation:

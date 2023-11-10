@@ -4,6 +4,7 @@ import 'package:amplify_core/amplify_core.dart';
 import 'package:aws_frame_account/models/InstitutionAnnouncementTable.dart';
 import 'package:aws_frame_account/models/InstitutionCommentBoardTable.dart';
 import 'package:aws_frame_account/models/InstitutionCommentConversationTable.dart';
+import 'package:aws_frame_account/models/InstitutionEssentialCareTable.dart';
 import 'package:aws_frame_account/models/InstitutionFoodTable.dart';
 import 'package:aws_frame_account/models/InstitutionNewsTable.dart';
 import 'package:aws_frame_account/models/InstitutionShuttleTimeTable.dart';
@@ -334,9 +335,149 @@ class GraphQLController {
       return null;
     }
   }
+  Future<List<InstitutionEssentialCareTable>>
+  queryEssentialCareInformationByInstitutionIdAndUserId(
+      { required String userId, String? nextToken}) async {
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+        query ListInstitutionEssentialCareTables(\$filter: TableInstitutionEssentialCareTableFilterInput, \$limit: Int, \$nextToken: String) {
+          listInstitutionEssentialCareTables(filter: \$filter, limit: \$limit, nextToken: \$nextToken) {
+            items {
+              BIRTH
+              INSTITUTION
+              INSTITUTION_ID
+              MEDICATION
+              IMAGE
+              MEDICATION_WAY
+              NAME
+              PHONE_NUMBER
+              USER_ID
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+        }
+      """,
+          variables: {
+            "filter": {
+              "USER_ID": {"eq": userId}
+            },
+            "limit": 1000,
+            "nextToken": nextToken,
+          },
 
+        ),
+      );
 
-  // 병찬
+      var response = await operation.response;
+
+      print(response.data);
+
+      var data = jsonDecode(response.data);
+      var items = data['listInstitutionEssentialCareTables']['items'];
+
+      if (items == null || response.data == null) {
+        print('errors: ${response.errors}');
+        return const [];
+      }
+
+      List<InstitutionEssentialCareTable> essentialCare =
+      (items as List)
+          .map((item) => InstitutionEssentialCareTable.fromJson(item))
+          .toList();
+
+      var newNextToken = data['listInstitutionEssentialCareTables']['nextToken'];
+
+      if (newNextToken != null) {
+        // recursive call for next page's data
+        var additionalItems =
+        await queryEssentialCareInformationByInstitutionIdAndUserId( userId: userId,nextToken : newNextToken);
+        essentialCare.addAll(additionalItems);
+      }
+
+      return essentialCare;
+
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
+    }
+    }
+
+//todo: 안됨
+  Future<List<InstitutionEssentialCareTable>>
+  queryEssentialCareInformationByInstitutionId(
+      {required String institutionId, String? nextToken}) async {
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+          query ListInstitutionEssentialCareTables(\$filter: TableInstitutionEssentialCareTableFilterInput, \$limit: Int, \$nextToken: String) {
+            listInstitutionEssentialCareTables(filter: \$filter, limit: \$limit, nextToken: \$nextToken) {
+              items {
+                BIRTH
+                INSTITUTION
+                INSTITUTION_ID
+                MEDICATION
+                IMAGE
+                MEDICATION_WAY
+                NAME
+                PHONE_NUMBER
+                USER_ID
+                createdAt
+				  updatedAt
+              }
+              nextToken
+            }
+          }
+        """,
+          variables: {
+            "filter": {"INSTITUTION_ID": {"eq": institutionId}},
+            "limit": 1000,
+            "nextToken": nextToken,
+          },
+        ),
+      );
+
+      var response = await operation.response;
+
+      print(response.data);
+
+      var data = jsonDecode(response.data);
+      var items = data['listInstitutionEssentialCareTables']['items'];
+
+      if (items == null || response.data == null) {
+        print('errors: ${response.errors}');
+        return const [];
+      }
+
+      List<InstitutionEssentialCareTable> essentialCare =
+      (items as List)
+          .map((item) => InstitutionEssentialCareTable.fromJson(item))
+          .toList();
+
+      var newNextToken = data['listInstitutionEssentialCareTables']['nextToken'];
+
+      if (newNextToken != null) {
+        // recursive call for next page's data
+        var additionalItems =
+        await queryEssentialCareInformationByInstitutionId(institutionId : institutionId , nextToken : newNextToken);
+        essentialCare.addAll(additionalItems);
+      }
+
+      return essentialCare;
+
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
+    }
+  }
+
+    // 병찬
 
 
 

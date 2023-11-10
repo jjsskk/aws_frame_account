@@ -25,7 +25,6 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
         institutionId: institutionId);
   }
 
-
   @override
   void initState() {
     super.initState();
@@ -56,7 +55,8 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
             }
 
             if (snapshot.hasData) {
-              snapshot.data!.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+              snapshot.data!
+                  .sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
               return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
@@ -64,7 +64,7 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
                   return Align(
                     alignment: Alignment.center,
                     child: Container(
-                      width: 350,  // 원하는 가로 사이즈로 조절하세요.
+                      width: 350, // 원하는 가로 사이즈로 조절하세요.
                       child: AspectRatio(
                         aspectRatio: 1232 / 392,
                         child: InkWell(
@@ -73,7 +73,8 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => AnnouncementDetailPage(
-                                    announcement: announcement, storageService: storageService),
+                                    announcement: announcement,
+                                    storageService: storageService),
                               ),
                             );
                           },
@@ -90,19 +91,26 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    getYearMonthDay(announcement.createdAt.toString()),
-                                    style: TextStyle(color: Colors.black, backgroundColor: Colors.transparent, fontWeight: FontWeight.w400),
+                                    getYearMonthDay(
+                                        announcement.createdAt.toString()),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        backgroundColor: Colors.transparent,
+                                        fontWeight: FontWeight.w400),
                                   ),
                                   Text(
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     announcement.TITLE!,
-                                    style: TextStyle(color: Colors.black, backgroundColor: Colors.transparent, fontWeight: FontWeight.w600, fontSize: 20),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        backgroundColor: Colors.transparent,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
                                   ),
                                 ],
                               ),
                             ),
-
                           ),
                         ),
                       ),
@@ -135,28 +143,52 @@ class AnnouncementDetailPage extends StatefulWidget {
 class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
   final gql = GraphQLController.Obj;
 
-  String title = '', content  = '', url = '', image = '';
+  String title = '', content = '', url = '', image = '';
 
   String getYearMonthDay(String dateString) {
     return dateString.substring(0, 10);
   }
 
-
   bool isUpdated = false;
+
   @override
   void initState() {
     title = widget.announcement.TITLE!;
-    widget.announcement.CONTENT  != null ? content = widget.announcement.CONTENT!: content = '';
-    widget.announcement.URL!=null ?url = widget.announcement.URL!:url = '';
-    widget.announcement.IMAGE!=null?image = widget.announcement.IMAGE!: image = '';
+    widget.announcement.CONTENT != null
+        ? content = widget.announcement.CONTENT!
+        : content = '';
+    widget.announcement.URL != null ? url = widget.announcement.URL! : url = '';
+    widget.announcement.IMAGE != null
+        ? image = widget.announcement.IMAGE!
+        : image = '';
     // TODO: implement initState
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('공지사항 세부 정보'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          '공지사항 세부 정보',
+          style: TextStyle(color: Colors.white), // 글자색을 하얀색으로 설정
+        ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+              fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -167,8 +199,8 @@ class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
               Text(title,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               SizedBox(height: 16),
-              Text(
-                  '작성일: ' + getYearMonthDay(widget.announcement.createdAt.toString())),
+              Text('작성일: ' +
+                  getYearMonthDay(widget.announcement.createdAt.toString())),
               SizedBox(height: 16),
               content != null ? Text(content) : Text(""),
               SizedBox(height: 16),
@@ -177,8 +209,7 @@ class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
               if (image != null)
                 if (image!.isNotEmpty)
                   FutureBuilder<String>(
-                    future:
-                    widget.storageService.getImageUrlFromS3(image!),
+                    future: widget.storageService.getImageUrlFromS3(image!),
                     builder:
                         (BuildContext context, AsyncSnapshot<String> snapshot) {
                       if (snapshot.hasData) {

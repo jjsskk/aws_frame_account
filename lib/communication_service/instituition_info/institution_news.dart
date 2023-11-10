@@ -155,8 +155,26 @@ class _InstitutionNewsDetailPageState extends State<InstitutionNewsDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('기관소식 세부 정보'),
-
+        leading: IconButton(
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          '기관소식 세부 정보',
+          style: TextStyle(color: Colors.white), // 글자색을 하얀색으로 설정
+        ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+              fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+            ),
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

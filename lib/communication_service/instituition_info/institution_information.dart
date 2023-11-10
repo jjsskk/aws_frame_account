@@ -40,11 +40,18 @@ class InstitutionInfoPage extends StatelessWidget {
             },
           ),
           elevation: 0.0,
-          backgroundColor: Color(0xFF1F2EAE),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+                fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+              ),
+            ),
+          ),
           title: Text('기관 정보', style: TextStyle(color: Colors.white),),
           centerTitle: true,
           bottom:PreferredSize(
-            preferredSize: Size.fromHeight(40.0),
+            preferredSize: Size.fromHeight(50.0),
             child: Material(
                 color: Colors.white, // TabBar의 배경을 반투명하게 설정
                 child:_tabBar
@@ -73,6 +80,4 @@ class InstitutionInfoPage extends StatelessWidget {
       ),
     );
   }
-
-
 }
