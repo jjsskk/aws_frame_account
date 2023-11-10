@@ -184,7 +184,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     return LineChartData(
         lineTouchData: LineTouchData(enabled: true),
         gridData: FlGridData(
-          show: true,
+          show: false,
           drawVerticalLine: true,
 
 
@@ -208,10 +208,15 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                 // margin: 12,
               ),
             ),
+            topTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: false, // 이 부분을 false로 설정하여 상단 x축의 숫자를 숨깁니다.
+              ),
+            ),
 
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
         borderData: FlBorderData(
-            show: true,
+            show: false,
             border: Border.all(color: const Color(0xff37434d), width: 1)),
         minX: 0,
         maxX: (graphData.length - 1).toDouble(),
@@ -251,7 +256,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       width: MediaQuery.of(context).size.width,
       height: 300,
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.all(8),
         child: LineChart(_getLineChartData()),
       ),
     );
@@ -262,14 +267,20 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
   // 버튼의 모양을 수정하고 싶다면 이 부분을 수정하면 될 것입니다.
   Widget _buildButtons() {
     return GridView.count(
-      crossAxisCount: 5,  // 2행을 만듦
+      crossAxisCount: 5,
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(), // 스크롤을 막음
+      physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.all(1.0),
+      mainAxisSpacing: 4.0,  // 메인 축 간격 설정
+      crossAxisSpacing: 4.0,  // 교차 축 간격 설정
       children: buttonLabels.keys.map((label) => ElevatedButton(
+
         style: ElevatedButton.styleFrom(
-          shape: CircleBorder(), // 이 부분을 통해서 원형으로 구성하게 됩니다.
-          fixedSize: Size(10.0, 5.0), // 원하는 버튼 width와 height를 설
+          padding: EdgeInsets.symmetric(horizontal: 1),
+          shape: CircleBorder(),
+          fixedSize: Size(10.0, 5.0),
+          primary: selectedLabel == label ? Color(0xFF2B3FF0) : null,  // 선택된 라벨에 따라 색상 변경
+
         ),
         onPressed: () {
           for (var result in results) {
@@ -316,12 +327,14 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
           }
         },
         child: Text(
-            buttonLabels[label]!,
-          style: TextStyle(fontSize: 13.0, height: 1.3),  // 버튼 텍스트 크기 조절
+          buttonLabels[label]!,
+          style: TextStyle(fontSize: 16.0, height: 1.3, fontWeight: FontWeight.w500,color: selectedLabel == label ? Colors.white : Color(0xFF2B3FF0), ),
+
         ),
       )).toList(),
     );
   }
+
 
 
   double numberOfFeatures = 3;
@@ -389,34 +402,66 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     // 빌드하는 부분입니다. 이 곳에서는 그래프가 들어가는 box의 쉐입을 정하는 곳입니다. 그래프가 있는 곳 박스를 수정하고 싶다면 이 곳을 수정하시면 됩니다.
     return Scaffold(
       appBar: AppBar(
-        title: Text('뇌 신호 그래프'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          '뇌 신호 그래프',
+          style: TextStyle(color: Colors.white), // 글자색을 하얀색으로 설정
+        ),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+              fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+            ),
+          ),
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            color:  Colors.white,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('image/ui (2).png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Container(
 
-                _buildButtons(),
-                AspectRatio(
-                  aspectRatio: 6 / 5,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: 15,),
+
+                  _buildButtons(),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    child: AspectRatio(
+                      aspectRatio: 6 / 5,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                            color: Colors.white.withOpacity(0.5)),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          child: _buildLineChart() ,
                         ),
-                        color: Color(0xff232d37)),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                      child: _buildLineChart() ,
+                      ),
                     ),
                   ),
-                ),
 
-              ]
+                ]
+              ),
             ),
           ),
         ),
