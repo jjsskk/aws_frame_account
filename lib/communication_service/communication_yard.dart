@@ -1,5 +1,5 @@
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
-import 'package:aws_frame_account/communication_service/comment_view.dart';
+import 'package:aws_frame_account/communication_service/comment/comment_view.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
 import 'package:aws_frame_account/communication_service/user_activity.dart';
 import 'package:aws_frame_account/communication_service/user_care_information.dart';
@@ -113,7 +113,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                             width: 120,
                             height: 120,
                           ), // 아이콘
-                          Text('이용자 활동 기록',
+                          Text('기관 활동 기록',
                               style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold)), // 텍스트
@@ -189,7 +189,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                             mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
                             children: <Widget>[
                               Image.asset(
-                                'image/community (16).png',
+                                'image/community (5).png',
                                 width: 120,
                                 height: 120,
                               ), // 아이콘

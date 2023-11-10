@@ -124,7 +124,7 @@ class _LoginPageState extends State<LoginPage> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
-                fit: BoxFit.cover, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
               ),
             ),
             child: ModalProgressHUD(

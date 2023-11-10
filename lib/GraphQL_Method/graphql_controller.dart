@@ -632,8 +632,7 @@ class GraphQLController {
     }
   }
 
-  Stream<GraphQLResponse>? subscribeInstitutionCommentBoard(
-      String institutionId) {
+  Stream<GraphQLResponse>? subscribeInstitutionCommentBoard() {
     String inst_id = 'aaa';
     try {
       var operation = Amplify.API.subscribe(
@@ -686,7 +685,7 @@ class GraphQLController {
 
 
   Future<List<InstitutionCommentBoardTable?>> listInstitutionCommentBoard(
-      String filterName, String Id, String year, String month,
+      String filterName,  String year, String month,
       {String? nextToken}) async {
     final time = '${TemporalDateTime.now()}';
     var remain = time.substring(12);
@@ -696,8 +695,8 @@ class GraphQLController {
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
-          apiName: "Institution_API_NEW",
-          document: """
+          apiName: "Protector_API",
+        document: """
           query ListInstitutionCommentBoardTables(\$filter: TableInstitutionCommentBoardTableFilterInput, \$limit: Int, \$nextToken: String) {
             listInstitutionCommentBoardTables(
               filter: \$filter,
@@ -710,6 +709,7 @@ class GraphQLController {
                 WRITER
                 TITLE
                 USERNAME
+                CONTENT
                 INSTITUTION_ID
                 NEW_CONVERSATION_PROTECTOR
                 NEW_CONVERSATION_INST
@@ -723,7 +723,7 @@ class GraphQLController {
         """,
           variables: {
             "filter": {
-              filterName: {"eq": Id},
+              filterName: {"eq": userId},
               "NEW_CONVERSATION_CREATEDAT": {
                 "between": [start, end]
               },
@@ -751,7 +751,7 @@ class GraphQLController {
         if (newNextToken != null) {
           // recursive call for next page's data
           var nextComments = await listInstitutionCommentBoard(
-              filterName, Id, year, month,
+              filterName, year, month,
               nextToken: newNextToken);
           comments.addAll(nextComments!);
         }

@@ -1,3 +1,4 @@
+import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/communication_service/comment_view.dart';
 import 'package:aws_frame_account/communication_service/communication_yard.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
@@ -13,6 +14,7 @@ class GlobalDrawer {
   static Widget getDrawer(BuildContext context, LoginState appState) {
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
+    final gql = GraphQLController.Obj;
     return Drawer(
         child: Container(
       decoration: BoxDecoration(
@@ -30,8 +32,8 @@ class GlobalDrawer {
               backgroundImage: AssetImage('image/ui (6).png'),
               backgroundColor: Colors.white,
             ),
-            accountName: Text('이름 : ${appState.protectorName}'),
-            accountEmail: Text('E-mail : ${appState.protectorEmail}'),
+            accountName: Text('이름 : ${gql.protectorName}'),
+            accountEmail: Text('E-mail : ${gql.protectorEmail}'),
             decoration: BoxDecoration(
                 color: Colors.indigoAccent,
                 borderRadius: BorderRadius.only(
