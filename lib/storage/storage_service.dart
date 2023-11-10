@@ -11,6 +11,18 @@ class StorageService {
   StorageService(){
     imageUrlsController = StreamController<List<String>>();
   }
+  Future<String> getImageUrlFromS3(String key) async {
+    try {
+      final getUrlOptions = GetUrlOptions(accessLevel: StorageAccessLevel.guest);
+      GetUrlResult urlResult = await Amplify.Storage.getUrl(key: key, options: getUrlOptions);
+
+      return urlResult.url;
+    } on AmplifyException catch (e) {
+      print('Error getting image from S3: $e');
+      return "";
+    }
+  }
+
   void createdeleteStreamController(){
     imageUrlsController.close();
     imageUrlsController = StreamController<List<String>>();
