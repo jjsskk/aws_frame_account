@@ -1,8 +1,13 @@
 import 'dart:convert';
 
 import 'package:amplify_core/amplify_core.dart';
+import 'package:aws_frame_account/models/InstitutionAnnouncementTable.dart';
 import 'package:aws_frame_account/models/InstitutionCommentBoardTable.dart';
 import 'package:aws_frame_account/models/InstitutionCommentConversationTable.dart';
+import 'package:aws_frame_account/models/InstitutionEssentialCareTable.dart';
+import 'package:aws_frame_account/models/InstitutionFoodTable.dart';
+import 'package:aws_frame_account/models/InstitutionNewsTable.dart';
+import 'package:aws_frame_account/models/InstitutionShuttleTimeTable.dart';
 import 'package:flutter/material.dart';
 
 //needed when using queryItem method
@@ -108,8 +113,371 @@ class GraphQLController {
     _userName = value;
   }
 
+  Future<List<InstitutionAnnouncementTable>>
+  queryInstitutionAnnouncementsByInstitutionId(
+      {required String institutionId, String? nextToken}) async {
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+          query ListInstitutionAnnouncementTables(\$filter: TableInstitutionAnnouncementTableFilterInput, \$limit: Int, \$nextToken: String) {
+            listInstitutionAnnouncementTables(filter: \$filter, limit: \$limit, nextToken: \$nextToken) {
+              items {
+                ANNOUNCEMENT_ID
+                CONTENT
+                IMAGE
+                INSTITUTION
+                INSTITUTION_ID
+                TITLE
+                URL
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+          }
+        """,
+          variables: {
+            "filter": {"INSTITUTION_ID": {"eq": institutionId}},
+            "limit": 1000,
+            "nextToken": nextToken,
+          },
+        ),
+      );
 
-  // 병찬
+      var response = await operation.response;
+
+      print(response.data);
+
+      var data = jsonDecode(response.data);
+      var items = data['listInstitutionAnnouncementTables']['items'];
+
+      if (items == null || response.data == null) {
+        print('errors: ${response.errors}');
+        return const [];
+      }
+
+      List<InstitutionAnnouncementTable> announcements =
+      (items as List)
+          .map((item) => InstitutionAnnouncementTable.fromJson(item))
+          .toList();
+
+      var newNextToken = data['listInstitutionAnnouncementTables']['nextToken'];
+
+      if (newNextToken != null) {
+        // recursive call for next page's data
+        var additionalItems =
+        await queryInstitutionAnnouncementsByInstitutionId(institutionId : institutionId , nextToken : newNextToken);
+        announcements.addAll(additionalItems);
+      }
+
+      return announcements;
+
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
+    }
+  }
+
+  Future<List<InstitutionNewsTable>> queryInstitutionNewsByInstitutionId(
+      {required String institutionId, String? nextToken}) async {
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+      query ListInstitutionNewsTables(\$filter: TableInstitutionNewsTableFilterInput, \$limit: Int, \$nextToken: String) {
+      listInstitutionNewsTables(filter: \$filter, limit: \$limit, nextToken: \$nextToken) {
+      items {
+      NEWS_ID
+      CONTENT
+      IMAGE
+      INSTITUTION
+      INSTITUTION_ID
+      TITLE
+      URL
+      createdAt
+      updatedAt
+      }
+      nextToken
+      }
+      }
+      """,
+          variables: {
+            "filter": {
+              "INSTITUTION_ID": {"eq": institutionId}
+            },
+            "limit": 1000,
+            "nextToken": nextToken,
+          },
+        ),
+      );
+
+      var response = await operation.response;
+
+      print(response.data);
+
+      var data = jsonDecode(response.data);
+      var items = data['listInstitutionNewsTables']['items'];
+
+      if (items == null || response.data == null) {
+        print('errors: ${response.errors}');
+        return const [];
+      }
+
+      List<InstitutionNewsTable> news = (items as List)
+          .map((item) => InstitutionNewsTable.fromJson(item))
+          .toList();
+
+      var newNextToken = data['listInstitutionNewsTables']['nextToken'];
+
+      if (newNextToken != null) {
+        // recursive call for next page's data
+        var additionalItems =
+        await queryInstitutionNewsByInstitutionId(
+            institutionId: institutionId, nextToken: newNextToken);
+        news.addAll(additionalItems);
+      }
+
+      return news;
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
+    }
+  }
+
+  Future<InstitutionFoodTable?> queryFoodByInstitutionIdAndDate(
+      String institutionId, String date) async {
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+          query ListInstitutionFoodTables(\$INSTITUTION_ID: String, \$DATE: String) {
+            listInstitutionFoodTables(filter: {INSTITUTION_ID: {eq: \$INSTITUTION_ID}, DATE: {eq: \$DATE}}) {
+              items {
+                DATE
+                INSTITUTION_ID
+                IMAGE_URL
+                createdAt
+                updatedAt
+              }
+            }
+          }
+        """,
+          variables: {"INSTITUTION_ID": institutionId, "DATE": date},
+        ),
+      );
+      var response = await operation.response;
+
+      InstitutionFoodTable food =
+          (jsonDecode(response.data)['listInstitutionFoodTables']['items']
+          as List)
+              .map((item) => InstitutionFoodTable.fromJson(item))
+              .toList()
+              .first;
+      if (food == null) {
+        print('errors: ${response.errors}');
+
+        return null;
+      }
+      // print(food);
+      return food;
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return null;
+    }
+  }
+
+  Future<InstitutionShuttleTimeTable?> queryShuttleTimeByInstitutionId(
+      String institutionId) async {
+    print(institutionId);
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+          query ListInstitutionShuttleTimeTables(\$INSTITUTION_ID: String) {
+            listInstitutionShuttleTimeTables(filter: {INSTITUTION_ID: {eq: \$INSTITUTION_ID}}) {
+              items {
+                INSTITUTION_ID
+                IMAGE_URL
+                createdAt
+                updatedAt
+              }
+            }
+          }
+        """,
+          variables: {
+            "INSTITUTION_ID": institutionId,
+          },
+        ),
+      );
+      var response = await operation.response;
+      print(response.data);
+      var responseData = jsonDecode(response.data);
+      List<dynamic> items =
+      responseData['listInstitutionShuttleTimeTables']['items'];
+
+      InstitutionShuttleTimeTable shuttleTime =
+      InstitutionShuttleTimeTable.fromJson(items[0]);
+
+      if (shuttleTime == null) {
+        print('errors: ${response.errors}');
+
+        return null;
+      }
+      print(shuttleTime);
+      return shuttleTime;
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return null;
+    }
+  }
+  Future<List<InstitutionEssentialCareTable>>
+  queryEssentialCareInformationByInstitutionIdAndUserId(
+      { required String userId, String? nextToken}) async {
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+        query ListInstitutionEssentialCareTables(\$filter: TableInstitutionEssentialCareTableFilterInput, \$limit: Int, \$nextToken: String) {
+          listInstitutionEssentialCareTables(filter: \$filter, limit: \$limit, nextToken: \$nextToken) {
+            items {
+              BIRTH
+              INSTITUTION
+              INSTITUTION_ID
+              MEDICATION
+              IMAGE
+              MEDICATION_WAY
+              NAME
+              PHONE_NUMBER
+              USER_ID
+              createdAt
+              updatedAt
+            }
+            nextToken
+          }
+        }
+      """,
+          variables: {
+            "filter": {
+              "USER_ID": {"eq": userId}
+            },
+            "limit": 1000,
+            "nextToken": nextToken,
+          },
+
+        ),
+      );
+
+      var response = await operation.response;
+
+      print(response.data);
+
+      var data = jsonDecode(response.data);
+      var items = data['listInstitutionEssentialCareTables']['items'];
+
+      if (items == null || response.data == null) {
+        print('errors: ${response.errors}');
+        return const [];
+      }
+
+      List<InstitutionEssentialCareTable> essentialCare =
+      (items as List)
+          .map((item) => InstitutionEssentialCareTable.fromJson(item))
+          .toList();
+
+      var newNextToken = data['listInstitutionEssentialCareTables']['nextToken'];
+
+      if (newNextToken != null) {
+        // recursive call for next page's data
+        var additionalItems =
+        await queryEssentialCareInformationByInstitutionIdAndUserId( userId: userId,nextToken : newNextToken);
+        essentialCare.addAll(additionalItems);
+      }
+
+      return essentialCare;
+
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
+    }
+    }
+
+//todo: 안됨
+  Future<List<InstitutionEssentialCareTable>>
+  queryEssentialCareInformationByInstitutionId(
+      {required String institutionId, String? nextToken}) async {
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+          query ListInstitutionEssentialCareTables(\$filter: TableInstitutionEssentialCareTableFilterInput, \$limit: Int, \$nextToken: String) {
+            listInstitutionEssentialCareTables(filter: \$filter, limit: \$limit, nextToken: \$nextToken) {
+              items {
+                BIRTH
+                INSTITUTION
+                INSTITUTION_ID
+                MEDICATION
+                IMAGE
+                MEDICATION_WAY
+                NAME
+                PHONE_NUMBER
+                USER_ID
+                createdAt
+				  updatedAt
+              }
+              nextToken
+            }
+          }
+        """,
+          variables: {
+            "filter": {"INSTITUTION_ID": {"eq": institutionId}},
+            "limit": 1000,
+            "nextToken": nextToken,
+          },
+        ),
+      );
+
+      var response = await operation.response;
+
+      print(response.data);
+
+      var data = jsonDecode(response.data);
+      var items = data['listInstitutionEssentialCareTables']['items'];
+
+      if (items == null || response.data == null) {
+        print('errors: ${response.errors}');
+        return const [];
+      }
+
+      List<InstitutionEssentialCareTable> essentialCare =
+      (items as List)
+          .map((item) => InstitutionEssentialCareTable.fromJson(item))
+          .toList();
+
+      var newNextToken = data['listInstitutionEssentialCareTables']['nextToken'];
+
+      if (newNextToken != null) {
+        // recursive call for next page's data
+        var additionalItems =
+        await queryEssentialCareInformationByInstitutionId(institutionId : institutionId , nextToken : newNextToken);
+        essentialCare.addAll(additionalItems);
+      }
+
+      return essentialCare;
+
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
+    }
+  }
+
+    // 병찬
 
 
 

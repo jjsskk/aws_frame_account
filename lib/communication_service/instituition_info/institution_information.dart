@@ -9,42 +9,75 @@ class InstitutionInfoPage extends StatelessWidget {
   late TabController _tabController;
 
   TabBar get _tabBar => TabBar(
+    indicatorColor: Color(0xFF1F2EAE),  // 밑줄 색상 변경
+    labelColor: Color(0xFF1F2EAE), // 선택된 탭의 글자색 변경
+    unselectedLabelColor: Colors.grey,  // 선택되지 않은 탭의 글자색 변경
+    labelStyle: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),  // 선택된 탭의 글자크기 변경
+    unselectedLabelStyle: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),  // 선택되지 않은 탭의 글자크기 변경
     tabs: [
       Tab(text: '공지사항',),
       Tab(text: '기관소식',),
       Tab(text: '시간표'),
       Tab(text: '편의사항'),
     ],
-
   );
+
   @override
   Widget build(BuildContext context) {
     var colorScheme = Theme.of(context).colorScheme;
     var theme = Theme.of(context);
+    var appBarHeight = AppBar().preferredSize.height;  // AppBar의 높이를 구함
     return DefaultTabController(
       initialIndex: 1,
       length: 4,
       child: Scaffold(
-          appBar: AppBar(
-            title: Text('기관 정보'),
-            centerTitle: true,
-            bottom:PreferredSize(
-              preferredSize: _tabBar.preferredSize,
-              child: Material(
-                color: Colors.blueAccent, //<-- SEE HERE
-                child:_tabBar
-
+        extendBodyBehindAppBar: true,  // AppBar 뒤에 배경 이미지가 보이도록 설정
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_circle_left_outlined, color: Colors.white, size: 35),
+            onPressed: (){
+              Navigator.pop(context);
+            },
+          ),
+          elevation: 0.0,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+                fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
               ),
             ),
-
           ),
-          body: const TabBarView(children: [
-            AnnouncementPage(),
-            InstitutionNewsPage(),
-            SchedulePage(),
-            ConveniencePage()
-
-          ])),
+          title: Text('기관 정보', style: TextStyle(color: Colors.white),),
+          centerTitle: true,
+          bottom:PreferredSize(
+            preferredSize: Size.fromHeight(50.0),
+            child: Material(
+                color: Colors.white, // TabBar의 배경을 반투명하게 설정
+                child:_tabBar
+            ),
+          ),
+        ),
+        body: Stack(  // Stack 위젯으로 배경 이미지 추가
+          children: [
+            Container(
+              height: appBarHeight,  // 이미지의 높이를 AppBar의 높이로 설정
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('image/community (7).png'),  // 배경 이미지 파일 경로
+                  fit: BoxFit.cover,  // 이미지를 화면에 꽉 차게 표시
+                ),
+              ),
+            ),
+            const TabBarView(children: [
+              AnnouncementPage(),
+              InstitutionNewsPage(),
+              SchedulePage(),
+              ConveniencePage()
+            ]),
+          ],
+        ),
+      ),
     );
   }
 }
