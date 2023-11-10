@@ -411,7 +411,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
         ),
         title: Text(
           '뇌 신호 그래프',
-          style: TextStyle(color: Colors.white), // 글자색을 하얀색으로 설정
+          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // 글자색을 하얀색으로 설정
         ),
         centerTitle: true,
         flexibleSpace: Container(

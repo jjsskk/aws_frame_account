@@ -23,6 +23,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
 
   late final bottomappbar;
   late final keyObj;
+
   @override
   void initState() {
     super.initState();
@@ -39,17 +40,30 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
       drawer: GlobalDrawer.getDrawer(context, appState),
       key: keyObj.key,
       appBar: AppBar(
-          title: Text('소통마당',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          '소통마당',
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold), // 글자색을 하얀색으로 설정
+        ),
+        centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+              fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
             ),
-          )),
+          ),
+        ),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
@@ -72,9 +86,10 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                         padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
                       ),
                       child: Column(
-                        mainAxisSize:
-                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
-                        mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                        mainAxisSize: MainAxisSize.min,
+                        // Column의 크기를 자식의 크기에 맞춤
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // 중앙 정렬
                         children: <Widget>[
                           Image.asset(
                             'image/community (2).png',
@@ -105,9 +120,10 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                         padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
                       ),
                       child: Column(
-                        mainAxisSize:
-                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
-                        mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                        mainAxisSize: MainAxisSize.min,
+                        // Column의 크기를 자식의 크기에 맞춤
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // 중앙 정렬
                         children: <Widget>[
                           Image.asset(
                             'image/community (8).png',
@@ -152,9 +168,10 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                         padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
                       ),
                       child: Column(
-                        mainAxisSize:
-                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
-                        mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
+                        mainAxisSize: MainAxisSize.min,
+                        // Column의 크기를 자식의 크기에 맞춤
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // 중앙 정렬
                         children: <Widget>[
                           Image.asset(
                             'image/community (16).png',
@@ -174,33 +191,34 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                     ),
                     Expanded(
                         child: TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => InstitutionInfoPage()),
-                            );
-                          },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
-                          ),
-                          child: Column(
-                            mainAxisSize:
-                            MainAxisSize.min, // Column의 크기를 자식의 크기에 맞춤
-                            mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬
-                            children: <Widget>[
-                              Image.asset(
-                                'image/community (5).png',
-                                width: 120,
-                                height: 120,
-                              ), // 아이콘
-                              Text('기관 정보',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)), // 텍스트
-                            ],
-                          ),
-                        )),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => InstitutionInfoPage()),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        // Column의 크기를 자식의 크기에 맞춤
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        // 중앙 정렬
+                        children: <Widget>[
+                          Image.asset(
+                            'image/community (5).png',
+                            width: 120,
+                            height: 120,
+                          ), // 아이콘
+                          Text('기관 정보',
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)), // 텍스트
+                        ],
+                      ),
+                    )),
                   ],
                 ),
               ),

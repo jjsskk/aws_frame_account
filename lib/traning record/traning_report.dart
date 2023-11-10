@@ -92,17 +92,30 @@ class _TraningReportPageState extends State<TraningReportPage> {
         key: keyObj.key,
         drawer: GlobalDrawer.getDrawer(context, appState),
         appBar: AppBar(
-            title: Text('훈련보고서', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            centerTitle: true,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_circle_left_outlined,
+                color: Colors.white, size: 35),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text(
+            '훈련보고서',
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold), // 글자색을 하얀색으로 설정
+          ),
+          centerTitle: true,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+                fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
               ),
-            )
             ),
+          ),
+        ),
         body: loading
             ? Center(child: CircularProgressIndicator())
             : Center(
