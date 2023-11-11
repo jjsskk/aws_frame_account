@@ -1,14 +1,13 @@
+
 {
-  "resourceName": "s3abed2243",
-  "policyUUID": "abed2243",
-  "bucketName": "awsamplify17811c63371c4c168a3b27bc44de4a0c",
+  "resourceName": "s3awsamplifyinstitutionstorage1b2ce37e",
+  "bucketName": "awsamplifyinstitutionstorage1b2ce37e",
+  "policyUUID": "91d964be",
   "storageAccess": "auth",
   "guestAccess": [],
   "authAccess": [
     "CREATE_AND_UPDATE",
     "READ",
     "DELETE"
-  ],
-  "triggerFunction": "NONE",
-  "groupAccess": {}
+  ]
 }

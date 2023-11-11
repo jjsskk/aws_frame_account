@@ -248,22 +248,21 @@ class _HomePageState extends State<HomePage> {
         drawer: GlobalDrawer.getDrawer(context, appState),
         key: keyObj.key,
         appBar: AppBar(
-          title: Text(
-            ' ${gql.userName}님의 동반자 ${gql.protectorName}님 안녕하세요!',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.logout,
-                semanticLabel: 'logout',
+
+          elevation: 0.0,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+                fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
               ),
-              onPressed: widget.shouldLogOut,
             ),
-          ],
-          automaticallyImplyLeading:
-          false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
+          ),
+          title: Text(' ${gql.userName}님의 동반자 ${gql.protectorName}님 안녕하세요!', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
+          centerTitle: true,
+
         ),
+
         body: Center(
             child: Column(
               children: [

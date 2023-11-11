@@ -143,7 +143,7 @@ class AnnouncementDetailPage extends StatefulWidget {
 class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
   final gql = GraphQLController.Obj;
 
-  String title = '', content = '', url = '', image = '';
+  String title = '', content = '', url = '', image = 'loading';
 
   String getYearMonthDay(String dateString) {
     return dateString.substring(0, 10);
