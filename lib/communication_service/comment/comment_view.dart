@@ -381,7 +381,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                                 controller: _searchController,
                                 onChanged: (value) => _runFilter(value),
                                 decoration: InputDecoration(
-                                  hintText: 'Search...',
+                                  hintText: '검색해주세요..',
                                   // Add a clear button to the search bar
                                   suffixIcon: IconButton(
                                     icon: Icon(
@@ -459,30 +459,54 @@ class _CommentViewPageState extends State<CommentViewPage> {
                                         Image.asset('image/community (4).png'),
                                   ),
                                 )
-                              : DropdownButton<String>(
-                                  value: dropdownValue,
-                                  onChanged: (String? value) {
-                                    setState(
-                                      () {
-                                        dropdownValue = value!;
-                                        dropDownDisappear = !dropDownDisappear;
-                                      },
-                                    );
-                                  },
-                                  items: _filterlist
-                                      .map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(
-                                            color: dropDownDisappear
-                                                ? Colors.transparent
-                                                : Colors.black),
+                              : Container(
+                                  height:
+                                      MediaQuery.of(context).size.height / 27,
+                                  width:
+                                      MediaQuery.of(context).size.width / 5,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    image: DecorationImage(
+                                      image:
+                                          AssetImage("image/report (20).png"),
+                                      // 여기에 배경 이미지 경로를 지정합니다.
+                                      fit: BoxFit
+                                          .fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: DropdownButton<String>(
+                                      dropdownColor: Colors.indigoAccent,
+                                      value: dropdownValue,
+                                      icon: Icon(
+                                        // Add this
+                                        Icons.arrow_drop_down, // Add this
+                                        color: Colors.white, // Add this
                                       ),
-                                    );
-                                  }).toList(),
+                                      onChanged: (String? value) {
+                                        setState(
+                                          () {
+                                            dropdownValue = value!;
+                                            dropDownDisappear =
+                                                !dropDownDisappear;
+                                          },
+                                        );
+                                      },
+                                      items: _filterlist
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(
+                                            value,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
                                 ),
                         )
                       ],

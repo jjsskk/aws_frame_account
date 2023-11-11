@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:core';
 
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:aws_frame_account/models/ModelProvider.dart';
 import 'package:aws_frame_account/traning%20record/custom_chart.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,7 @@ class AnalyzingReportPage extends StatefulWidget {
 class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   bool loading = true;
 
-  var userbutton = '유저 데이터 추가';
+  var userbutton = '유저(훈련인) 데이터 추가';
   var brainbutton = '뇌파 데이터 추가';
   late final gql;
   int usercount = 0; // DATA count added to USER DB
@@ -83,30 +84,59 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   int ageEra = 0;
   var month = 1; // for DropdownDatePicker
   var year = 2023; // for DropdownDatePicker
+  List<String> monthList = [
+    '1월',
+    '2월',
+    '3월',
+    '4월',
+    '5월',
+    '6월',
+    '7월',
+    '8월',
+    '9월',
+    '10월',
+    '11월',
+    '12월',
+  ];
+  List<String> yearList = [];
+
+  String dropdownYear = '';
+  String dropdownMonth = '';
 
   int numberForonedata = 1; // for extractRequiredUserData()
 
   Map<String, List<int>> allData = {}; // variable for _getBars()
 
+  void makeYearDropdownValues() {
+    var tempYear = year - 3;
+    for (; tempYear < year + 4; tempYear++) yearList.add('$tempYear년');
+
+    dropdownMonth = '$month월';
+    dropdownYear = '$year년';
+  }
+
   @override
   void initState() {
     super.initState();
+    month = DateTime.now().month;
+    year = DateTime.now().year;
+    makeYearDropdownValues();
     gql = GraphQLController.Obj;
     extractLatestBrainData();
-    // extractSimilarAge();
-    // gql.queryListMonthlyDBItems.then((dynamic) {
-    //   print(dynamic);
-    // });
-
-    //   gql.queryListMonthlyDBItems().then((result) {
-    //     print("here:$result");
-    //   }).catchError((error) {
-    //     print("error: $error");
-    //   });
   }
 
   void extractLatestBrainData() {
-    gql.queryMonthlyDBItem().then((value) {
+    gql.queryMonthlyDBLatestItem().then((values) {
+      print(values);
+
+      values.sort((a, b) {
+        String aa = a.month;
+
+        String bb = b.month;
+        return bb.compareTo(aa);
+      });
+
+      var value = values.first;
       setState(() {
         CON_SCORE = value!.con_score;
         SPACETIME_SCORE = value!.spacetime_score;
@@ -130,7 +160,10 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     int changeddate = year * 10000 + month * 100;
     numberForonedata = 0;
     Future<dynamic> future =
-        gql.queryMonthlyDBRequiredItem(changeddate).then((value) {
+        gql.queryMonthlyDBRequiredItem(gql.userId, changeddate).then((values) {
+      // 현제 보호자의 유저(훈련인)의 데이터 불러오기
+      var value = values.last;
+
       if (value != null) {
         setState(() {
           numberForonedata++;
@@ -153,7 +186,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
   void extractSimilarAge() {
     users = [];
-    String birth = "19651008";
+    // String birth = "19651008";
+    String birth = gql.userBirth;
     int year = int.parse(birth.substring(0, 4));
     int month = int.parse(birth.substring(4, 6));
     int day = int.parse(birth.substring(6, 8));
@@ -177,12 +211,12 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     print(minYear);
     print(maxYear);
 
-    gql.queryListUserDBItems(minYear, maxYear).then((result) {
+    gql.queryListUserDBItemsForAverageAge(minYear, maxYear).then((result) {
       // extract SimilarAge users Ids
       // print(result);
       result.forEach((value) {
         // print("${value.id}");
-        users.add(value.id);
+        users.add(value.ID);
       });
       futuresList = [];
       calculateAverageSignal();
@@ -223,10 +257,13 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     print("monthint: $changeddate");
 
     int numberForavg = 0;
-    users.forEach((id) async {
+    users.forEach((selectedAgeUserId) async {
       // print(id);
-      Future<dynamic> future =
-          gql.queryMonthlyDBRequiredItem(id, changeddate).then((value) {
+      Future<dynamic> future = gql
+          .queryMonthlyDBRequiredItem(selectedAgeUserId, changeddate)
+          .then((values) {
+        //같은 연렁대 유저(훈련인)의 데이터 불러오기 (보호자의 유저(훈련인)가 아님)
+        var value = values.last;
         if (value != null) {
           numberForavg++;
           CON_SCORE_SUM += value.con_score as int;
@@ -278,6 +315,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           numberForonedata = 0;
         }
 
+        ORIENT_SCORE_AVG = (ORIENT_SCORE_SUM ~/ numberForavg);
+        allData['지남력'] = [ORIENT_SCORE, ORIENT_SCORE_AVG];
+
         CON_SCORE_AVG = (CON_SCORE_SUM ~/ numberForavg); //135/3= 45
         allData['주의력'] = [CON_SCORE, CON_SCORE_AVG];
 
@@ -299,9 +339,6 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         REAC_SCORE_AVG = (REAC_SCORE_SUM ~/ numberForavg); //반응속도 점수
         allData['반응 속도'] = [REAC_SCORE, REAC_SCORE_AVG];
 
-        ORIENT_SCORE_AVG = (ORIENT_SCORE_SUM ~/ numberForavg);
-        allData['지남력'] = [ORIENT_SCORE, ORIENT_SCORE_AVG];
-
         AVG_ATT_AVG = (AVG_ATT_SUM ~/ numberForavg);
         allData['집중력'] = [AVG_ATT, AVG_ATT_AVG];
 
@@ -321,6 +358,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           AVG_ATT = 0;
           AVG_MED = 0;
         }
+
+        ORIENT_SCORE_AVG = 0;
+        allData['지남력'] = [ORIENT_SCORE, ORIENT_SCORE_AVG];
 
         CON_SCORE_AVG = 0; //135/3= 45
         allData['주의력'] = [CON_SCORE, CON_SCORE_AVG];
@@ -343,15 +383,14 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         REAC_SCORE_AVG = 0; //반응속도 점수
         allData['반응 속도'] = [REAC_SCORE, REAC_SCORE_AVG];
 
-        ORIENT_SCORE_AVG = 0;
-        allData['지남력'] = [ORIENT_SCORE, ORIENT_SCORE_AVG];
-
         AVG_ATT_AVG = 0;
         allData['집중력'] = [AVG_ATT, AVG_ATT_AVG];
 
         AVG_MED_AVG = 0;
         allData['안정감'] = [AVG_MED, AVG_MED_AVG];
       }
+
+      print('지남력:${allData.keys.first}');
       loading = false;
     });
   }
@@ -363,6 +402,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
     const ticks = [20, 40, 60, 80, 100];
     var features = [
+      "지남력($ORIENT_SCORE)",
       "주의력($CON_SCORE)",
       "시공간($SPACETIME_SCORE)",
       "집행기능($EXEC_SCORE)",
@@ -370,12 +410,12 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
       "언어기능($LING_SCORE)",
       "계산력($CAL_SCORE)",
       "반응속도($REAC_SCORE)",
-      "지남력($ORIENT_SCORE)",
       // "집중력($AVG_ATT)",
       // "안정감($AVG_MED)",
     ];
     var data = [
       [
+        ORIENT_SCORE,
         CON_SCORE,
         SPACETIME_SCORE,
         EXEC_SCORE,
@@ -383,7 +423,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         LING_SCORE,
         CAL_SCORE,
         REAC_SCORE,
-        ORIENT_SCORE,
+
         // AVG_ATT,
         // AVG_MED,
       ]
@@ -399,74 +439,194 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         title: Text('분석 보고서',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+              fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+            ),
+          ),
+        ),
       ),
       body: loading
-          ? Center(child: CircularProgressIndicator())
+          ? LoadingPage()
           : Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image:
+                      AssetImage("image/ui (2).png"), // 여기에 배경 이미지 경로를 지정합니다.
+                  fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                ),
+              ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                 child: Column(
                   children: <Widget>[
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Expanded(
-                          child: DropdownDatePicker(
-                            inputDecoration: InputDecoration(
-                                enabledBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.grey, width: 1.0),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10))),
-                            // optional
-                            isDropdownHideUnderline: true,
-                            // optional
-                            isFormValidator: true,
-                            // optional
-                            startYear: 2022,
-                            // optional
-                            endYear: 2030,
-                            // optional
-                            width: 10,
-                            // optional
-                            locale: "zh_CN",
-                            // selectedDay: 14, // optional
-                            showDay: false,
-                            selectedMonth: month,
-                            // optional
-                            selectedYear: year,
-                            // optional
-                            // onChangedDay: (value) => print('onChangedDay: $value'),
-                            onChangedMonth: (value) {
-                              print('onChangedMonth: $value');
-                              month = int.parse(value!);
-                            },
-                            onChangedYear: (value) {
-                              print('onChangedYear: $value');
-                              year = int.parse(value!);
-                            },
-                            //boxDecoration: BoxDecoration(
-                            // border: Border.all(color: Colors.grey, width: 1.0)), // optional
-                            // showDay: false,// optional
-                            // dayFlex: 2,// optional
-                            // locale: "zh_CN",// optional
-                            // hintDay: 'Day', // optional
-                            // hintMonth: 'Month', // optional
-                            // hintYear: 'Year', // optional
-                            // hintTextStyle: TextStyle(color: Colors.grey), // optional
+                        Container(
+                          height: MediaQuery.of(context).size.height / 25,
+                          width: MediaQuery.of(context).size.width / 3.5,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            image: DecorationImage(
+                              image: AssetImage("image/report (20).png"),
+                              // 여기에 배경 이미지 경로를 지정합니다.
+                              fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                            ),
+                          ),
+                          child: Center(
+                            child: DropdownButton<String>(
+                              dropdownColor: Colors.indigoAccent,
+                              value: dropdownYear,
+                              icon: Icon(
+                                // Add this
+                                Icons.arrow_drop_down, // Add this
+                                color: Colors.white, // Add this
+                              ),
+                              onChanged: (String? value) {
+                                setState(
+                                  () {
+                                    dropdownYear = value!;
+                                    year = int.parse(value!.substring(0, 4));
+                                  },
+                                );
+                                print(year);
+                              },
+                              items: yearList.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
                           ),
                         ),
-                        IconButton(
-                            onPressed: () {
-                              setState(() {
-                                loading = true;
-                              });
-                              futuresList = [];
-                              futuresList.add(extractRequiredBrainData());
+                        Container(
+                          height: MediaQuery.of(context).size.height / 25,
+                          width: MediaQuery.of(context).size.width / 4,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            image: DecorationImage(
+                              image: AssetImage("image/report (20).png"),
+                              // 여기에 배경 이미지 경로를 지정합니다.
+                              fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                            ),
+                          ),
+                          child: Center(
+                            child: DropdownButton<String>(
+                              dropdownColor: Colors.indigoAccent,
+                              value: dropdownMonth,
+                              icon: Icon(
+                                // Add this
+                                Icons.arrow_drop_down, // Add this
+                                color: Colors.white, // Add this
+                              ),
+                              onChanged: (String? value) {
+                                setState(
+                                  () {
+                                    dropdownMonth = value!;
+                                    int len = value!.length;
+                                    month = int.parse(
+                                        value!.substring(0, len > 2 ? 2 : 1));
+                                  },
+                                );
+                                print(month);
+                              },
+                              items: monthList.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                        // Expanded(
+                        //   child: DropdownDatePicker(
+                        //     inputDecoration: InputDecoration(
+                        //         enabledBorder: const OutlineInputBorder(
+                        //           borderSide: BorderSide(
+                        //               color: Colors.grey, width: 1.0),
+                        //         ),
+                        //         border: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.circular(10))),
+                        //     // optional
+                        //     isDropdownHideUnderline: true,
+                        //     // optional
+                        //     isFormValidator: true,
+                        //     // optional
+                        //     startYear: 2022,
+                        //     // optional
+                        //     endYear: 2030,
+                        //     // optional
+                        //     width: 10,
+                        //     // optional
+                        //     locale: "zh_CN",
+                        //     // selectedDay: 14, // optional
+                        //     showDay: false,
+                        //     selectedMonth: month,
+                        //     // optional
+                        //     selectedYear: year,
+                        //     // optional
+                        //     // onChangedDay: (value) => print('onChangedDay: $value'),
+                        //     onChangedMonth: (value) {
+                        //       print('onChangedMonth: $value');
+                        //       month = int.parse(value!);
+                        //     },
+                        //     onChangedYear: (value) {
+                        //       print('onChangedYear: $value');
+                        //       year = int.parse(value!);
+                        //     },
+                        //     //boxDecoration: BoxDecoration(
+                        //     // border: Border.all(color: Colors.grey, width: 1.0)), // optional
+                        //     // showDay: false,// optional
+                        //     // dayFlex: 2,// optional
+                        //     // locale: "zh_CN",// optional
+                        //     // hintDay: 'Day', // optional
+                        //     // hintMonth: 'Month', // optional
+                        //     // hintYear: 'Year', // optional
+                        //     // hintTextStyle: TextStyle(color: Colors.grey), // optional
+                        //   ),
+                        // ),
+                        Container(
 
-                              calculateAverageSignal();
-                            },
-                            icon: Icon(Icons.search))
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: Colors.white,
+                          ),
+                          child: Center(
+                            child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    loading = true;
+                                  });
+                                  futuresList = [];
+                                  futuresList.add(extractRequiredBrainData());
+
+                                  calculateAverageSignal();
+                                },
+                                icon: Icon(
+                                  Icons.search,
+                                  color: const Color(0xff1f43f3),
+                                )),
+                          ),
+                        )
                       ],
                     ),
                     // BUTTONS for adding artificial data to DB
@@ -505,24 +665,34 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                     //   useSides: true,
                     // ),
 
-                    Container(
-                      height: MediaQuery.of(context).size.height / 2.15,
-                      decoration: BoxDecoration(
-                          image: DecorationImage(
-                        image: AssetImage("image/report (18).png"),
-                        // 여기에 배경 이미지 경로를 지정합니다.
-                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                      )),
-                      child: Container(
-                        child: RadarChart(
-                          data: data,
-                          ticks: ticks,
-                          features: features,
-                          reverseAxis: false,
+                    Stack(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: Image.asset("image/report (18).png"),
                         ),
-                      ),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: 64,
+                            ),
+                            Container(
+                              height:
+                                  MediaQuery.of(context).size.height / 2.935,
+                              child: RadarChart(
+                                data: data,
+                                ticks: ticks,
+                                features: features,
+                                reverseAxis: false,
+                                outlineColor: Colors.transparent,
+                                axisColor: Colors.transparent,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Center(child: Text('평균연령 $ageEra세 점수 ')),
+                    // Center(child: Text('평균연령 $ageEra세 점수 ')),
                     Expanded(
                       child: ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -890,33 +1060,73 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
         smaller = '';
       }
       */
-      data.add(Padding(
-        padding: EdgeInsets.symmetric(vertical: 15.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(key),
-            Expanded(
-              child: LinearPercentIndicator(
-                animation: true,
-                lineHeight: 20.0,
-                animationDuration: 2000,
-                percent: (value.first) / 100,
-                animateFromLastPercent: true,
-                center: Text("${value.first}"),
-                // user's one data
-                isRTL: false,
-                barRadius: Radius.elliptical(5, 15),
-                progressColor: color[index],
-                maskFilter: MaskFilter.blur(BlurStyle.solid, 3),
+      data.add(Container(
+        constraints: BoxConstraints(
+          maxHeight: double.infinity, // container 길이를 text에 맞게 유연하게 늘릴수 있다.
+        ),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image:
+                AssetImage("image/community (20).png"), // 여기에 배경 이미지 경로를 지정합니다.
+            fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                      width: MediaQuery.of(context).size.width / 7,
+                      height: MediaQuery.of(context).size.width / 7,
+                      child: Image.asset("image/report (${index + 26}).png")),
+                  Expanded(
+                    child: LinearPercentIndicator(
+                      animation: true,
+                      lineHeight: 20.0,
+                      animationDuration: 2000,
+                      percent: (value.first) / 100,
+                      animateFromLastPercent: true,
+                      center: Text("${value.first}"),
+                      // user's one data
+                      isRTL: false,
+                      barRadius: Radius.elliptical(5, 15),
+                      progressColor: color[index],
+                      maskFilter: MaskFilter.blur(BlurStyle.solid, 3),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Text("${value.last}"), //average
-            Text('(평균연령 $ageEra)'),
-          ],
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '  $key',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text("${value.last}(평균연령 $ageEra)",
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text('자세한 평가는 전문가가 직접 적어줄거에요',
+                  style: const TextStyle(fontWeight: FontWeight.bold)),
+              Text(value.last <= value.first ? higher : smaller,
+                  style: const TextStyle(fontWeight: FontWeight.bold))
+            ],
+          ),
         ),
       ));
-      data.add(value.last <= value.first ? Text(higher) : Text(smaller));
       data.add(Divider(
         thickness: 2.0,
       ));

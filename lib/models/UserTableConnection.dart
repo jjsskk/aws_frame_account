@@ -24,12 +24,12 @@ import 'package:amplify_core/amplify_core.dart' as amplify_core;
 import 'package:collection/collection.dart';
 
 
-/** This is an auto generated class representing the InstitutionEssentialCareTableConnection type in your schema. */
-class InstitutionEssentialCareTableConnection {
-  final List<InstitutionEssentialCareTable>? _items;
+/** This is an auto generated class representing the UserTableConnection type in your schema. */
+class UserTableConnection {
+  final List<UserTable>? _items;
   final String? _nextToken;
 
-  List<InstitutionEssentialCareTable>? get items {
+  List<UserTable>? get items {
     return _items;
   }
   
@@ -37,11 +37,11 @@ class InstitutionEssentialCareTableConnection {
     return _nextToken;
   }
   
-  const InstitutionEssentialCareTableConnection._internal({items, nextToken}): _items = items, _nextToken = nextToken;
+  const UserTableConnection._internal({items, nextToken}): _items = items, _nextToken = nextToken;
   
-  factory InstitutionEssentialCareTableConnection({List<InstitutionEssentialCareTable>? items, String? nextToken}) {
-    return InstitutionEssentialCareTableConnection._internal(
-      items: items != null ? List<InstitutionEssentialCareTable>.unmodifiable(items) : items,
+  factory UserTableConnection({List<UserTable>? items, String? nextToken}) {
+    return UserTableConnection._internal(
+      items: items != null ? List<UserTable>.unmodifiable(items) : items,
       nextToken: nextToken);
   }
   
@@ -52,7 +52,7 @@ class InstitutionEssentialCareTableConnection {
   @override
   bool operator ==(Object other) {
     if (identical(other, this)) return true;
-    return other is InstitutionEssentialCareTableConnection &&
+    return other is UserTableConnection &&
       DeepCollectionEquality().equals(_items, other._items) &&
       _nextToken == other._nextToken;
   }
@@ -64,7 +64,7 @@ class InstitutionEssentialCareTableConnection {
   String toString() {
     var buffer = new StringBuffer();
     
-    buffer.write("InstitutionEssentialCareTableConnection {");
+    buffer.write("UserTableConnection {");
     buffer.write("items=" + (_items != null ? _items!.toString() : "null") + ", ");
     buffer.write("nextToken=" + "$_nextToken");
     buffer.write("}");
@@ -72,33 +72,33 @@ class InstitutionEssentialCareTableConnection {
     return buffer.toString();
   }
   
-  InstitutionEssentialCareTableConnection copyWith({List<InstitutionEssentialCareTable>? items, String? nextToken}) {
-    return InstitutionEssentialCareTableConnection._internal(
+  UserTableConnection copyWith({List<UserTable>? items, String? nextToken}) {
+    return UserTableConnection._internal(
       items: items ?? this.items,
       nextToken: nextToken ?? this.nextToken);
   }
   
-  InstitutionEssentialCareTableConnection copyWithModelFieldValues({
-    ModelFieldValue<List<InstitutionEssentialCareTable>?>? items,
+  UserTableConnection copyWithModelFieldValues({
+    ModelFieldValue<List<UserTable>?>? items,
     ModelFieldValue<String?>? nextToken
   }) {
-    return InstitutionEssentialCareTableConnection._internal(
+    return UserTableConnection._internal(
       items: items == null ? this.items : items.value,
       nextToken: nextToken == null ? this.nextToken : nextToken.value
     );
   }
   
-  InstitutionEssentialCareTableConnection.fromJson(Map<String, dynamic> json)  
+  UserTableConnection.fromJson(Map<String, dynamic> json)  
     : _items = json['items'] is List
         ? (json['items'] as List)
           .where((e) => e != null)
-          .map((e) => InstitutionEssentialCareTable.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
+          .map((e) => UserTable.fromJson(new Map<String, dynamic>.from(e['serializedData'])))
           .toList()
         : null,
       _nextToken = json['nextToken'];
   
   Map<String, dynamic> toJson() => {
-    'items': _items?.map((InstitutionEssentialCareTable? e) => e?.toJson()).toList(), 'nextToken': _nextToken
+    'items': _items?.map((UserTable? e) => e?.toJson()).toList(), 'nextToken': _nextToken
   };
   
   Map<String, Object?> toMap() => {
@@ -107,14 +107,14 @@ class InstitutionEssentialCareTableConnection {
   };
 
   static var schema = amplify_core.Model.defineSchema(define: (amplify_core.ModelSchemaDefinition modelSchemaDefinition) {
-    modelSchemaDefinition.name = "InstitutionEssentialCareTableConnection";
-    modelSchemaDefinition.pluralName = "InstitutionEssentialCareTableConnections";
+    modelSchemaDefinition.name = "UserTableConnection";
+    modelSchemaDefinition.pluralName = "UserTableConnections";
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.embedded(
       fieldName: 'items',
       isRequired: false,
       isArray: true,
-      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'InstitutionEssentialCareTable')
+      ofType: amplify_core.ModelFieldType(amplify_core.ModelFieldTypeEnum.embeddedCollection, ofCustomTypeName: 'UserTable')
     ));
     
     modelSchemaDefinition.addField(amplify_core.ModelFieldDefinition.customTypeField(

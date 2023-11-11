@@ -42,6 +42,14 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
           title: Text('소통마당',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           centerTitle: true,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+                fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+              ),
+            ),
+          ),
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);

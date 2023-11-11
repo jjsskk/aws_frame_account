@@ -90,7 +90,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                           controller: _searchController,
                           onChanged: (value) => _runFilter(value),
                           decoration: InputDecoration(
-                            hintText: 'Search...',
+                            hintText: '검색해주세요...',
                             // Add a clear button to the search bar
                             suffixIcon: IconButton(
                               icon: Icon(Icons.clear),
@@ -111,27 +111,29 @@ class _CommentViewPageState extends State<CommentViewPage> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      onChanged: (String? value) {
-                        setState(
-                          () {
-                            dropdownValue = value!;
-                          },
-                        );
-                      },
-                      items: _filterlist
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        );
-                      }).toList(),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        onChanged: (String? value) {
+                          setState(
+                            () {
+                              dropdownValue = value!;
+                            },
+                          );
+                        },
+                        items: _filterlist
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   )
                 ],

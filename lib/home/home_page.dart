@@ -251,6 +251,15 @@ class _HomePageState extends State<HomePage> {
           title: Text(
             ' ${gql.userName}님의 동반자 ${gql.protectorName}님 안녕하세요!',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+
+          ),
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+                fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+              ),
+            ),
           ),
           actions: [
             IconButton(
@@ -325,11 +334,11 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     SizedBox(
-                      width: 200.0, // 원하는 너비로 조절
-                      height: 200.0, // 원하는 높이로 조절
+                      width: MediaQuery.of(context).size.width/2.2,
+                      height: MediaQuery.of(context).size.width/3, // 원하는 너비로 조절
                       child: IconButton(
                         icon: Image.asset('image/mainmenu (1).png'),
                         iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
@@ -344,8 +353,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(
-                      width: 200.0, // 원하는 너비로 조절
-                      height: 200.0, // 원하는 높이로 조절
+                      width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
+                      height: MediaQuery.of(context).size.width/3, // 원하는 너비로 조절
                       child: IconButton(
                         icon: Image.asset('image/mainmenu (7).png'),
                         iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.

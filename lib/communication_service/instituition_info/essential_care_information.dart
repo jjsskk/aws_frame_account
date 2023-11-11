@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:aws_frame_account/models/InstitutionEssentialCareTable.dart';
 import 'package:aws_frame_account/storage/storage_service.dart';
 import 'package:flutter/material.dart';
@@ -32,6 +33,7 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
   String medicationWay = "";
   String institutionId = "";
   String institution = '';
+  bool loading  = true;
 
   String convertToE164(String phoneNumber, String countryCode) {
     // 전화번호의 맨 앞자리가 0인 경우, 국가 코드로 대체
@@ -76,9 +78,13 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
           _essentialCare = []; // 데이터가 없는 경우 이미지 URL을 빈 문자열로 설정
         });
       }
+      setState(() {
+        loading =false;
+      });
     }).catchError((error) {
       setState(() {
         _essentialCare = []; // 에러 발생 시 이미지 URL을 빈 문자열로 설정
+        loading =false;
       });
       print("Error fetching data: $error");
     });
@@ -116,7 +122,7 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
           ),
         ),
       ),
-      body: ListView(
+      body: loading? LoadingPage() : ListView(
         padding: EdgeInsets.all(16),
         children: [
           // SizedBox(height:20),

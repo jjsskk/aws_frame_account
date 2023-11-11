@@ -65,7 +65,36 @@ class _TraningReportPageState extends State<TraningReportPage> {
     bottomappbar = GlobalBottomAppBar(keyObj: keyObj);
 
     gql = GraphQLController.Obj;
-    gql.queryMonthlyDBItem().then((value) {
+    extractLatestBrainData();
+    // gql.queryMonthlyDBItem().then((value) {
+    //   setState(() {
+    //     CON_SCORE = "${value!.con_score}";
+    //     SPACETIME_SCORE = "${value!.spacetime_score}";
+    //     EXEC_SCORE = "${value!.exec_score}";
+    //     MEM_SCORE = "${value!.mem_score}";
+    //     LING_SCORE = "${value!.ling_score}";
+    //     CAL_SCORE = "${value!.cal_score}";
+    //     REAC_SCORE = "${value!.reac_score}";
+    //     ORIENT_SCORE = "${value!.orient_score}";
+    //     AVG_ATT = "${value!.avg_att}";
+    //     AVG_MED = "${value!.avg_med}";
+    //     loading = false;
+    //   });
+    // });
+  }
+
+  void extractLatestBrainData() {
+    gql.queryMonthlyDBLatestItem().then((values) {
+      print(values);
+
+      values.sort((a, b) {
+        String aa = a.month;
+
+        String bb = b.month;
+        return bb.compareTo(aa);
+      });
+
+      var value = values.first;
       setState(() {
         CON_SCORE = "${value!.con_score}";
         SPACETIME_SCORE = "${value!.spacetime_score}";
@@ -81,7 +110,6 @@ class _TraningReportPageState extends State<TraningReportPage> {
       });
     });
   }
-
   @override
   Widget build(BuildContext context) {
     appState = context.watch<LoginState>();
@@ -234,7 +262,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       const SizedBox(
-                                        width: 65,
+                                        width: 40,
                                       ),
                                       Column(
                                         children: [
@@ -252,7 +280,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                         ],
                                       ),
                                       const SizedBox(
-                                        width: 50,
+                                        width: 55,
                                       ),
                                       Column(
                                         children: [
@@ -261,7 +289,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                         ],
                                       ),
                                       const SizedBox(
-                                        width: 50,
+                                        width: 55,
                                       ),
                                       Column(
                                         children: [
@@ -278,7 +306,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       const SizedBox(
-                                        width: 65,
+                                        width: 38,
                                       ),
                                       Column(
                                         children: [
@@ -325,39 +353,6 @@ class _TraningReportPageState extends State<TraningReportPage> {
                           height: 10,
                         ),
 
-                    Stack(
-                      children: <Widget>[
-                        Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-
-                              const SizedBox(
-                                width: 110,
-                              ),
-
-                              Image.asset(
-                                'image/report (26).png', // 이미지 경로
-                                width: 70, // 필요에 따라 조절
-                                height: 70,
-                                //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
-                              ),
-
-
-                              Image.asset(
-                                'image/report (27).png', // 이미지 경로
-                                width: 70, // 필요에 따라 조절
-                                height: 70, // 필요에 따라 조절
-
-                                //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
-                              ),
-                              const SizedBox(
-                                width: 110,
-                              ),
-
-                            ]
-                        ),
-
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -366,7 +361,16 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                Text(AVG_ATT, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                                Container(
+                                  height: 80,
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage("image/report (32).png"),
+                                        // 여기에 배경 이미지 경로를 지정합니다.
+                                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                                      ),),
+                                    child: Center(child: Text(AVG_ATT, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -381,7 +385,16 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                Text(AVG_MED, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)),
+                                Container(
+                                  height: 80,
+                                    width: 80,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage("image/report (27).png"),
+                                        // 여기에 배경 이미지 경로를 지정합니다.
+                                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                                      ),),
+                                    child: Center(child: Text(AVG_MED, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
                                 const SizedBox(
                                   height: 10,
                                 ),
@@ -390,8 +403,6 @@ class _TraningReportPageState extends State<TraningReportPage> {
                             ),
                           ],
                         ),
-                        ]
-                    ),
 
 
                         const SizedBox(
@@ -410,11 +421,11 @@ class _TraningReportPageState extends State<TraningReportPage> {
 
 
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
                             SizedBox(
-                              width: 180.0, // 원하는 너비로 조절
-                              height: 120.0, // 원하는 높이로 조절
+                              width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
+                              height: MediaQuery.of(context).size.width/3, // // 원하는 높이로 조절
                               child: IconButton(
                                 icon: Image.asset('image/report (19).png'),
                                 iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
@@ -429,8 +440,8 @@ class _TraningReportPageState extends State<TraningReportPage> {
                               ),
                             ),
                             SizedBox(
-                              width: 180.0, // 원하는 너비로 조절
-                              height: 120.0, // 원하는 높이로 조절
+                              width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
+                              height: MediaQuery.of(context).size.width/3, //
                               child: IconButton(
                                 icon: Image.asset('image/report (3).png'),
                                 iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
