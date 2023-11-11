@@ -390,9 +390,18 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
   @override
   void initState() {
     super.initState();
-    fetchData();
+    gql = GraphQLController.Obj;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchData().then((_) {
+        if (ModalRoute.of(context)!.isCurrent) {
+          setState(() {
+            isLoading = false;
+          });
+        }
+      });
+    });
   }
-
+  bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -432,7 +441,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: SingleChildScrollView(
+        child: isLoading
+            ? Center(child: CircularProgressIndicator()) :SingleChildScrollView(
           child: Center(
             child: Container(
 
