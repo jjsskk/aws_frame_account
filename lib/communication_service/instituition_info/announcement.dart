@@ -178,7 +178,7 @@ class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
         ),
         title: Text(
           '공지사항 세부 정보',
-          style: TextStyle(color: Colors.white), // 글자색을 하얀색으로 설정
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20), // 글자색을 하얀색으로 설정
         ),
         centerTitle: true,
         flexibleSpace: Container(
@@ -190,39 +190,52 @@ class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(title,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-              SizedBox(height: 16),
-              Text('작성일: ' +
-                  getYearMonthDay(widget.announcement.createdAt.toString())),
-              SizedBox(height: 16),
-              content != null ? Text(content) : Text(""),
-              SizedBox(height: 16),
-              url != null ? Text(url) : Text(""),
-              SizedBox(height: 16),
-              if (image != null)
-                if (image!.isNotEmpty)
-                  FutureBuilder<String>(
-                    future: widget.storageService.getImageUrlFromS3(image!),
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      if (snapshot.hasData) {
-                        String imageUrl = snapshot.data!;
-                        return Image.network(imageUrl);
-                      } else if (snapshot.hasError) {
-                        return Text('이미지를 불러올 수 없습니다.');
-                      } else {
-                        return CircularProgressIndicator();
-                      }
-                    },
-                  ),
-            ],
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('image/ui (4).png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start  ,
+              children: [
+                Text(title,
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
+                Text('작성일: ' +
+                    getYearMonthDay(widget.announcement.createdAt.toString())),
+                SizedBox(height: 8),
+                Divider(),
+                SizedBox(height: 8),
+                content != null ? Text(content) : Text(""),
+                SizedBox(height: 16),
+                url != null ? Text(url) : Text(""),
+                SizedBox(height: 16),
+                if (image != null)
+                  if (image!.isNotEmpty)
+                    FutureBuilder<String>(
+                      future: widget.storageService.getImageUrlFromS3(image!),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
+                        if (snapshot.hasData) {
+                          String imageUrl = snapshot.data!;
+                          return Image.network(imageUrl);
+                        } else if (snapshot.hasError) {
+                          return Text('이미지를 불러올 수 없습니다.');
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    ),
+              ],
+            ),
           ),
         ),
       ),

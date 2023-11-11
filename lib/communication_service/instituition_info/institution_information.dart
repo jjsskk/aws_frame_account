@@ -48,7 +48,7 @@ class InstitutionInfoPage extends StatelessWidget {
               ),
             ),
           ),
-          title: Text('기관 정보', style: TextStyle(color: Colors.white),),
+          title: Text('기관 정보', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),),
           centerTitle: true,
           bottom:PreferredSize(
             preferredSize: Size.fromHeight(50.0),
