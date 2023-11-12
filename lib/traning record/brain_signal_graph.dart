@@ -1,21 +1,20 @@
-
 import 'dart:math';
 
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../models/MonthlyDBTest.dart';
+import '../models/MonthlyBrainSignalTable.dart';
 
 class BrainSignalPage extends StatefulWidget {
   BrainSignalPage({Key? key}) : super(key: key);
 
-
   @override
   State<BrainSignalPage> createState() => _BrainSignalPageState();
 }
-class _BrainSignalPageState extends State<BrainSignalPage> {
 
+class _BrainSignalPageState extends State<BrainSignalPage> {
   String? selectedLabel;
   bool useSides = false;
 
@@ -31,10 +30,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     Color(0xff801336), // Burgundy
     Color(0xffEB9F9A), // Salmon
     Color(0xffFAD201), // Yellow
-
   ];
-
-
 
   // 이 코드는 그래프의 x축의 값을 나타내는 위젯입니다. 각 월을 반환합니다.
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
@@ -47,9 +43,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       String text = "$month월";
 
       final style = TextStyle(
-          color: Color(0xff68737d),
-          fontWeight: FontWeight.bold,
-          fontSize: 12);
+          color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 12);
 
       return SideTitleWidget(
         axisSide: meta.axisSide,
@@ -60,10 +54,33 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     }
   }
 
+  Map<String, String> namePng = {};
 
+  void makeButtonNameList() {
+    // "avg_att": "평균\n집중도",
+    // "avg_med": "평균\n안정감",
+    // "con_score": "주의력",
+    // "spacetime_score": "시공간",
+    // "exec_score": "집행기능",
+    // "mem_score": "기억력",
+    // "ling_score": "언어기능",
+    // "cal_score": "계산력",
+    // "reac_score": "반응속도",
+    // "orient_score": "지남력",
+    namePng['avg_att'] = 'image/report (13).png';
+    namePng['avg_med'] = 'image/report (14).png';
+    namePng['con_score'] = 'image/report (27).png';
+    namePng['spacetime_score'] = 'image/report (28).png';
+    namePng['exec_score'] = 'image/report (29).png';
+    namePng['mem_score'] = 'image/report (30).png';
+    namePng['ling_score'] = 'image/report (31).png';
+    namePng['cal_score'] = 'image/report (32).png';
+    namePng['reac_score'] = 'image/report (33).png';
+    namePng['orient_score'] = 'image/report (26).png';
+  }
 
   //이 위젯은 그래프의 각 y축의 값을 나타내는 위젯입니다.
-    Widget leftTitleWidgets(double value, TitleMeta meta) {
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Color(0xff67727d),
       fontWeight: FontWeight.bold,
@@ -93,8 +110,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
 
   // 버튼의 각 라벨들을 매핑해주는 것들입니다. 왼쪽에 있는 것은 db를 통해서 불러온 값이고 오른쪽이 보여주고자 하는 값입니다.
   Map<String, String> buttonLabels = {
-    "avg_att": "평균\n집중도",
-    "avg_med": "평균\n안정감",
+    "avg_att": "집중도",
+    "avg_med": "안정감",
     "con_score": "주의력",
     "spacetime_score": "시공간",
     "exec_score": "집행기능",
@@ -109,7 +126,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
   //twelveMonthsAgo이라는 변수를 통해서 최근 1년까지를 설정하고 버튼을 눌렀을때 그 이름에 따른 데이터를 가져오게 됩니다.
   //그래프 데이터를 각각 수집한 것을 graphData라는 리스트에 넣어 반환하게 됩니다.
   //TODO: 현재시각으로부터 1년을 설정하는 것이 아니라 12개의 데이터를 찾아야하는 건지 질문하기
-  List<double> _getGraphData(String label,int colorIndex) {
+  List<double> _getGraphData(String label, int colorIndex) {
     List<double> graphData = [];
     DateTime twelveMonthsAgo = DateTime.now().subtract(Duration(days: 365 * 1));
     for (var result in results) {
@@ -176,18 +193,16 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       colorIndex = buttonLabels.keys.toList().indexOf(selectedLabel!);
       graphData = _getGraphData(selectedLabel!, colorIndex);
     }
-    List<Color> selectedGradientColors = [      buttomColors[colorIndex],
+    List<Color> selectedGradientColors = [
+      buttomColors[colorIndex],
       buttomColors[colorIndex].withOpacity(0.8),
     ];
-
 
     return LineChartData(
         lineTouchData: LineTouchData(enabled: true),
         gridData: FlGridData(
           show: false,
           drawVerticalLine: true,
-
-
         ),
         titlesData: FlTitlesData(
             show: true,
@@ -213,7 +228,6 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                 showTitles: false, // 이 부분을 false로 설정하여 상단 x축의 숫자를 숨깁니다.
               ),
             ),
-
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false))),
         borderData: FlBorderData(
             show: false,
@@ -224,13 +238,12 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
         maxY: 100,
         lineBarsData: [
           LineChartBarData(
-              spots: graphData
-                  .asMap()
-                  .map((i, e) => MapEntry(i, FlSpot(i.toDouble(), e)))
-                  .values
-                  .toList(),
+            spots: graphData
+                .asMap()
+                .map((i, e) => MapEntry(i, FlSpot(i.toDouble(), e)))
+                .values
+                .toList(),
             isCurved: true,
-
             gradient: LinearGradient(colors: selectedGradientColors),
             barWidth: 5,
             isStrokeCapRound: true,
@@ -271,117 +284,197 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.all(1.0),
-      mainAxisSpacing: 4.0,  // 메인 축 간격 설정
-      crossAxisSpacing: 4.0,  // 교차 축 간격 설정
-      children: buttonLabels.keys.map((label) => ElevatedButton(
-
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(horizontal: 1),
-          shape: CircleBorder(),
-          fixedSize: Size(10.0, 5.0),
-          primary: selectedLabel == label ? Color(0xFF2B3FF0) : null,  // 선택된 라벨에 따라 색상 변경
-
-        ),
-        onPressed: () {
-          for (var result in results) {
-            String? month = result?.month.substring(4, 6);
-            var value;
-            switch (label) {
-              case "avg_att":
-                value = result?.avg_att;
-                break;
-              case "avg_med":
-                value = result?.avg_med;
-                break;
-              case "con_score":
-                value = result?.con_score;
-                break;
-              case "spacetime_score":
-                value = result?.spacetime_score;
-                break;
-              case "exec_score":
-                value = result?.exec_score;
-                break;
-              case "mem_score":
-                value = result?.mem_score;
-                break;
-              case "ling_score":
-                value = result?.ling_score;
-                break;
-              case "cal_score":
-                value = result?.cal_score;
-                break;
-              case "reac_score":
-                value = result?.reac_score;
-                break;
-              case "orient_score":
-                value = result?.orient_score;
-                break;
-              default:
-                value = null;
-            }
-            setState(() {
-              selectedLabel = label;
-            });
-            print("Month: $month, $label: $value");
-          }
-        },
-        child: Text(
-          buttonLabels[label]!,
-          style: TextStyle(fontSize: 16.0, height: 1.3, fontWeight: FontWeight.w500,color: selectedLabel == label ? Colors.white : Color(0xFF2B3FF0), ),
-
-        ),
-      )).toList(),
+      mainAxisSpacing: 4.0,
+      // 메인 축 간격 설정
+      crossAxisSpacing: 4.0,
+      // 교차 축 간격 설정
+      children: buttonLabels.keys
+          .map((label) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(namePng[label]!), // 여기에 배경 이미지 경로를 지정합니다.
+                    fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                  ),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    for (var result in results) {
+                      String? month = result?.month.substring(4, 6);
+                      var value;
+                      switch (label) {
+                        case "avg_att":
+                          value = result?.avg_att;
+                          break;
+                        case "avg_med":
+                          value = result?.avg_med;
+                          break;
+                        case "con_score":
+                          value = result?.con_score;
+                          break;
+                        case "spacetime_score":
+                          value = result?.spacetime_score;
+                          break;
+                        case "exec_score":
+                          value = result?.exec_score;
+                          break;
+                        case "mem_score":
+                          value = result?.mem_score;
+                          break;
+                        case "ling_score":
+                          value = result?.ling_score;
+                          break;
+                        case "cal_score":
+                          value = result?.cal_score;
+                          break;
+                        case "reac_score":
+                          value = result?.reac_score;
+                          break;
+                        case "orient_score":
+                          value = result?.orient_score;
+                          break;
+                        default:
+                          value = null;
+                      }
+                      setState(() {
+                        selectedLabel = label;
+                      });
+                      print("Month: $month, $label: $value");
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      buttonLabels[label]!,
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          height: 1.3,
+                          fontWeight: FontWeight.w500,
+                          color: selectedLabel == label
+                              ? Colors.black
+                              : Colors.grey
+                          // : Color(0xFF2B3FF0),
+                          ),
+                    ),
+                  ),
+                ),
+                // ElevatedButton(
+                //   style: ElevatedButton.styleFrom(
+                //     padding: EdgeInsets.symmetric(horizontal: 1),
+                //     shape: CircleBorder(),
+                //     fixedSize: Size(10.0, 5.0),
+                //     // primary: selectedLabel == label
+                //     //     ? Color(0xFF2B3FF0)
+                //     //     : null, // 선택된 라벨에 따라 색상 변경
+                //     backgroundColor: Colors.transparent
+                //   ),
+                //   onPressed: () {
+                //     for (var result in results) {
+                //       String? month = result?.month.substring(4, 6);
+                //       var value;
+                //       switch (label) {
+                //         case "avg_att":
+                //           value = result?.avg_att;
+                //           break;
+                //         case "avg_med":
+                //           value = result?.avg_med;
+                //           break;
+                //         case "con_score":
+                //           value = result?.con_score;
+                //           break;
+                //         case "spacetime_score":
+                //           value = result?.spacetime_score;
+                //           break;
+                //         case "exec_score":
+                //           value = result?.exec_score;
+                //           break;
+                //         case "mem_score":
+                //           value = result?.mem_score;
+                //           break;
+                //         case "ling_score":
+                //           value = result?.ling_score;
+                //           break;
+                //         case "cal_score":
+                //           value = result?.cal_score;
+                //           break;
+                //         case "reac_score":
+                //           value = result?.reac_score;
+                //           break;
+                //         case "orient_score":
+                //           value = result?.orient_score;
+                //           break;
+                //         default:
+                //           value = null;
+                //       }
+                //       setState(() {
+                //         selectedLabel = label;
+                //       });
+                //       print("Month: $month, $label: $value");
+                //     }
+                //   },
+                //   child: Text(
+                //     buttonLabels[label]!,
+                //     style: TextStyle(
+                //       fontSize: 16.0,
+                //       height: 1.3,
+                //       fontWeight: FontWeight.w500,
+                //       color: selectedLabel == label
+                //           ? Colors.white
+                //           : Color(0xFF2B3FF0),
+                //     ),
+                //   ),
+                // ),
+              ))
+          .toList(),
     );
   }
 
-
-
   double numberOfFeatures = 3;
-  List<MonthlyDBTest?> results = []; //넣어 둘 친구
+  List<MonthlyBrainSignalTable?> results = []; //넣어 둘 친구
   late final gql;
   int usercount = 0;
   int braincount = 0;
+  bool loading = true;
 
   Future<void> fetchData() async {
     gql = GraphQLController.Obj;
 
     try {
+      final data =
+          await gql.queryMonthlyDBLatestItem(); // 보호자의 유저(훈련인)의 1년가 최신 데이터불라옴
+      {
+        print(data);
+        print("Type of myResult: ${data.runtimeType}");
 
-      final data = await gql.queryListMonthlyDBItems();
+        // 날짜에 따라 오름차순으로 정렬
+        data.sort((a, b) {
+          int yearA = int.parse(a.month.substring(0, 4));
+          int monthA = int.parse(a.month.substring(4, 6));
+          int dayA = int.parse(a.month.substring(6, 8));
+          DateTime aDate = DateTime(yearA, monthA, dayA);
 
-      print(data);
-      print("Type of myResult: ${data.runtimeType}");
+          int yearB = int.parse(b.month.substring(0, 4));
+          int monthB = int.parse(b.month.substring(4, 6));
+          int dayB = int.parse(b.month.substring(6, 8));
+          DateTime bDate = DateTime(yearB, monthB, dayB);
 
-      // 날짜에 따라 오름차순으로 정렬
-      data.sort((a, b) {
-        int yearA = int.parse(a.month.substring(0, 4));
-        int monthA = int.parse(a.month.substring(4, 6));
-        int dayA = int.parse(a.month.substring(6, 8));
-        DateTime aDate = DateTime(yearA, monthA, dayA);
+          return aDate.compareTo(bDate);
+        });
 
-        int yearB = int.parse(b.month.substring(0, 4));
-        int monthB = int.parse(b.month.substring(4, 6));
-        int dayB = int.parse(b.month.substring(6, 8));
-        DateTime bDate = DateTime(yearB, monthB, dayB);
-
-        return aDate.compareTo(bDate);
-      });
-
-      for (int i = 0; i < data.length; i++) {
-        MonthlyDBTest? currentItem = data[i];
-        if (currentItem != null) {
-          // currentItem에 대한 작업 수행
-          print(data[i]);
-        } else {
-          // 아이템이 null인 경우에 대한 처리
-          print("null");
+        for (int i = 0; i < data.length; i++) {
+          MonthlyBrainSignalTable? currentItem = data[i];
+          if (currentItem != null) {
+            // currentItem에 대한 작업 수행
+            print(data[i]);
+          } else {
+            // 아이템이 null인 경우에 대한 처리
+            print("null");
+          }
         }
+        makeButtonNameList();
+        setState(() {
+          results = data;
+          loading = false;
+        });
       }
-
-      setState(() {
-        results = data;
-      });
     } catch (error) {
       print(error);
     }
@@ -392,7 +485,6 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     super.initState();
     fetchData();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -411,7 +503,10 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
         ),
         title: Text(
           '뇌 신호 그래프',
-          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // 글자색을 하얀색으로 설정
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold), // 글자색을 하얀색으로 설정
         ),
         centerTitle: true,
         flexibleSpace: Container(
@@ -423,49 +518,64 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
           ),
         ),
       ),
-      body: Container(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('image/ui (2).png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Container(
-
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 15,),
-
-                  _buildButtons(),
-                  Container(
-                    padding: EdgeInsets.all(20),
-                    child: AspectRatio(
-                      aspectRatio: 6 / 5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+      body: loading
+          ? LoadingPage()
+          : Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('image/ui (2).png'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 20),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              height: 15,
                             ),
-                            color: Colors.white.withOpacity(0.5)),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                          child: _buildLineChart() ,
-                        ),
-                      ),
+                            Text(
+                              '뇌 신호 측정 영역',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold), // 글자색을 하얀색으로 설정
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            _buildButtons(),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            Container(
+                              child: AspectRatio(
+                                aspectRatio: 6 / 5,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                      color: Colors.white.withOpacity(0.5)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 10),
+                                    child: _buildLineChart(),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ]),
                     ),
                   ),
-
-                ]
+                ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 }

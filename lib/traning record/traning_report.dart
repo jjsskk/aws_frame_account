@@ -2,6 +2,7 @@ import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
 import 'package:aws_frame_account/drawer/drawer.dart';
 import 'package:aws_frame_account/bottomappbar/globalkey.dart';
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:aws_frame_account/traning%20record/analyzing_report.dart';
 import 'package:aws_frame_account/traning%20record/brain_signal_graph.dart';
@@ -84,7 +85,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
   }
 
   void extractLatestBrainData() {
-    gql.queryMonthlyDBLatestItem().then((values) {
+    gql.queryMonthlyDBLatestItem().then((values) {//보호자의 훈련인의 최신 데이너 뽑아옴
       print(values);
 
       values.sort((a, b) {
@@ -133,7 +134,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
             )
             ),
         body: loading
-            ? Center(child: CircularProgressIndicator())
+            ? LoadingPage()
             : Center(
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),

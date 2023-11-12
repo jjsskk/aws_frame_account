@@ -22,7 +22,6 @@
       },
       "storage": {
         "s3523ce512": {},
-        "s3abed2243": {},
         "Institution": {
           "tableName": "Institution",
           "region": "us-east-2",
@@ -31,6 +30,10 @@
           "partitionKeyType": "S",
           "sortKeyName": "date",
           "sortKeyType": "S"
+        },
+        "awsamplify9cd0a992": {
+          "bucketName": "awsamplifyinstitutionstorage1b2ce37e92050-staging",
+          "region": "us-east-2"
         }
       },
       "analytics": {

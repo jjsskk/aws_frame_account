@@ -1,3 +1,4 @@
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,7 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
           future: _announcements,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return LoadingPage();
             }
 
             if (snapshot.hasData) {

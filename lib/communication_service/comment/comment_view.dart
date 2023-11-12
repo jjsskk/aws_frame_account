@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:amplify_core/amplify_core.dart';
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/communication_service/comment/Detail_comment.dart';
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -362,178 +363,194 @@ class _CommentViewPageState extends State<CommentViewPage> {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+              fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+            ),
+          ),
+        ),
       ),
       body: loading_comment
-          ? Center(child: CircularProgressIndicator())
-          : Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
-                            child: Container(
-                              child: TextField(
-                                controller: _searchController,
-                                onChanged: (value) => _runFilter(value),
-                                decoration: InputDecoration(
-                                  hintText: '검색해주세요..',
-                                  // Add a clear button to the search bar
-                                  suffixIcon: IconButton(
-                                    icon: Icon(
-                                      Icons.clear,
-                                      color: Colors.transparent,
-                                    ),
-                                    onPressed: () => _searchController.clear(),
-                                  ),
-                                  // Add a search icon or button to the search bar
-                                  prefixIcon: IconButton(
-                                    icon: Icon(
-                                      Icons.search,
-                                      color: Colors.transparent,
-                                    ),
-                                    onPressed: () {
-                                      _runFilter(_searchController.text.trim());
-                                    },
-                                  ),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.fitWidth,
-                                  image: AssetImage(
-                                    "image/community (6).png",
-                                  ),
-                                ),
-                              ),
-                            ),
-
-                            // Container(
-                            //   // Add padding around the search bar
-                            //   padding:
-                            //       const EdgeInsets.symmetric(horizontal: 8.0),
-                            //   // Use a Material design search bar
-                            //   child: TextField(
-                            //     style: TextStyle(color: Colors.black),
-                            //     controller: _searchController,
-                            //     onChanged: (value) => _runFilter(value),
-                            //     decoration: InputDecoration(
-                            //       hintText: 'Search...',
-                            //       // Add a clear button to the search bar
-                            //       suffixIcon: IconButton(
-                            //         icon: Icon(Icons.clear),
-                            //         onPressed: () => _searchController.clear(),
-                            //       ),
-                            //       // Add a search icon or button to the search bar
-                            //       prefixIcon: IconButton(
-                            //         icon: Icon(Icons.search),
-                            //         onPressed: () {
-                            //           _runFilter(_searchController.text.trim());
-                            //         },
-                            //       ),
-                            //       border: OutlineInputBorder(
-                            //         borderRadius: BorderRadius.circular(20.0),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: dropDownDisappear
-                              ? InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      dropDownDisappear = !dropDownDisappear;
-                                    });
-                                  },
-                                  child: Container(
-                                    width:
-                                        MediaQuery.of(context).size.width / 9,
-                                    child:
-                                        Image.asset('image/community (4).png'),
-                                  ),
-                                )
-                              : Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 27,
-                                  width:
-                                      MediaQuery.of(context).size.width / 5,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    image: DecorationImage(
-                                      image:
-                                          AssetImage("image/report (20).png"),
-                                      // 여기에 배경 이미지 경로를 지정합니다.
-                                      fit: BoxFit
-                                          .fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: DropdownButton<String>(
-                                      dropdownColor: Colors.indigoAccent,
-                                      value: dropdownValue,
+          ? LoadingPage()
+          : Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+            fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+          ),
+        ),
+            child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+                              child: Container(
+                                child: TextField(
+                                  controller: _searchController,
+                                  onChanged: (value) => _runFilter(value),
+                                  decoration: InputDecoration(
+                                    hintText: '검색해주세요..',
+                                    // Add a clear button to the search bar
+                                    suffixIcon: IconButton(
                                       icon: Icon(
-                                        // Add this
-                                        Icons.arrow_drop_down, // Add this
-                                        color: Colors.white, // Add this
+                                        Icons.clear,
+                                        color: Colors.transparent,
                                       ),
-                                      onChanged: (String? value) {
-                                        setState(
-                                          () {
-                                            dropdownValue = value!;
-                                            dropDownDisappear =
-                                                !dropDownDisappear;
-                                          },
-                                        );
+                                      onPressed: () => _searchController.clear(),
+                                    ),
+                                    // Add a search icon or button to the search bar
+                                    prefixIcon: IconButton(
+                                      icon: Icon(
+                                        Icons.search,
+                                        color: Colors.transparent,
+                                      ),
+                                      onPressed: () {
+                                        _runFilter(_searchController.text.trim());
                                       },
-                                      items: _filterlist
-                                          .map<DropdownMenuItem<String>>(
-                                              (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(
-                                            value,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        );
-                                      }).toList(),
                                     ),
                                   ),
                                 ),
-                        )
-                      ],
-                    ),
-                    Expanded(
-                        child: NotificationListener<ScrollNotification>(
-                      onNotification: (ScrollNotification notification) {
-                        /*
-                     스크롤 할때 발생되는 이벤트
-                     해당 함수에서 어느 방향으로 스크롤을 했는지를 판단해
-                     리스트 가장 밑에서 아래서 위로 40프로 이상 스크롤 했을때
-                     서버에서 데이터를 추가로 가져오는 루틴이 포함됨.
-                    */
-                        if (!loading_scroll) scrollNotification(notification);
-                        return false;
-                      },
-                      child: ListView(
-                          physics: AlwaysScrollableScrollPhysics(),
-                          // controller: _scrollController,
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.all(16.0),
-                          children: _buildListCards(context)),
-                    )),
-                  ],
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    fit: BoxFit.fitWidth,
+                                    image: AssetImage(
+                                      "image/community (6).png",
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              // Container(
+                              //   // Add padding around the search bar
+                              //   padding:
+                              //       const EdgeInsets.symmetric(horizontal: 8.0),
+                              //   // Use a Material design search bar
+                              //   child: TextField(
+                              //     style: TextStyle(color: Colors.black),
+                              //     controller: _searchController,
+                              //     onChanged: (value) => _runFilter(value),
+                              //     decoration: InputDecoration(
+                              //       hintText: 'Search...',
+                              //       // Add a clear button to the search bar
+                              //       suffixIcon: IconButton(
+                              //         icon: Icon(Icons.clear),
+                              //         onPressed: () => _searchController.clear(),
+                              //       ),
+                              //       // Add a search icon or button to the search bar
+                              //       prefixIcon: IconButton(
+                              //         icon: Icon(Icons.search),
+                              //         onPressed: () {
+                              //           _runFilter(_searchController.text.trim());
+                              //         },
+                              //       ),
+                              //       border: OutlineInputBorder(
+                              //         borderRadius: BorderRadius.circular(20.0),
+                              //       ),
+                              //     ),
+                              //   ),
+                              // ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 16),
+                            child: dropDownDisappear
+                                ? InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        dropDownDisappear = !dropDownDisappear;
+                                      });
+                                    },
+                                    child: Container(
+                                      width:
+                                          MediaQuery.of(context).size.width / 9,
+                                      child:
+                                          Image.asset('image/community (4).png'),
+                                    ),
+                                  )
+                                : Container(
+                                    height:
+                                        MediaQuery.of(context).size.height / 27,
+                                    width:
+                                        MediaQuery.of(context).size.width / 5,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      image: DecorationImage(
+                                        image:
+                                            AssetImage("image/report (20).png"),
+                                        // 여기에 배경 이미지 경로를 지정합니다.
+                                        fit: BoxFit
+                                            .fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: DropdownButton<String>(
+                                        dropdownColor: Colors.indigoAccent,
+                                        value: dropdownValue,
+                                        icon: Icon(
+                                          // Add this
+                                          Icons.arrow_drop_down, // Add this
+                                          color: Colors.white, // Add this
+                                        ),
+                                        onChanged: (String? value) {
+                                          setState(
+                                            () {
+                                              dropdownValue = value!;
+                                              dropDownDisappear =
+                                                  !dropDownDisappear;
+                                            },
+                                          );
+                                        },
+                                        items: _filterlist
+                                            .map<DropdownMenuItem<String>>(
+                                                (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(
+                                              value,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                          )
+                        ],
+                      ),
+                      Expanded(
+                          child: NotificationListener<ScrollNotification>(
+                        onNotification: (ScrollNotification notification) {
+                          /*
+                       스크롤 할때 발생되는 이벤트
+                       해당 함수에서 어느 방향으로 스크롤을 했는지를 판단해
+                       리스트 가장 밑에서 아래서 위로 40프로 이상 스크롤 했을때
+                       서버에서 데이터를 추가로 가져오는 루틴이 포함됨.
+                      */
+                          if (!loading_scroll) scrollNotification(notification);
+                          return false;
+                        },
+                        child: ListView(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            // controller: _scrollController,
+                            shrinkWrap: true,
+                            padding: const EdgeInsets.all(16.0),
+                            children: _buildListCards(context)),
+                      )),
+                    ],
+                  ),
                 ),
               ),
-            ),
+          ),
     );
     ;
   }

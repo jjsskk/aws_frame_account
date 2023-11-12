@@ -272,7 +272,7 @@ class _SignUpPageState extends State<SignUpPage> {
           Row(
             children: [
               Expanded(
-                flex: 2,
+                flex: 5,
                 child: Container(
                   constraints: BoxConstraints(
                     maxHeight:
@@ -317,7 +317,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 style: textColor.subtitle2,
               ),
               Expanded(
-                flex: 2,
+                flex: 7,
                 child: Container(
                   constraints: BoxConstraints(
                     maxHeight:
@@ -334,34 +334,36 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         vertical: 3.0, horizontal: 20),
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      onChanged: (String? value) {
-                        setState(
-                          () {
-                            dropdownValue = value!;
-                          },
-                        );
-                      },
-                      items: _emaillist
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: textColor.subtitle2,
-                          ),
-                        );
-                      }).toList(),
+                    child: Center(
+                      child: DropdownButton<String>(
+                        value: dropdownValue,
+                        onChanged: (String? value) {
+                          setState(
+                            () {
+                              dropdownValue = value!;
+                            },
+                          );
+                        },
+                        items: _emaillist
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: textColor.subtitle2,
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),
               ),
               const SizedBox(
-                width: 10,
+                width: 5,
               ),
               Expanded(
-                flex: 1,
+                flex: 3,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: iconColor,
@@ -685,7 +687,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 _signUp(textColor);
               },
               child: Container(
-                height: MediaQuery.of(context).size.height / 8,
+                height: MediaQuery.of(context).size.height / 10,
                 width: MediaQuery.of(context).size.width / 3,
                 decoration: BoxDecoration(
                   image: DecorationImage(

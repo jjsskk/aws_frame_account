@@ -137,6 +137,22 @@
           "resourceName": "Institution"
         }
       ]
+    },
+    "AMPLIFY_storage_awsamplify9cd0a992_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "awsamplify9cd0a992"
+        }
+      ]
+    },
+    "AMPLIFY_storage_awsamplify9cd0a992_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "awsamplify9cd0a992"
+        }
+      ]
     }
   },
   "storage": {
@@ -146,10 +162,11 @@
       "service": "DynamoDB",
       "serviceType": "imported"
     },
-    "s3abed2243": {
+    "awsamplify9cd0a992": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "service": "S3"
+      "service": "S3",
+      "serviceType": "imported"
     }
   }
 }

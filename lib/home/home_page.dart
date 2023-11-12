@@ -250,7 +250,7 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
           title: Text(
             ' ${gql.userName}님의 동반자 ${gql.protectorName}님 안녕하세요!',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
 
           ),
           flexibleSpace: Container(
@@ -273,145 +273,156 @@ class _HomePageState extends State<HomePage> {
           automaticallyImplyLeading:
           false, // -> important to making top drawer button not visible while keeping drawer function in scaffold
         ),
-        body: Center(
-            child: Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 40,
-                          ),
-                          Text('${gql.userName} 님의 훈련 데이터',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          // GraphPage(),
-                          max > 0
-                              ? Linechart(
-                            data: dataForCamparing,
-                            dataName: nameForMax,
-                          )
-                              : SizedBox( // 비교 데이터가 없거나 상승 데이터가 없을 떄 차트 대신 나올 asset으로 꾸미면 좋을듯
-                            height:
-                            MediaQuery.of(context).size.height / 3,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          max > 0
-                              ? Text(
-                              '지난달보다 $nameForMax $max 상승!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
-                              : Text(
-                              '지난달보다 상승된 데이터가 없습니다ㅠㅠ!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+              fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Center(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              Text('${gql.userName} 님의 훈련 데이터',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              // GraphPage(),
+                              max > 0
+                                  ? Linechart(
+                                data: dataForCamparing,
+                                dataName: nameForMax,
+                              )
+                                  : SizedBox( // 비교 데이터가 없거나 상승 데이터가 없을 떄 차트 대신 나올 asset으로 꾸미면 좋을듯
+                                height:
+                                MediaQuery.of(context).size.height / 3,
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              max > 0
+                                  ? Text(
+                                  '지난달보다 $nameForMax $max 상승!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+                                  : Text(
+                                  '지난달보다 상승된 데이터가 없습니다ㅠㅠ!', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
 
-                          SizedBox(
-                            width: 400.0, // 원하는 너비로 조절
-                            height: 100.0, // 원하는 높이로 조절
-                            child: IconButton(
-                              icon: Image.asset('image/mainmenu (8).png'),
-                              iconSize: 40.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => TraningReportPage(),
-                                  ),
-                                );
-                              },
-                            ),
+                              SizedBox(
+                                width: 400.0, // 원하는 너비로 조절
+                                height: 100.0, // 원하는 높이로 조절
+                                child: IconButton(
+                                  icon: Image.asset('image/mainmenu (8).png'),
+                                  iconSize: 40.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TraningReportPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width/2.2,
-                      height: MediaQuery.of(context).size.width/3, // 원하는 너비로 조절
-                      child: IconButton(
-                        icon: Image.asset('image/mainmenu (1).png'),
-                        iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CommunicationYardPage(),
-                            ),
-                          );
-                        },
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width/2.2,
+                          height: MediaQuery.of(context).size.width/3, // 원하는 너비로 조절
+                          child: IconButton(
+                            icon: Image.asset('image/mainmenu (1).png'),
+                            iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CommunicationYardPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
+                          height: MediaQuery.of(context).size.width/3, // 원하는 너비로 조절
+                          child: IconButton(
+                            icon: Image.asset('image/mainmenu (7).png'),
+                            iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CommunicationYardPage(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
-                      height: MediaQuery.of(context).size.width/3, // 원하는 너비로 조절
-                      child: IconButton(
-                        icon: Image.asset('image/mainmenu (7).png'),
-                        iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => CommunicationYardPage(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                    // Expanded(
+                    //   child: Align(
+                    //     alignment: Alignment.bottomCenter,
+                    //     child: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         const SizedBox(
+                    //           width: 1,
+                    //         ),
+                    //         IconButton(
+                    //           onPressed: () {
+                    //             _key.currentState!.openDrawer();
+                    //           },
+                    //           icon: Icon(
+                    //             Icons.menu,
+                    //             color: colorScheme.primary,
+                    //             size: 30,
+                    //           ),
+                    //         ),
+                    //         const SizedBox(
+                    //           width: 5,
+                    //         ),
+                    //         const SizedBox(
+                    //           width: 5,
+                    //         ),
+                    //         IconButton(
+                    //           onPressed: () {},
+                    //           icon: Icon(
+                    //             Icons.adjust,
+                    //             color: colorScheme.primary,
+                    //             size: 30,
+                    //           ),
+                    //         ),
+                    //         const SizedBox(
+                    //           width: 1,
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
                   ],
-                ),
-                // Expanded(
-                //   child: Align(
-                //     alignment: Alignment.bottomCenter,
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //       children: [
-                //         const SizedBox(
-                //           width: 1,
-                //         ),
-                //         IconButton(
-                //           onPressed: () {
-                //             _key.currentState!.openDrawer();
-                //           },
-                //           icon: Icon(
-                //             Icons.menu,
-                //             color: colorScheme.primary,
-                //             size: 30,
-                //           ),
-                //         ),
-                //         const SizedBox(
-                //           width: 5,
-                //         ),
-                //         const SizedBox(
-                //           width: 5,
-                //         ),
-                //         IconButton(
-                //           onPressed: () {},
-                //           icon: Icon(
-                //             Icons.adjust,
-                //             color: colorScheme.primary,
-                //             size: 30,
-                //           ),
-                //         ),
-                //         const SizedBox(
-                //           width: 1,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // )
-              ],
-            )),
+                )),
+          ),
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           tooltip: 'Create',
