@@ -71,7 +71,7 @@ class StorageService {
     try {
       // 3
       final options = S3UploadFileOptions(
-          accessLevel: StorageAccessLevel.private);
+          accessLevel: StorageAccessLevel.guest);
 
       // 4
       await Amplify.Storage.uploadFile(
