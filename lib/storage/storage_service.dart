@@ -16,6 +16,7 @@ class StorageService {
       final getUrlOptions = GetUrlOptions(accessLevel: StorageAccessLevel.guest);
       GetUrlResult urlResult = await Amplify.Storage.getUrl(key: key, options: getUrlOptions);
 
+      // print('resulturl ${urlResult.url}');
       return urlResult.url;
     } on AmplifyException catch (e) {
       print('Error getting image from S3: $e');

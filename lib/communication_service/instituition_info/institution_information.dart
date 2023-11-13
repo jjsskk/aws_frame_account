@@ -28,7 +28,7 @@ class InstitutionInfoPage extends StatelessWidget {
     var theme = Theme.of(context);
     var appBarHeight = AppBar().preferredSize.height;  // AppBar의 높이를 구함
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: 4,
       child: Scaffold(
         extendBodyBehindAppBar: true,  // AppBar 뒤에 배경 이미지가 보이도록 설정

@@ -117,9 +117,9 @@ class _HomePageState extends State<HomePage> {
 
   void getUserData(String id) async {
     final data = gql.queryUserDBItem(id).then((value) {
-      gql.userId = value.id;
-      gql.userBirth = "${value.birth}";
-      gql.userName = value.name;
+      gql.userId = value.ID;
+      gql.userBirth = "${value.BIRTH}";
+      gql.userName = value.NAME;
       print("value : $value");
       setState(() {
         loading_User = false;

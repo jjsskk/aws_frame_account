@@ -130,7 +130,7 @@ class _VerificationPageState extends State<VerificationPage> {
             InkWell(
               onTap: _verify,
               child: Container(
-                height: MediaQuery.of(context).size.height / 12,
+                height: MediaQuery.of(context).size.height / 16,
                 width: MediaQuery.of(context).size.width / 3.5,
                 decoration: BoxDecoration(
                   image: DecorationImage(

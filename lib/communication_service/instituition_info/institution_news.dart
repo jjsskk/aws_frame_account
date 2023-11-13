@@ -51,9 +51,9 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
         child: FutureBuilder<List<InstitutionNewsTable>>(
           future: _news,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
+
+            if(snapshot.connectionState == ConnectionState.waiting)
               return LoadingPage();
-            }
 
             if (snapshot.hasData) {
               snapshot.data!.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));

@@ -644,7 +644,7 @@ class GraphQLController {
     try {
       var ID = '3';
       int limit =
-      1; // Fetch the latest 1 data items, you can change this value to fetch more or less
+          1; // Fetch the latest 1 data items, you can change this value to fetch more or less
       String sortDirection =
           "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
 
@@ -854,7 +854,8 @@ class GraphQLController {
 
         if (newNextToken != null) {
           // recursive call for next page's data
-          var additionalItems = await queryMonthlyDBRequiredItem(selectedAgeUserId, yearMonth,
+          var additionalItems = await queryMonthlyDBRequiredItem(
+              selectedAgeUserId, yearMonth,
               nextToken: newNextToken);
           monthlyDBTests.addAll(additionalItems);
         }
@@ -986,51 +987,98 @@ class GraphQLController {
   //     return null;
   //   }
   // }
-  Future<UserDBTest?> queryUserDBItem(String id) async {
-    const ID = '1';
+
+  // Future<UserDBTest?> queryUserDBItem(String id) async {
+  //   const ID = '1';
+  //   try {
+  //     var operation = Amplify.API.query(
+  //       request: GraphQLRequest(
+  //         apiName: "awsamplify",
+  //         document: """
+  //         query getUserDBTest(\$id: ID!) {
+  //           getUserDBTest(
+  //             id: \$id
+  //           ) {
+  //               id
+  //               birth
+  //               name
+  //               organization
+  //               sex
+  //               createdAt
+  //               updatedAt
+  //           }
+  //         }
+  //       """,
+  //         variables: {
+  //           "id": ID,
+  //         },
+  //       ),
+  //     );
+  //
+  //     var response = await operation.response;
+  //     {
+  //       print(response.data);
+  //       if (response.data == null) {
+  //         safePrint('errors: ${response.errors}');
+  //         return null;
+  //       }
+  //       UserDBTest user =
+  //           UserDBTest.fromJson(jsonDecode(response.data)['getUserDBTest']);
+  //       if (user == null) {
+  //         safePrint('errors: ${response.errors}');
+  //         return null;
+  //       }
+  //
+  //       return user;
+  //     }
+  //   } on ApiException catch (e) {
+  //     safePrint('Query failed: $e');
+  //     return null;
+  //   }
+  // }
+
+  Future<UserTable?> queryUserDBItem(String id) async {
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
-          apiName: "awsamplify",
+          apiName: "Protector_API",
           document: """
-          query getUserDBTest(\$id: ID!) {
-            getUserDBTest(
-              id: \$id
+          query getUserTable(\$ID:String!) {
+            getUserTable(
+              ID: \$ID
             ) {
-                id
-                birth
-                name
-                organization
-                sex            
-                createdAt
-                updatedAt
-            }
+                ID
+                BIRTH
+                CREATEDAT
+                INSTITUTION
+                INSTITUTION_ID
+                NAME
+                SEX
+                UPDATEDAT
+              }
           }
         """,
           variables: {
-            "id": ID,
+            "ID":  id,
           },
         ),
       );
 
       var response = await operation.response;
       {
-        print(response.data);
-        if (response.data == null) {
-          safePrint('errors: ${response.errors}');
-          return null;
-        }
-        UserDBTest user =
-            UserDBTest.fromJson(jsonDecode(response.data)['getUserDBTest']);
-        if (user == null) {
-          safePrint('errors: ${response.errors}');
+        var data = jsonDecode(response.data);
+        var item = data['getUserTable'];
+        if (response.data == null || item == null) {
+          print('errors: ${response.errors}');
           return null;
         }
 
-        return user;
+        UserTable? User = UserTable.fromJson(item);
+
+        return User;
       }
     } on ApiException catch (e) {
-      safePrint('Query failed: $e');
+      print('Query failed: $e');
       return null;
     }
   }
