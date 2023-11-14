@@ -5,6 +5,7 @@ import 'package:aws_frame_account/models/InstitutionAnnouncementTable.dart';
 import 'package:aws_frame_account/models/InstitutionCommentBoardTable.dart';
 import 'package:aws_frame_account/models/InstitutionCommentConversationTable.dart';
 import 'package:aws_frame_account/models/InstitutionEssentialCareTable.dart';
+import 'package:aws_frame_account/models/InstitutionEventScheduleTable.dart';
 import 'package:aws_frame_account/models/InstitutionFoodTable.dart';
 import 'package:aws_frame_account/models/InstitutionNewsTable.dart';
 import 'package:aws_frame_account/models/InstitutionShuttleTimeTable.dart';
@@ -1059,7 +1060,7 @@ class GraphQLController {
           }
         """,
           variables: {
-            "ID":  id,
+            "ID": id,
           },
         ),
       );
@@ -1922,6 +1923,82 @@ class GraphQLController {
     } on ApiException catch (e) {
       safePrint('Mutation failed: $e');
       return false;
+    }
+  }
+
+//스켸줄 페이지
+  Future<List<InstitutionEventScheduleTable?>>
+      queryInstitutionScheduleByInstitutionId(String institutionId, String date,
+          {String? nextToken}) async {
+    String inst_id = 'aaa';
+    int dateNext = int.parse(date);
+    dateNext += 40;
+    try {
+      var operation = Amplify.API.query(
+        request: GraphQLRequest(
+          apiName: "Protector_API",
+          document: """
+          query ListInstitutionEventScheduleTables(\$filter: TableInstitutionEventScheduleTableFilterInput, \$limit: Int, \$nextToken: String) {
+            listInstitutionEventScheduleTables(
+              filter: \$filter,
+              limit: \$limit,
+              nextToken: \$nextToken
+            ) {
+              items {
+                INSTITUTION_ID
+                SCHEDULE_ID
+                CONTENT
+                TAG
+                TIME
+                DATE
+                createdAt
+                updatedAt
+              }
+              nextToken
+            }
+          }
+        """,
+          variables: {
+            "filter": {
+              "INSTITUTION_ID": {"eq": institutionId},
+              "DATE": {
+                "between": [date, '$dateNext']
+              },
+            },
+            "limit": 1000,
+            "nextToken": nextToken,
+          },
+        ),
+      );
+
+      var response = await operation.response;
+      {
+        var data = jsonDecode(response.data);
+        var items = data['listInstitutionEventScheduleTables']['items'];
+
+        if (items == null || response.data == null) {
+          print('errors: ${response.errors}');
+          return const [];
+        }
+        List<InstitutionEventScheduleTable?> schedules = (items as List)
+            .map((item) => InstitutionEventScheduleTable.fromJson(item))
+            .toList();
+        var newNextToken =
+            data['listInstitutionEventScheduleTables']['nextToken'];
+
+        if (newNextToken != null) {
+          // recursive call for next page's data
+          var nextSchedules = await queryInstitutionScheduleByInstitutionId(
+              institutionId, date,
+              nextToken: newNextToken);
+          schedules.addAll(nextSchedules);
+        }
+
+        return schedules;
+      }
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+      return const [];
     }
   }
 }

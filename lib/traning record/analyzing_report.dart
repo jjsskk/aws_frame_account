@@ -108,6 +108,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   Map<String, List<int>> allData = {}; // variable for _getBars()
 
   void makeYearDropdownValues() {
+    month = DateTime.now().month;
+    year = DateTime.now().year;
     var tempYear = year - 3;
     for (; tempYear < year + 4; tempYear++) yearList.add('$tempYear년');
 
@@ -118,8 +120,6 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   @override
   void initState() {
     super.initState();
-    month = DateTime.now().month;
-    year = DateTime.now().year;
     makeYearDropdownValues();
     gql = GraphQLController.Obj;
     extractLatestBrainData();
