@@ -128,45 +128,16 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   void extractLatestBrainData() {
     gql.queryMonthlyDBLatestItem().then((values) {
       print(values);
+      if (values.isNotEmpty) {
+        values.sort((a, b) {
+          String aa = a.month;
 
-      values.sort((a, b) {
-        String aa = a.month;
+          String bb = b.month;
+          return bb.compareTo(aa);
+        });
 
-        String bb = b.month;
-        return bb.compareTo(aa);
-      });
-
-      var value = values.first;
-      setState(() {
-        CON_SCORE = value!.con_score;
-        SPACETIME_SCORE = value!.spacetime_score;
-        EXEC_SCORE = value!.exec_score;
-        MEM_SCORE = value!.mem_score;
-        LING_SCORE = value!.ling_score;
-        CAL_SCORE = value!.cal_score;
-        REAC_SCORE = value!.reac_score;
-        ORIENT_SCORE = value!.orient_score;
-        AVG_ATT = value!.avg_att;
-        AVG_MED = value!.avg_med;
-        month = int.parse(value.month.substring(4, 6));
-        print("month : $month");
-        year = int.parse(value.month.substring(0, 4));
-        extractSimilarAge();
-      });
-    });
-  }
-
-  Future<dynamic> extractRequiredBrainData() {
-    int changeddate = year * 10000 + month * 100;
-    numberForonedata = 0;
-    Future<dynamic> future =
-        gql.queryMonthlyDBRequiredItem(gql.userId, changeddate).then((values) {
-      // 현제 보호자의 유저(훈련인)의 데이터 불러오기
-      var value = values.last;
-
-      if (value != null) {
+        var value = values.first;
         setState(() {
-          numberForonedata++;
           CON_SCORE = value!.con_score;
           SPACETIME_SCORE = value!.spacetime_score;
           EXEC_SCORE = value!.exec_score;
@@ -177,7 +148,44 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           ORIENT_SCORE = value!.orient_score;
           AVG_ATT = value!.avg_att;
           AVG_MED = value!.avg_med;
+          month = int.parse(value.month.substring(4, 6));
+          print("month : $month");
+          year = int.parse(value.month.substring(0, 4));
         });
+      }
+      extractSimilarAge();
+    });
+  }
+
+  Future<dynamic> extractRequiredBrainData() {
+    int changeddate = year * 10000 + month * 100;
+    numberForonedata = 0;
+    Future<dynamic> future =
+        gql.queryMonthlyDBRequiredItem(gql.userId, changeddate).then((values) {
+      // 현제 보호자의 유저(훈련인)의 데이터 불러오기
+      if (values.isNotEmpty) {
+        values.sort((a, b) {
+          String aa = a.month;
+
+          String bb = b.month;
+          return bb.compareTo(aa);
+        });
+        var value = values.first;
+        if (value != null) {
+          setState(() {
+            numberForonedata++;
+            CON_SCORE = value!.con_score;
+            SPACETIME_SCORE = value!.spacetime_score;
+            EXEC_SCORE = value!.exec_score;
+            MEM_SCORE = value!.mem_score;
+            LING_SCORE = value!.ling_score;
+            CAL_SCORE = value!.cal_score;
+            REAC_SCORE = value!.reac_score;
+            ORIENT_SCORE = value!.orient_score;
+            AVG_ATT = value!.avg_att;
+            AVG_MED = value!.avg_med;
+          });
+        }
       }
     });
 
@@ -188,6 +196,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     users = [];
     // String birth = "19651008";
     String birth = gql.userBirth;
+    print(birth);
     int year = int.parse(birth.substring(0, 4));
     int month = int.parse(birth.substring(4, 6));
     int day = int.parse(birth.substring(6, 8));
@@ -603,7 +612,6 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
                         //   ),
                         // ),
                         Container(
-
                           height: 40,
                           width: 40,
                           decoration: BoxDecoration(

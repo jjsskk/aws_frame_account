@@ -2,6 +2,7 @@ import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
 import 'package:aws_frame_account/communication_service/comment/comment_view.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/essential_care_information.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
+import 'package:aws_frame_account/communication_service/instituition_info/schedule/schedule.dart';
 import 'package:aws_frame_account/communication_service/user_activity.dart';
 import 'package:aws_frame_account/communication_service/user_care_information.dart';
 import 'package:aws_frame_account/drawer/drawer.dart';
@@ -119,11 +120,11 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                       Expanded(
                           child: TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => UserActivityPage()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) => SchedulePage()),
+                          // );
                         },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
@@ -139,7 +140,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                               width: 120,
                               height: 120,
                             ), // 아이콘
-                            Text('기관 활동 기록',
+                            Text('이용자 활동 기록',
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold)), // 텍스트

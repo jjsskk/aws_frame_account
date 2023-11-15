@@ -124,6 +124,14 @@ class _TraningReportPageState extends State<TraningReportPage> {
             title: Text('훈련보고서',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             centerTitle: true,
+            flexibleSpace: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('image/ui (5).png'), // 여기에 원하는 이미지 경로를 써주세요.
+                  fit: BoxFit.cover, // 이미지가 AppBar를 꽉 채우도록 설정
+                ),
+              ),
+            ),
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -135,345 +143,357 @@ class _TraningReportPageState extends State<TraningReportPage> {
             ),
         body: loading
             ? LoadingPage()
-            : Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text("${gql.userName} 님의 두뇌나이", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            : Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image:
+              AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+              fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+            ),
+          ),
+              child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text("${gql.userName} 님의 두뇌나이", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
 
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Container(
-                              width: 400,
-                              height: 320,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('image/report (25).png'),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                width: 400,
+                                height: 320,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('image/report (25).png'),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text('${gql.userName} 님의 두뇌는 \'27세\' 입니다!',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
-                          ],
-                        ),
+                              Text('${gql.userName} 님의 두뇌는 \'27세\' 입니다!',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                            ],
+                          ),
 
-                        const SizedBox(
-                          height: 20,
-                        ),
+                          const SizedBox(
+                            height: 20,
+                          ),
 
-                        Divider(
-                          thickness: 2.0,
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        /*
-                        Text("최근 훈련 참여도", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                          Divider(
+                            thickness: 2.0,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          /*
+                          Text("최근 훈련 참여도", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('영역별 성취도', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top1', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top2', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top3', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
-                                )
-                              ],
-                            ),
-                            Container(
-                                height: MediaQuery.of(context).size.height / 5,
-                                child: VerticalDivider(
-                                  thickness: 2.0,
-                                  width: 20,
-                                  endIndent: 0,
-                                  indent: 20,
-                                )),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text('영역별 수행도', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top1', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top2', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [Text('Top3', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        */
-                        const SizedBox(
-                          height: 10,
-                        ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('영역별 성취도', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [Text('Top1', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [Text('Top2', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [Text('Top3', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                  )
+                                ],
+                              ),
+                              Container(
+                                  height: MediaQuery.of(context).size.height / 5,
+                                  child: VerticalDivider(
+                                    thickness: 2.0,
+                                    width: 20,
+                                    endIndent: 0,
+                                    indent: 20,
+                                  )),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('영역별 수행도', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [Text('Top1', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [Text('Top2', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [Text('Top3', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold))],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          */
+                          const SizedBox(
+                            height: 10,
+                          ),
 
-                        Stack(
-                          children: <Widget>[
+                          Stack(
+                            children: <Widget>[
 
-                            Image.asset(
-                              'image/report (17).png', // 이미지 경로
-                              width: 400, // 필요에 따라 조절
-                              height: 250, // 필요에 따라 조절
-                              //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
-                            ),
+                              Image.asset(
+                                'image/report (17).png', // 이미지 경로
+                                width: 400, // 필요에 따라 조절
+                                height: 250, // 필요에 따라 조절
+                                //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
+                              ),
 
 
-                            Column(
+                              Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 65,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          width: 40,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(ORIENT_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                            //Text('지남력 점수'),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 48,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(CON_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                            //Text('주의력 점수'),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 55,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(SPACETIME_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                            //Text('시공간 점수'),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 55,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(EXEC_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold) ),
+                                            //Text('집행기능 점수'),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 65,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(
+                                          width: 38,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(MEM_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                            //Text('기억력 점수'),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 48,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(LING_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                            //Text('언어기능 점수'),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 50,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(CAL_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                            //Text('계산력 점수'),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 50,
+                                        ),
+                                        Column(
+                                          children: [
+                                            Text(REAC_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                                            //Text('반응속도 점수'),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ]
+                              )
+
+                      ]
+                          ),
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
                                 children: [
                                   const SizedBox(
-                                    height: 65,
+                                    height: 15,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        width: 40,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(ORIENT_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                                          //Text('지남력 점수'),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 48,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(CON_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                                          //Text('주의력 점수'),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 55,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(SPACETIME_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                                          //Text('시공간 점수'),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 55,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(EXEC_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold) ),
-                                          //Text('집행기능 점수'),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                  Container(
+                                    height: 80,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage("image/report (32).png"),
+                                          // 여기에 배경 이미지 경로를 지정합니다.
+                                          fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                                        ),),
+                                      child: Center(child: Text(AVG_ATT, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
                                   const SizedBox(
-                                    height: 65,
+                                    height: 10,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(
-                                        width: 38,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(MEM_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                                          //Text('기억력 점수'),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 48,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(LING_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                                          //Text('언어기능 점수'),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 50,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(CAL_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                                          //Text('계산력 점수'),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        width: 50,
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(REAC_SCORE, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                                          //Text('반응속도 점수'),
-                                        ],
-                                      ),
-                                    ],
+                                  Text('집중력', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 35,
+                              ),
+                              Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 15,
                                   ),
-                                ]
-                            )
-
-                    ]
-                        ),
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  height: 80,
-                                    width: 80,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage("image/report (32).png"),
-                                        // 여기에 배경 이미지 경로를 지정합니다.
-                                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                                      ),),
-                                    child: Center(child: Text(AVG_ATT, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text('집중력', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                            const SizedBox(
-                              width: 35,
-                            ),
-                            Column(
-                              children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Container(
-                                  height: 80,
-                                    width: 80,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage("image/report (27).png"),
-                                        // 여기에 배경 이미지 경로를 지정합니다.
-                                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                                      ),),
-                                    child: Center(child: Text(AVG_MED, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text('안정감', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                              ],
-                            ),
-                          ],
-                        ),
-
-
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Divider(
-                          thickness: 2.0,
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text("세부 결과 보기", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                        const SizedBox(
-                          height: 10,
-                        ),
-
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
-                              height: MediaQuery.of(context).size.width/3, // // 원하는 높이로 조절
-                              child: IconButton(
-                                icon: Image.asset('image/report (19).png'),
-                                iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => AnalyzingReportPage(),
-                                    ),
-                                  );
-                                },
+                                  Container(
+                                    height: 80,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage("image/report (27).png"),
+                                          // 여기에 배경 이미지 경로를 지정합니다.
+                                          fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                                        ),),
+                                      child: Center(child: Text(AVG_MED, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Text('안정감', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                                ],
                               ),
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
-                              height: MediaQuery.of(context).size.width/3, //
-                              child: IconButton(
-                                icon: Image.asset('image/report (3).png'),
-                                iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => BrainSignalPage(),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
 
-                      ],
+
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Divider(
+                            thickness: 2.0,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text("세부 결과 보기", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          const SizedBox(
+                            height: 10,
+                          ),
+
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
+                                height: MediaQuery.of(context).size.width/3, // // 원하는 높이로 조절
+                                child: IconButton(
+                                  icon: Image.asset('image/report (19).png'),
+                                  iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => AnalyzingReportPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width/2.2, // 원하는 너비로 조절
+                                height: MediaQuery.of(context).size.width/3, //
+                                child: IconButton(
+                                  icon: Image.asset('image/report (3).png'),
+                                  iconSize: 10.0, // 이 속성은 IconButton의 icon 파라미터가 Icon 위젯일 때 사용됩니다.
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => BrainSignalPage(),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+            ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           tooltip: 'Create',
+          backgroundColor: Colors.transparent,
+          elevation: 0,
           child: CircleAvatar(
             radius: 28,
             backgroundImage: AssetImage('image/ui (14).png'),
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.transparent,
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation:
+        FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: bottomappbar);
   }
 }

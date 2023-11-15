@@ -413,7 +413,6 @@ class _LoginPageState extends State<LoginPage> {
       _prefs.remove('autologin');
 
     print('username: $Email');
-    print('password: $password');
     final credentials = LoginCredentials(username: Email, password: password);
     await widget.didProvideCredentials(credentials, context);
     // AnalyticsService.log(LoginEvent());

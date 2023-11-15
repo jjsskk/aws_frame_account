@@ -56,7 +56,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String dropdownValue = _emaillist.first;
 
   final iconColor = const Color(0xff2b3fee);
-  final dividerColor = Colors.black;
+  final dividerColor = const Color(0xff2b3fee);
 
   @override
   void initState() {
@@ -133,89 +133,84 @@ class _SignUpPageState extends State<SignUpPage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Text('약관동의',
+                      style: TextStyle(
+                          color: Colors.indigoAccent,
+                          fontWeight: FontWeight.bold)),
+                  Row(
                     children: [
-                      Text('약관동의',
-                          style: TextStyle(
-                              color: Colors.indigoAccent,
-                              fontWeight: FontWeight.bold)),
-                      Row(
-                        children: [
-                          Container(
-                              height: 35,
-                              width: 35,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(isChecked_personal
-                                      ? "image/login (10).png"
-                                      : "image/login (1).png"),
-                                  // 여기에 배경 이미지 경로를 지정합니다.
-                                  fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                                ),
-                              ),
-                              child: Text('')),
-                          const SizedBox(
-                            width: 5,
+                      Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(isChecked_personal
+                                  ? "image/login (10).png"
+                                  : "image/login (1).png"),
+                              // 여기에 배경 이미지 경로를 지정합니다.
+                              fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                            ),
                           ),
-                          TextButton(
-                              onPressed: () {
-                                _showDialog(
-                                    '개인정보 동의',
-                                    '본인은 행정기관이 보유하고 있는 부동산 전산자료를 한국수출보험공사에게 제공'
-                                        " 하는데 대하여 아래와 같이 동의합니다.\n"
-                                        "-  아      래  -\n"
-                                        "1. 	사용목적 : 구상권 및 소구권의 행사\n"
-                                        " 2. 	자료제공의 범위 : 소유 부동산 현황 (전국)\n"
-                                        "3. 	동의서의 유효기간 :\n"
-                                        "- 수출신용보증의 구상채무 소멸시까지\n"
-                                        "- 수출어음보험의 소구채무 소멸시까지\n"
-                                        "- 수출보증보험의 구상채무 소멸시까지\n");
-                              },
-                              child: Text(
-                                '(필수) 개인정보 동의',
-                                style: textColor.subtitle2,
-                              )),
-                        ],
+                          child: Text('')),
+                      const SizedBox(
+                        width: 5,
                       ),
-                      Row(
-                        children: [
-                          Container(
-                              height: 35,
-                              width: 35,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(isChecked_market
-                                      ? "image/login (10).png"
-                                      : "image/login (1).png"),
-                                  // 여기에 배경 이미지 경로를 지정합니다.
-                                  fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                                ),
-                              ),
-                              child: Text('')),
-                          const SizedBox(
-                            width: 5,
+                      TextButton(
+                          onPressed: () {
+                            _showDialog(
+                                '개인정보 동의',
+                                '본인은 행정기관이 보유하고 있는 부동산 전산자료를 한국수출보험공사에게 제공'
+                                    " 하는데 대하여 아래와 같이 동의합니다.\n"
+                                    "-  아      래  -\n"
+                                    "1. 	사용목적 : 구상권 및 소구권의 행사\n"
+                                    " 2. 	자료제공의 범위 : 소유 부동산 현황 (전국)\n"
+                                    "3. 	동의서의 유효기간 :\n"
+                                    "- 수출신용보증의 구상채무 소멸시까지\n"
+                                    "- 수출어음보험의 소구채무 소멸시까지\n"
+                                    "- 수출보증보험의 구상채무 소멸시까지\n");
+                          },
+                          child: Text(
+                            '(필수) 개인정보 동의',
+                            style: textColor.subtitle2,
+                          )),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                          height: 35,
+                          width: 35,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage(isChecked_market
+                                  ? "image/login (10).png"
+                                  : "image/login (1).png"),
+                              // 여기에 배경 이미지 경로를 지정합니다.
+                              fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                            ),
                           ),
-                          TextButton(
-                              onPressed: () {
-                                _showDialog(
-                                    '마케팅 동의',
-                                    '본인은 행정기관이 보유하고 있는 부동산 전산자료를 한국수출보험공사에게 제공'
-                                        " 하는데 대하여 아래와 같이 동의합니다.\n"
-                                        "-  아      래  -\n"
-                                        "1. 	사용목적 : 구상권 및 소구권의 행사\n"
-                                        " 2. 	자료제공의 범위 : 소유 부동산 현황 (전국)\n"
-                                        "3. 	동의서의 유효기간 :\n"
-                                        "- 수출신용보증의 구상채무 소멸시까지\n"
-                                        "- 수출어음보험의 소구채무 소멸시까지\n"
-                                        "- 수출보증보험의 구상채무 소멸시까지\n");
-                              },
-                              child: Text(
-                                '(선택) 마케팅 동의',
-                                style: textColor.subtitle2,
-                              )),
-                        ],
+                          child: Text('')),
+                      const SizedBox(
+                        width: 5,
                       ),
+                      TextButton(
+                          onPressed: () {
+                            _showDialog(
+                                '마케팅 동의',
+                                '본인은 행정기관이 보유하고 있는 부동산 전산자료를 한국수출보험공사에게 제공'
+                                    " 하는데 대하여 아래와 같이 동의합니다.\n"
+                                    "-  아      래  -\n"
+                                    "1. 	사용목적 : 구상권 및 소구권의 행사\n"
+                                    " 2. 	자료제공의 범위 : 소유 부동산 현황 (전국)\n"
+                                    "3. 	동의서의 유효기간 :\n"
+                                    "- 수출신용보증의 구상채무 소멸시까지\n"
+                                    "- 수출어음보험의 소구채무 소멸시까지\n"
+                                    "- 수출보증보험의 구상채무 소멸시까지\n");
+                          },
+                          child: Text(
+                            '(선택) 마케팅 동의',
+                            style: textColor.subtitle2,
+                          )),
                     ],
                   ),
                   // Sign Up Form
@@ -268,6 +263,9 @@ class _SignUpPageState extends State<SignUpPage> {
               style: TextStyle(
                   color: Colors.indigoAccent, fontWeight: FontWeight.bold)),
 
+          const SizedBox(
+            height: 10,
+          ),
           // Email TextField
           Row(
             children: [
@@ -317,7 +315,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 style: textColor.subtitle2,
               ),
               Expanded(
-                flex: 7,
+                flex: 5,
                 child: Container(
                   constraints: BoxConstraints(
                     maxHeight:
@@ -333,7 +331,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 3.0, horizontal: 20),
+                        vertical: 3.0, horizontal: 0),
                     child: Center(
                       child: DropdownButton<String>(
                         value: dropdownValue,
@@ -374,7 +372,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       if (_emailController.text.trim() == '') {
                         return;
                       }
-                      final email =
+                      var email =
                           '${_emailController.text.trim()}@$dropdownValue';
                       isChecked_email =
                           await widget.resendConfirmCode(email, context);
@@ -689,51 +687,9 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Container(
                 height: MediaQuery.of(context).size.height / 10,
                 width: MediaQuery.of(context).size.width / 3,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("image/community (18).png"),
-                    // 여기에 배경 이미지 경로를 지정합니다.
-                    fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                  ),
-                ),
-                child: Text(''),
+                child: Image.asset("image/community (18).png"),
               ),
             ),
-
-            // Container(
-            //   padding: EdgeInsets.all(15),
-            //   height: MediaQuery.of(context).size.width / 4.5,
-            //   width: MediaQuery.of(context).size.width / 4.5,
-            //   decoration: BoxDecoration(
-            //       color: iconColor, borderRadius: BorderRadius.circular(50)),
-            //   child: GestureDetector(
-            //     onTap: () {
-            //       _signUp(textColor);
-            //     },
-            //     child: Container(
-            //       decoration: BoxDecoration(
-            //           gradient: LinearGradient(
-            //               colors: [Colors.deepPurple, Colors.indigo],
-            //               begin: Alignment.topLeft,
-            //               end: Alignment.bottomRight),
-            //           borderRadius: BorderRadius.circular(30),
-            //           boxShadow: [
-            //             BoxShadow(
-            //                 color: Colors.black.withOpacity(0.3),
-            //                 spreadRadius: 1,
-            //                 blurRadius: 1,
-            //                 offset: Offset(0, 1))
-            //           ]),
-            //       child: Center(
-            //         child: Text(
-            //           '회원가입',
-            //           style: TextStyle(
-            //               color: Colors.white, fontWeight: FontWeight.bold),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
           )
         ],
       ),

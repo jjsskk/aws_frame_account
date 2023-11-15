@@ -24,6 +24,8 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
 
   final TextEditingController _contentController = TextEditingController();
 
+  var blue = const Color(0xff1f43f3);
+
   List<Map<String, dynamic>> _conversations = [];
 
   late var appState;
@@ -156,7 +158,8 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
               child: Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+                    image:
+                        AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
                     fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
                   ),
                 ),
@@ -232,7 +235,8 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                             ),
                             Container(
                               constraints: BoxConstraints(
-                                minHeight: MediaQuery.of(context).size.height / 3,
+                                minHeight:
+                                    MediaQuery.of(context).size.height / 3,
                                 maxHeight: double.infinity,
                               ),
                               decoration: BoxDecoration(
@@ -257,14 +261,16 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                                             Text(commentTitle,
                                                 style: TextStyle(
                                                     fontSize: 25,
-                                                    fontWeight: FontWeight.bold)),
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                             Divider(
                                               thickness: 2.0,
                                             ),
                                             Text(commentContent,
                                                 style: TextStyle(
                                                     fontSize: 18,
-                                                    fontWeight: FontWeight.bold)),
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                             const SizedBox(
                                               height: 10,
                                             )
@@ -346,7 +352,8 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
               ),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -376,71 +383,58 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                         ],
                       ),
                       gql.protectorEmail == value['email']
-                          ? Container(
-                              width: MediaQuery.of(context).size.width / 8,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage("image/ui (18).png"),
-                                  // 여기에 배경 이미지 경로를 지정합니다.
-                                  fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-                                ),
+                          ? IconButton(
+                              icon: Icon(
+                                Icons.highlight_remove_rounded,
+                                color: blue,
                               ),
-                              child: Center(
-                                  child: InkWell(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text('해당 댓글을 삭제하시겠습니까?'),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () async {
-                                                  final check = await gql
-                                                      .deleteCommentConversationdata(
-                                                    value['board_id'],
-                                                    value['conversation_id'],
-                                                  );
-                                                  if (check) {
-                                                    // ScaffoldMessenger.of(context)
-                                                    //     .showSnackBar(SnackBar(
-                                                    //   content: Text(
-                                                    //     '댓글이 삭제 되었습니다',
-                                                    //     style:
-                                                    //     TextStyle(fontWeight: FontWeight.bold),
-                                                    //   ),
-                                                    // ));
-                                                    Navigator.pop(context);
-                                                  } else {
-                                                    ScaffoldMessenger.of(context)
-                                                        .showSnackBar(SnackBar(
-                                                      content: const Text(
-                                                        '댓글이 삭제 되지 못했습니다. 다시 시도해주세요.',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold),
-                                                      ),
-                                                    ));
-                                                    Navigator.pop(context);
-                                                  }
-                                                },
-                                                child: const Text('네')),
-                                            TextButton(
-                                                onPressed: () {
+                              onPressed: () async {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: const Text('해당 댓글을 삭제하시겠습니까?'),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () async {
+                                                final check = await gql
+                                                    .deleteCommentConversationdata(
+                                                  value['board_id'],
+                                                  value['conversation_id'],
+                                                );
+                                                if (check) {
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(SnackBar(
+                                                  //   content: Text(
+                                                  //     '댓글이 삭제 되었습니다',
+                                                  //     style:
+                                                  //     TextStyle(fontWeight: FontWeight.bold),
+                                                  //   ),
+                                                  // ));
                                                   Navigator.pop(context);
-                                                },
-                                                child: const Text('아니요'))
-                                          ],
-                                        );
-                                      });
-                                },
-                                child: Text(
-                                  '삭제',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              )),
+                                                } else {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(SnackBar(
+                                                    content: const Text(
+                                                      '댓글이 삭제 되지 못했습니다. 다시 시도해주세요.',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ));
+                                                  Navigator.pop(context);
+                                                }
+                                              },
+                                              child: const Text('네')),
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('아니요'))
+                                        ],
+                                      );
+                                    });
+                              },
                             )
                           : const SizedBox(),
                     ],
@@ -450,22 +444,19 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                   ),
                   Text(value['content'],
                       style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text(
-                    value['date'].substring(0, 10) ==
-                            DateTime.now().toString().substring(0, 10)
-                        ? value['date'].substring(11, 19)
-                        : value['date'].substring(0, 10) +
-                            ' ' +
-                            value['date'].substring(11, 19),
-                  ),
+                  Text(value['date'].substring(0, 10) ==
+                          DateTime.now().toString().substring(0, 10)
+                      ? value['date'].substring(11, 19)
+                      : value['date'].substring(0, 10)),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 10,)
+          const SizedBox(
+            height: 10,
+          )
         ],
       );
-
     }).toList();
   }
 }

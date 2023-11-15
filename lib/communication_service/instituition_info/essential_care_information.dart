@@ -47,7 +47,7 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
   Future<void> getEssentialCare() async {
     _essentialCare = [];
     await gql
-        .queryEssentialCareInformationByInstitutionIdAndUserId(userId: "2")
+        .queryEssentialCareInformationByInstitutionIdAndUserId(userId: "1")
         .then((value) {
       if (value != null && value.isNotEmpty) {
         var care = value.first; // 첫 번째 아이템만 사용합니다.

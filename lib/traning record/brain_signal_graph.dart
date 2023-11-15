@@ -54,7 +54,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     }
   }
 
-  Map<String, String> namePng = {};
+  Map<String, String> nameDeepPng = {};
+  Map<String, String> nameLightPng = {};
 
   void makeButtonNameList() {
     // "avg_att": "평균\n집중도",
@@ -67,16 +68,26 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
     // "cal_score": "계산력",
     // "reac_score": "반응속도",
     // "orient_score": "지남력",
-    namePng['avg_att'] = 'image/report (13).png';
-    namePng['avg_med'] = 'image/report (14).png';
-    namePng['con_score'] = 'image/report (27).png';
-    namePng['spacetime_score'] = 'image/report (28).png';
-    namePng['exec_score'] = 'image/report (29).png';
-    namePng['mem_score'] = 'image/report (30).png';
-    namePng['ling_score'] = 'image/report (31).png';
-    namePng['cal_score'] = 'image/report (32).png';
-    namePng['reac_score'] = 'image/report (33).png';
-    namePng['orient_score'] = 'image/report (26).png';
+    nameDeepPng['avg_att'] = 'image/report (23).png';
+    nameDeepPng['avg_med'] = 'image/report (10).png';
+    nameDeepPng['con_score'] = 'image/report (27).png';
+    nameDeepPng['spacetime_score'] = 'image/report (28).png';
+    nameDeepPng['exec_score'] = 'image/report (29).png';
+    nameDeepPng['mem_score'] = 'image/report (30).png';
+    nameDeepPng['ling_score'] = 'image/report (31).png';
+    nameDeepPng['cal_score'] = 'image/report (32).png';
+    nameDeepPng['reac_score'] = 'image/report (33).png';
+    nameDeepPng['orient_score'] = 'image/report (26).png';
+    nameLightPng['avg_att'] = 'image/report (13).png';
+    nameLightPng['avg_med'] = 'image/report (14).png';
+    nameLightPng['con_score'] = 'image/report (35).png';
+    nameLightPng['spacetime_score'] = 'image/report (36).png';
+    nameLightPng['exec_score'] = 'image/report (37).png';
+    nameLightPng['mem_score'] = 'image/report (38).png';
+    nameLightPng['ling_score'] = 'image/report (39).png';
+    nameLightPng['cal_score'] = 'image/report (40).png';
+    nameLightPng['reac_score'] = 'image/report (41).png';
+    nameLightPng['orient_score'] = 'image/report (34).png';
   }
 
   //이 위젯은 그래프의 각 y축의 값을 나타내는 위젯입니다.
@@ -284,64 +295,143 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       padding: EdgeInsets.all(1.0),
-      mainAxisSpacing: 4.0,
+      mainAxisSpacing: 30,
       // 메인 축 간격 설정
       crossAxisSpacing: 4.0,
+      childAspectRatio: 0.7,
+      // 가로 세로 비율 조절
       // 교차 축 간격 설정
       children: buttonLabels.keys
-          .map((label) => Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(namePng[label]!), // 여기에 배경 이미지 경로를 지정합니다.
-                    fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+          .map((label) => Column(
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(selectedLabel == label
+                            ? nameDeepPng[label]!
+                            : nameLightPng[label]!), // 여기에 배경 이미지 경로를 지정합니다.
+                        fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                      ),
+                    ),
+                    child: InkWell(
+                        onTap: () {
+                          for (var result in results) {
+                            String? month = result?.month.substring(4, 6);
+                            var value;
+                            switch (label) {
+                              case "avg_att":
+                                value = result?.avg_att;
+                                break;
+                              case "avg_med":
+                                value = result?.avg_med;
+                                break;
+                              case "con_score":
+                                value = result?.con_score;
+                                break;
+                              case "spacetime_score":
+                                value = result?.spacetime_score;
+                                break;
+                              case "exec_score":
+                                value = result?.exec_score;
+                                break;
+                              case "mem_score":
+                                value = result?.mem_score;
+                                break;
+                              case "ling_score":
+                                value = result?.ling_score;
+                                break;
+                              case "cal_score":
+                                value = result?.cal_score;
+                                break;
+                              case "reac_score":
+                                value = result?.reac_score;
+                                break;
+                              case "orient_score":
+                                value = result?.orient_score;
+                                break;
+                              default:
+                                value = null;
+                            }
+                            setState(() {
+                              selectedLabel = label;
+                            });
+                            print("Month: $month, $label: $value");
+                          }
+                        },
+                        child: Image.asset(selectedLabel == label
+                            ? nameDeepPng[label]!
+                            : nameLightPng[label]!)),
+
+                    // ElevatedButton(
+                    //   style: ElevatedButton.styleFrom(
+                    //     padding: EdgeInsets.symmetric(horizontal: 1),
+                    //     shape: CircleBorder(),
+                    //     fixedSize: Size(10.0, 5.0),
+                    //     // primary: selectedLabel == label
+                    //     //     ? Color(0xFF2B3FF0)
+                    //     //     : null, // 선택된 라벨에 따라 색상 변경
+                    //     backgroundColor: Colors.transparent
+                    //   ),
+                    //   onPressed: () {
+                    //     for (var result in results) {
+                    //       String? month = result?.month.substring(4, 6);
+                    //       var value;
+                    //       switch (label) {
+                    //         case "avg_att":
+                    //           value = result?.avg_att;
+                    //           break;
+                    //         case "avg_med":
+                    //           value = result?.avg_med;
+                    //           break;
+                    //         case "con_score":
+                    //           value = result?.con_score;
+                    //           break;
+                    //         case "spacetime_score":
+                    //           value = result?.spacetime_score;
+                    //           break;
+                    //         case "exec_score":
+                    //           value = result?.exec_score;
+                    //           break;
+                    //         case "mem_score":
+                    //           value = result?.mem_score;
+                    //           break;
+                    //         case "ling_score":
+                    //           value = result?.ling_score;
+                    //           break;
+                    //         case "cal_score":
+                    //           value = result?.cal_score;
+                    //           break;
+                    //         case "reac_score":
+                    //           value = result?.reac_score;
+                    //           break;
+                    //         case "orient_score":
+                    //           value = result?.orient_score;
+                    //           break;
+                    //         default:
+                    //           value = null;
+                    //       }
+                    //       setState(() {
+                    //         selectedLabel = label;
+                    //       });
+                    //       print("Month: $month, $label: $value");
+                    //     }
+                    //   },
+                    //   child: Text(
+                    //     buttonLabels[label]!,
+                    //     style: TextStyle(
+                    //       fontSize: 16.0,
+                    //       height: 1.3,
+                    //       fontWeight: FontWeight.w500,
+                    //       color: selectedLabel == label
+                    //           ? Colors.white
+                    //           : Color(0xFF2B3FF0),
+                    //     ),
+                    //   ),
+                    // ),
                   ),
-                ),
-                child: InkWell(
-                  onTap: () {
-                    for (var result in results) {
-                      String? month = result?.month.substring(4, 6);
-                      var value;
-                      switch (label) {
-                        case "avg_att":
-                          value = result?.avg_att;
-                          break;
-                        case "avg_med":
-                          value = result?.avg_med;
-                          break;
-                        case "con_score":
-                          value = result?.con_score;
-                          break;
-                        case "spacetime_score":
-                          value = result?.spacetime_score;
-                          break;
-                        case "exec_score":
-                          value = result?.exec_score;
-                          break;
-                        case "mem_score":
-                          value = result?.mem_score;
-                          break;
-                        case "ling_score":
-                          value = result?.ling_score;
-                          break;
-                        case "cal_score":
-                          value = result?.cal_score;
-                          break;
-                        case "reac_score":
-                          value = result?.reac_score;
-                          break;
-                        case "orient_score":
-                          value = result?.orient_score;
-                          break;
-                        default:
-                          value = null;
-                      }
-                      setState(() {
-                        selectedLabel = label;
-                      });
-                      print("Month: $month, $label: $value");
-                    }
-                  },
-                  child: Center(
+                  Expanded(
                     child: Text(
                       buttonLabels[label]!,
                       style: TextStyle(
@@ -355,73 +445,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                           ),
                     ),
                   ),
-                ),
-                // ElevatedButton(
-                //   style: ElevatedButton.styleFrom(
-                //     padding: EdgeInsets.symmetric(horizontal: 1),
-                //     shape: CircleBorder(),
-                //     fixedSize: Size(10.0, 5.0),
-                //     // primary: selectedLabel == label
-                //     //     ? Color(0xFF2B3FF0)
-                //     //     : null, // 선택된 라벨에 따라 색상 변경
-                //     backgroundColor: Colors.transparent
-                //   ),
-                //   onPressed: () {
-                //     for (var result in results) {
-                //       String? month = result?.month.substring(4, 6);
-                //       var value;
-                //       switch (label) {
-                //         case "avg_att":
-                //           value = result?.avg_att;
-                //           break;
-                //         case "avg_med":
-                //           value = result?.avg_med;
-                //           break;
-                //         case "con_score":
-                //           value = result?.con_score;
-                //           break;
-                //         case "spacetime_score":
-                //           value = result?.spacetime_score;
-                //           break;
-                //         case "exec_score":
-                //           value = result?.exec_score;
-                //           break;
-                //         case "mem_score":
-                //           value = result?.mem_score;
-                //           break;
-                //         case "ling_score":
-                //           value = result?.ling_score;
-                //           break;
-                //         case "cal_score":
-                //           value = result?.cal_score;
-                //           break;
-                //         case "reac_score":
-                //           value = result?.reac_score;
-                //           break;
-                //         case "orient_score":
-                //           value = result?.orient_score;
-                //           break;
-                //         default:
-                //           value = null;
-                //       }
-                //       setState(() {
-                //         selectedLabel = label;
-                //       });
-                //       print("Month: $month, $label: $value");
-                //     }
-                //   },
-                //   child: Text(
-                //     buttonLabels[label]!,
-                //     style: TextStyle(
-                //       fontSize: 16.0,
-                //       height: 1.3,
-                //       fontWeight: FontWeight.w500,
-                //       color: selectedLabel == label
-                //           ? Colors.white
-                //           : Color(0xFF2B3FF0),
-                //     ),
-                //   ),
-                // ),
+                ],
               ))
           .toList(),
     );
@@ -470,6 +494,7 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
           }
         }
         makeButtonNameList();
+        selectedLabel = "avg_att";
         setState(() {
           results = data;
           loading = false;
@@ -533,7 +558,8 @@ class _BrainSignalPageState extends State<BrainSignalPage> {
                 child: Center(
                   child: Container(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 20),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[

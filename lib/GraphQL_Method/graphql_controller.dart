@@ -50,7 +50,7 @@ class GraphQLController {
   String _institutionNumber = '';
 
   // user table info
-  String _userId = ''; // userNumber
+  // String _userId = ''; // userNumber
   String _userBirth = '';
   String _userName = '';
 
@@ -63,16 +63,16 @@ class GraphQLController {
     _userNumber = '';
     _institutionNumber = '';
     // user table info
-    _userId = '';
+    // _userId = '';
     _userBirth = '';
     _userName = '';
   }
 
-  String get userId => _userId;
+  // String get userId => _userId;
 
-  set userId(String value) {
-    _userId = value;
-  }
+  // set userId(String value) {
+  //   _userId = value;
+  // }
 
   String get userNumber => _userNumber;
 
@@ -596,7 +596,7 @@ class GraphQLController {
         """,
           variables: {
             "filter": {
-              "id": {"eq": userId},
+              "id": {"eq": userNumber},
               "month": {
                 "between": [compareDate, currentDate]
               },
@@ -684,7 +684,7 @@ class GraphQLController {
           }
         """,
           variables: {
-            "id": userId,
+            "id": userNumber,
             "limit": limit,
             "sortDirection": sortDirection,
           },
@@ -1113,7 +1113,7 @@ class GraphQLController {
         """,
           variables: {
             "filter": {
-              // "INSTITUTION_ID": {"eq":  institutionId},
+
               "BIRTH": {
                 "between": [start, end]
               },
@@ -1306,7 +1306,7 @@ class GraphQLController {
         """,
           variables: {
             "filter": {
-              filterName: {"eq": userId},
+              filterName: {"eq": userNumber},
               "NEW_CONVERSATION_CREATEDAT": {
                 "between": [start, end]
               },
@@ -1928,7 +1928,7 @@ class GraphQLController {
 
 //스켸줄 페이지
   Future<List<InstitutionEventScheduleTable?>>
-      queryInstitutionScheduleByInstitutionId(String institutionId, String date,
+      queryInstitutionScheduleByInstitutionId( String date,
           {String? nextToken}) async {
     String inst_id = 'aaa';
     int dateNext = int.parse(date);
@@ -1960,7 +1960,7 @@ class GraphQLController {
         """,
           variables: {
             "filter": {
-              "INSTITUTION_ID": {"eq": institutionId},
+              "INSTITUTION_ID": {"eq": institutionNumber},
               "DATE": {
                 "between": [date, '$dateNext']
               },
@@ -1989,7 +1989,7 @@ class GraphQLController {
         if (newNextToken != null) {
           // recursive call for next page's data
           var nextSchedules = await queryInstitutionScheduleByInstitutionId(
-              institutionId, date,
+              date,
               nextToken: newNextToken);
           schedules.addAll(nextSchedules);
         }

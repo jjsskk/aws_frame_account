@@ -89,7 +89,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
             value.NEW_CONVERSATION_CREATEDAT.toString()
       });
     });
-    _comments.sort((a, b) {
+    _comments.sort((a, b) {//descending order
       String aa = a['new_conversation_createdat'];
 
       String bb = b['new_conversation_createdat'];
@@ -404,7 +404,8 @@ class _CommentViewPageState extends State<CommentViewPage> {
                                         Icons.clear,
                                         color: Colors.transparent,
                                       ),
-                                      onPressed: () => _searchController.clear(),
+                                      onPressed:null
+                                          // () => _searchController.clear(),
                                     ),
                                     // Add a search icon or button to the search bar
                                     prefixIcon: IconButton(

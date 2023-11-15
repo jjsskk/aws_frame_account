@@ -34,19 +34,12 @@ class _SchedulePageState extends State<SchedulePage> {
   String saveScheduleId = '';
   List<String> tagsFromDB = [];
 
-  int startHour = 0; //used to update program start time
-  int startMin = 0; //used to update program start time
-  int endHour = 0; //used to update program end time
-  int endMin = 0; //used to update program end time
+  // final GlobalKey _containerkey = GlobalKey();
 
-  DateTime _dateStartTimePicker = DateTime.now();
-  DateTime _dateEndTimePicker = DateTime.now();
-  final GlobalKey _containerkey = GlobalKey();
-
-  TextEditingController _programController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  final TextfieldTagsController _tagController = TextfieldTagsController();
+  // TextEditingController _programController = TextEditingController();
+  // final _formKey = GlobalKey<FormState>();
+  //
+  // final TextfieldTagsController _tagController = TextfieldTagsController();
   late double _distanceToField;
 
   // for calendar event
@@ -151,7 +144,7 @@ class _SchedulePageState extends State<SchedulePage> {
     monthStr = month > 9 ? '${month}' : '0${month}';
     gql
         .queryInstitutionScheduleByInstitutionId(
-            "1", '${_selectedDay!.year}${monthStr}00')
+            '${_selectedDay!.year}${monthStr}00')
         .then((result) {
       //       gql.queryInstitutionScheduleByInstitutionId("1").then((result) {
       print(result);
@@ -540,7 +533,7 @@ class _SchedulePageState extends State<SchedulePage> {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 8, horizontal: 16),
+                                    vertical: 15, horizontal: 16),
                                 child: Column(
                                   children: [
                                     Row(
@@ -552,6 +545,9 @@ class _SchedulePageState extends State<SchedulePage> {
                                           style: textStyleBlack,
                                         ),
                                       ],
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
                                     ),
                                     ValueListenableBuilder<List<Event>>(
                                       valueListenable: _selectedEvents!,
@@ -592,8 +588,7 @@ class _SchedulePageState extends State<SchedulePage> {
                                                         child: Container(
                                                           padding: EdgeInsets
                                                               .symmetric(
-                                                                  vertical:
-                                                                      15,
+                                                                  vertical: 15,
                                                                   horizontal:
                                                                       10),
                                                           constraints:
@@ -603,8 +598,8 @@ class _SchedulePageState extends State<SchedulePage> {
                                                                         context)
                                                                     .size
                                                                     .width,
-                                                            maxHeight: double
-                                                                .infinity,
+                                                            maxHeight:
+                                                                double.infinity,
                                                           ),
                                                           decoration:
                                                               BoxDecoration(
@@ -626,7 +621,8 @@ class _SchedulePageState extends State<SchedulePage> {
                                                                       Container(
                                                                           constraints:
                                                                               BoxConstraints(
-                                                                            maxHeight: double.infinity,
+                                                                            maxHeight:
+                                                                                double.infinity,
                                                                           ),
                                                                           width:
                                                                               MediaQuery.of(context).size.width / 4.5,
@@ -647,12 +643,15 @@ class _SchedulePageState extends State<SchedulePage> {
                                                                     child:
                                                                         Column(
                                                                       crossAxisAlignment:
-                                                                          CrossAxisAlignment.start,
+                                                                          CrossAxisAlignment
+                                                                              .start,
                                                                       children: [
                                                                         Row(
-                                                                            children: value[index].tags.map((String tag) {
+                                                                            children:
+                                                                                value[index].tags.map((String tag) {
                                                                           return Flexible(
-                                                                            child: Container(
+                                                                            child:
+                                                                                Container(
                                                                               constraints: BoxConstraints(
                                                                                 maxWidth: MediaQuery.of(context).size.width / 6,
                                                                               ),
@@ -690,73 +689,6 @@ class _SchedulePageState extends State<SchedulePage> {
                                                                         ),
                                                                       ],
                                                                     ),
-                                                                  ),
-                                                                  Column(
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
-                                                                    children: [
-                                                                      IconButton(
-                                                                          onPressed:
-                                                                              () {
-                                                                            print('delete');
-                                                                            showDialog(
-                                                                                context: context,
-                                                                                useRootNavigator: false,
-                                                                                // without this, info.ifRouteChanged(context) dont recognize context change. check page stack
-                                                                                builder: (BuildContext dontext) {
-                                                                                  return AlertDialog(
-                                                                                    title: Text('삭제하시겠습니까?'),
-                                                                                    actions: [
-                                                                                      TextButton(
-                                                                                          onPressed: () async {
-                                                                                            bool isChecked = await gql.deleteScheduledata("1", value[index].sche_id);
-                                                                                            {
-                                                                                              if (isChecked) {
-                                                                                                getEventDataFromDB();
-                                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                                                  content: Text(
-                                                                                                    '일정이 삭제되었습니다.',
-                                                                                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                                                                                  ),
-                                                                                                ));
-                                                                                                // kEvents[date].removeWhere((event) =>
-                                                                                                //     event
-                                                                                                //         .sche_id ==
-                                                                                                //     value[index]
-                                                                                                //         .sche_id);
-                                                                                              } else {
-                                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                                                                  content: Text(
-                                                                                                    '오류가 발생되어 삭제되지 않았습니다.',
-                                                                                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                                                                                  ),
-                                                                                                ));
-                                                                                              }
-                                                                                            }
-
-                                                                                            Navigator.pop(context);
-                                                                                          },
-                                                                                          child: Text('네')),
-                                                                                      TextButton(
-                                                                                          onPressed: () {
-                                                                                            Navigator.pop(context);
-                                                                                          },
-                                                                                          child: Text('아니요'))
-                                                                                    ],
-                                                                                  );
-                                                                                });
-                                                                          },
-                                                                          icon:
-                                                                              Icon(
-                                                                            Icons.highlight_remove_rounded,
-                                                                            color: blue,
-                                                                          )),
-                                                                      const SizedBox(
-                                                                        height:
-                                                                            42,
-                                                                      )
-                                                                    ],
                                                                   ),
                                                                 ],
                                                               ),
