@@ -67,6 +67,9 @@ dev_dependencies:
   datepicker_dropdown: ^0.0.7+5
   percent_indicator: ^4.2.3
   back_button_interceptor: ^6.0.2
+  flutter_spinkit: ^5.1.0
+  textfield_tags: ^2.0.2
+
 
 
   # The "flutter_lints" package below contains a set of recommended lints to

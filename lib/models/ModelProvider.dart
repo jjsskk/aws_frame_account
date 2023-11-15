@@ -30,6 +30,8 @@ import 'InstitutionCommentBoardTable.dart';
 import 'InstitutionCommentBoardTableConnection.dart';
 import 'InstitutionCommentConversationTable.dart';
 import 'InstitutionCommentConversationTableConnection.dart';
+import 'InstitutionEssentialCareTable.dart';
+import 'InstitutionEssentialCareTableConnection.dart';
 import 'InstitutionEventScheduleTable.dart';
 import 'InstitutionEventScheduleTableConnection.dart';
 import 'InstitutionFoodTable.dart';
@@ -38,6 +40,10 @@ import 'InstitutionNewsTable.dart';
 import 'InstitutionNewsTableConnection.dart';
 import 'InstitutionShuttleTimeTable.dart';
 import 'InstitutionShuttleTimeTableConnection.dart';
+import 'MonthlyBrainSignalTable.dart';
+import 'MonthlyBrainSignalTableConnection.dart';
+import 'UserTable.dart';
+import 'UserTableConnection.dart';
 
 export 'InstitutionAnnouncementTable.dart';
 export 'InstitutionAnnouncementTableConnection.dart';
@@ -45,6 +51,8 @@ export 'InstitutionCommentBoardTable.dart';
 export 'InstitutionCommentBoardTableConnection.dart';
 export 'InstitutionCommentConversationTable.dart';
 export 'InstitutionCommentConversationTableConnection.dart';
+export 'InstitutionEssentialCareTable.dart';
+export 'InstitutionEssentialCareTableConnection.dart';
 export 'InstitutionEventScheduleTable.dart';
 export 'InstitutionEventScheduleTableConnection.dart';
 export 'InstitutionFoodTable.dart';
@@ -53,18 +61,22 @@ export 'InstitutionNewsTable.dart';
 export 'InstitutionNewsTableConnection.dart';
 export 'InstitutionShuttleTimeTable.dart';
 export 'InstitutionShuttleTimeTableConnection.dart';
+export 'MonthlyBrainSignalTable.dart';
+export 'MonthlyBrainSignalTableConnection.dart';
 export 'MonthlyDBTest.dart';
 export 'Test.dart';
 export 'Todo.dart';
 export 'UserDBTest.dart';
+export 'UserTable.dart';
+export 'UserTableConnection.dart';
 
 class ModelProvider implements amplify_core.ModelProviderInterface {
   @override
-  String version = "2ffd0149e60c91a5c67be340c800dbff";
+  String version = "e086eb75999eaec0096b58c08df2d187";
   @override
   List<amplify_core.ModelSchema> modelSchemas = [MonthlyDBTest.schema, Test.schema, Todo.schema, UserDBTest.schema];
   @override
-  List<amplify_core.ModelSchema> customTypeSchemas = [InstitutionAnnouncementTable.schema, InstitutionAnnouncementTableConnection.schema, InstitutionCommentBoardTable.schema, InstitutionCommentBoardTableConnection.schema, InstitutionCommentConversationTable.schema, InstitutionCommentConversationTableConnection.schema, InstitutionEventScheduleTable.schema, InstitutionEventScheduleTableConnection.schema, InstitutionFoodTable.schema, InstitutionFoodTableConnection.schema, InstitutionNewsTable.schema, InstitutionNewsTableConnection.schema, InstitutionShuttleTimeTable.schema, InstitutionShuttleTimeTableConnection.schema];
+  List<amplify_core.ModelSchema> customTypeSchemas = [InstitutionAnnouncementTable.schema, InstitutionAnnouncementTableConnection.schema, InstitutionCommentBoardTable.schema, InstitutionCommentBoardTableConnection.schema, InstitutionCommentConversationTable.schema, InstitutionCommentConversationTableConnection.schema, InstitutionEssentialCareTable.schema, InstitutionEssentialCareTableConnection.schema, InstitutionEventScheduleTable.schema, InstitutionEventScheduleTableConnection.schema, InstitutionFoodTable.schema, InstitutionFoodTableConnection.schema, InstitutionNewsTable.schema, InstitutionNewsTableConnection.schema, InstitutionShuttleTimeTable.schema, InstitutionShuttleTimeTableConnection.schema, MonthlyBrainSignalTable.schema, MonthlyBrainSignalTableConnection.schema, UserTable.schema, UserTableConnection.schema];
   static final ModelProvider _instance = ModelProvider();
 
   static ModelProvider get instance => _instance;

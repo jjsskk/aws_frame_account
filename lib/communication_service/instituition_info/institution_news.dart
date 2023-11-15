@@ -1,3 +1,4 @@
+import 'package:aws_frame_account/loading_page/loading_page.dart';
 import 'package:aws_frame_account/models/InstitutionNewsTable.dart';
 import 'package:flutter/material.dart';
 
@@ -50,9 +51,9 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
         child: FutureBuilder<List<InstitutionNewsTable>>(
           future: _news,
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
+
+            if(snapshot.connectionState == ConnectionState.waiting)
+              return LoadingPage();
 
             if (snapshot.hasData) {
               snapshot.data!.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));

@@ -64,208 +64,218 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
           ),
         ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-          child: Column(
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => EssentialCareInfoPage()),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('image/ui (3).png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                          child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EssentialCareInfoPage()),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // Column의 크기를 자식의 크기에 맞춤
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // 중앙 정렬
+                          children: <Widget>[
+                            Image.asset(
+                              'image/community (2).png',
+                              width: 120,
+                              height: 120,
+                            ), // 아이콘
+                            Text('이용자 돌봄 정보',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold)), // 텍스트
+                          ],
+                        ),
+                      )),
+                      Container(
+                        width: 1.0, // Width of the vertical divider
+                        color: colorScheme.primary,
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        // Column의 크기를 자식의 크기에 맞춤
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        // 중앙 정렬
-                        children: <Widget>[
-                          Image.asset(
-                            'image/community (2).png',
-                            width: 120,
-                            height: 120,
-                          ), // 아이콘
-                          Text('이용자 돌봄 정보',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)), // 텍스트
-                        ],
-                      ),
-                    )),
-                    Container(
-                      width: 1.0, // Width of the vertical divider
-                      color: colorScheme.primary,
-                    ),
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserActivityPage()),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        // Column의 크기를 자식의 크기에 맞춤
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        // 중앙 정렬
-                        children: <Widget>[
-                          Image.asset(
-                            'image/community (8).png',
-                            width: 120,
-                            height: 120,
-                          ), // 아이콘
-                          Text('기관 활동 기록',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)), // 텍스트
-                        ],
-                      ),
-                    )),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 1.0, // Height of the horizontal divider
-                      color: colorScheme.primary,
-                    ),
+                      Expanded(
+                          child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => UserActivityPage()),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // Column의 크기를 자식의 크기에 맞춤
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // 중앙 정렬
+                          children: <Widget>[
+                            Image.asset(
+                              'image/community (8).png',
+                              width: 120,
+                              height: 120,
+                            ), // 아이콘
+                            Text('기관 활동 기록',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold)), // 텍스트
+                          ],
+                        ),
+                      )),
+                    ],
                   ),
-                ],
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                        child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CommentViewPage()),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                      child: Container(
+                        height: 1.0, // Height of the horizontal divider
+                        color: colorScheme.primary,
                       ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        // Column의 크기를 자식의 크기에 맞춤
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        // 중앙 정렬
-                        children: <Widget>[
-                          Image.asset(
-                            'image/community (16).png',
-                            width: 120,
-                            height: 120,
-                          ), // 아이콘
-                          Text('코멘트 모아보기',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)), // 텍스트
-                        ],
-                      ),
-                    )),
-                    Container(
-                      width: 1.0, // Width of the vertical divider
-                      color: colorScheme.primary,
                     ),
-                    Expanded(
-                        child: TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InstitutionInfoPage()),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        // Column의 크기를 자식의 크기에 맞춤
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        // 중앙 정렬
-                        children: <Widget>[
-                          Image.asset(
-                            'image/community (5).png',
-                            width: 120,
-                            height: 120,
-                          ), // 아이콘
-                          Text('기관 정보',
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold)), // 텍스트
-                        ],
-                      ),
-                    )),
                   ],
                 ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              // Container(
-              //   child: Align(
-              //     alignment: Alignment.bottomCenter,
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: [
-              //         const SizedBox(
-              //           width: 1,
-              //         ),
-              //         IconButton(
-              //           onPressed: () {
-              //             // _key.currentState!.openDrawer();
-              //           },
-              //           icon: Icon(
-              //             Icons.menu,
-              //             color: colorScheme.primary,
-              //             size: 30,
-              //           ),
-              //         ),
-              //         const SizedBox(
-              //           width: 5,
-              //         ),
-              //         const SizedBox(
-              //           width: 5,
-              //         ),
-              //         IconButton(
-              //           onPressed: () {},
-              //           icon: Icon(
-              //             Icons.adjust,
-              //             color: colorScheme.primary,
-              //             size: 30,
-              //           ),
-              //         ),
-              //         const SizedBox(
-              //           width: 1,
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              // )
-            ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                          child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CommentViewPage()),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // Column의 크기를 자식의 크기에 맞춤
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // 중앙 정렬
+                          children: <Widget>[
+                            Image.asset(
+                              'image/community (16).png',
+                              width: 120,
+                              height: 120,
+                            ), // 아이콘
+                            Text('코멘트 모아보기',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold)), // 텍스트
+                          ],
+                        ),
+                      )),
+                      Container(
+                        width: 1.0, // Width of the vertical divider
+                        color: colorScheme.primary,
+                      ),
+                      Expanded(
+                          child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => InstitutionInfoPage()),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero, // 내부 여백을 제거합니다.
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          // Column의 크기를 자식의 크기에 맞춤
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          // 중앙 정렬
+                          children: <Widget>[
+                            Image.asset(
+                              'image/community (5).png',
+                              width: 120,
+                              height: 120,
+                            ), // 아이콘
+                            Text('기관 정보',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold)), // 텍스트
+                          ],
+                        ),
+                      )),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                // Container(
+                //   child: Align(
+                //     alignment: Alignment.bottomCenter,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         const SizedBox(
+                //           width: 1,
+                //         ),
+                //         IconButton(
+                //           onPressed: () {
+                //             // _key.currentState!.openDrawer();
+                //           },
+                //           icon: Icon(
+                //             Icons.menu,
+                //             color: colorScheme.primary,
+                //             size: 30,
+                //           ),
+                //         ),
+                //         const SizedBox(
+                //           width: 5,
+                //         ),
+                //         const SizedBox(
+                //           width: 5,
+                //         ),
+                //         IconButton(
+                //           onPressed: () {},
+                //           icon: Icon(
+                //             Icons.adjust,
+                //             color: colorScheme.primary,
+                //             size: 30,
+                //           ),
+                //         ),
+                //         const SizedBox(
+                //           width: 1,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // )
+              ],
+            ),
           ),
         ),
       ),

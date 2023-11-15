@@ -70,85 +70,95 @@ class _CommentViewPageState extends State<CommentViewPage> {
         title: Text('코멘트 모아보기'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
-                      child: Container(
-                        // Add padding around the search bar
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        // Use a Material design search bar
-                        child: TextField(
-                          style: TextStyle(color: Colors.black),
-                          controller: _searchController,
-                          onChanged: (value) => _runFilter(value),
-                          decoration: InputDecoration(
-                            hintText: 'Search...',
-                            // Add a clear button to the search bar
-                            suffixIcon: IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () => _searchController.clear(),
-                            ),
-                            // Add a search icon or button to the search bar
-                            prefixIcon: IconButton(
-                              icon: Icon(Icons.search),
-                              onPressed: () {
-                                _runFilter(_searchController.text.trim());
-                              },
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20.0),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+            fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+          ),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+                        child: Container(
+                          // Add padding around the search bar
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          // Use a Material design search bar
+                          child: TextField(
+                            style: TextStyle(color: Colors.black),
+                            controller: _searchController,
+                            onChanged: (value) => _runFilter(value),
+                            decoration: InputDecoration(
+                              hintText: '검색해주세요...',
+                              // Add a clear button to the search bar
+                              suffixIcon: IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () => _searchController.clear(),
+                              ),
+                              // Add a search icon or button to the search bar
+                              prefixIcon: IconButton(
+                                icon: Icon(Icons.search),
+                                onPressed: () {
+                                  _runFilter(_searchController.text.trim());
+                                },
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 16),
-                    child: DropdownButton<String>(
-                      value: dropdownValue,
-                      onChanged: (String? value) {
-                        setState(
-                          () {
-                            dropdownValue = value!;
+                    Container(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: DropdownButton<String>(
+                          value: dropdownValue,
+                          onChanged: (String? value) {
+                            setState(
+                              () {
+                                dropdownValue = value!;
+                              },
+                            );
                           },
-                        );
-                      },
-                      items: _filterlist
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  )
-                ],
-              ),
-              Expanded(
-                child: _foundComments.isNotEmpty
-                    ? ListView(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.all(16.0),
-                        children: _buildListCards(context),
-                      )
-                    : const Text(
-                        '검색된 내용이 없습니다',
-                        style: TextStyle(fontSize: 24),
+                          items: _filterlist
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            );
+                          }).toList(),
+                        ),
                       ),
-              ),
-            ],
+                    )
+                  ],
+                ),
+                Expanded(
+                  child: _foundComments.isNotEmpty
+                      ? ListView(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.all(16.0),
+                          children: _buildListCards(context),
+                        )
+                      : const Text(
+                          '검색된 내용이 없습니다',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

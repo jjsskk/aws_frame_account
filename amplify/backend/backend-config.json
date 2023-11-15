@@ -82,19 +82,59 @@
         }
       ]
     },
-    "AMPLIFY_storage_awsamplify741ed7d3_bucketName": {
+    "AMPLIFY_storage_Institution_arn": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "awsamplify741ed7d3"
+          "resourceName": "Institution"
         }
       ]
     },
-    "AMPLIFY_storage_awsamplify741ed7d3_region": {
+    "AMPLIFY_storage_Institution_partitionKeyName": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "awsamplify741ed7d3"
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
+        }
+      ]
+    },
+    "AMPLIFY_storage_Institution_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "Institution"
         }
       ]
     },
@@ -116,6 +156,12 @@
     }
   },
   "storage": {
+    "Institution": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    },
     "awsamplify9cd0a992": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
