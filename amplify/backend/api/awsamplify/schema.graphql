@@ -82,6 +82,20 @@ input CreateInstitutionCommentConversationTableInput {
 	updatedAt: AWSDateTime
 }
 
+input CreateInstitutionEssentialCareTableInput {
+	INSTITUTION_ID: String!
+	USER_ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	MEDICATION: String
+	MEDICATION_WAY: String
+	NAME: String
+	IMAGE: String
+	PHONE_NUMBER: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
 input CreateInstitutionEventScheduleTableInput {
 	INSTITUTION_ID: String!
 	SCHEDULE_ID: String!
@@ -120,6 +134,39 @@ input CreateInstitutionShuttleTimeTableInput {
 	updatedAt: AWSDateTime
 }
 
+input CreateMonthlyBrainSignalTableInput {
+	id: String!
+	month: String!
+	total_time: Int
+	avg_att: Int
+	avg_med: Int
+	firsts_name: String
+	first_amt: Int
+	second_name: String
+	second_amt: Int
+	con_score: Int
+	spacetime_score: Int
+	exec_score: Int
+	mem_score: Int
+	ling_score: Int
+	cal_score: Int
+	reac_score: Int
+	orient_score: Int
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+input CreateUserTableInput {
+	ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	INSTITUTION_ID: String
+	NAME: String
+	SEX: String
+	CREATEDAT: AWSDateTime
+	UPDATEDAT: AWSDateTime
+}
+
 input DeleteInstitutionAnnouncementTableInput {
 	ANNOUNCEMENT_ID: String!
 	INSTITUTION_ID: String!
@@ -133,6 +180,11 @@ input DeleteInstitutionCommentBoardTableInput {
 input DeleteInstitutionCommentConversationTableInput {
 	BOARD_ID: String!
 	CONVERSATION_ID: String!
+}
+
+input DeleteInstitutionEssentialCareTableInput {
+	INSTITUTION_ID: String!
+	USER_ID: String!
 }
 
 input DeleteInstitutionEventScheduleTableInput {
@@ -152,6 +204,15 @@ input DeleteInstitutionNewsTableInput {
 
 input DeleteInstitutionShuttleTimeTableInput {
 	INSTITUTION_ID: String!
+}
+
+input DeleteMonthlyBrainSignalTableInput {
+	id: String!
+	month: String!
+}
+
+input DeleteUserTableInput {
+	ID: String!
 }
 
 type InstitutionAnnouncementTable {
@@ -203,6 +264,25 @@ type InstitutionCommentConversationTable {
 
 type InstitutionCommentConversationTableConnection {
 	items: [InstitutionCommentConversationTable]
+	nextToken: String
+}
+
+type InstitutionEssentialCareTable {
+	INSTITUTION_ID: String!
+	USER_ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	MEDICATION: String
+	MEDICATION_WAY: String
+	NAME: String
+	IMAGE: String
+	PHONE_NUMBER: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+type InstitutionEssentialCareTableConnection {
+	items: [InstitutionEssentialCareTable]
 	nextToken: String
 }
 
@@ -261,6 +341,33 @@ type InstitutionShuttleTimeTable {
 
 type InstitutionShuttleTimeTableConnection {
 	items: [InstitutionShuttleTimeTable]
+	nextToken: String
+}
+
+type MonthlyBrainSignalTable {
+	id: String!
+	month: String!
+	total_time: Int
+	avg_att: Int
+	avg_med: Int
+	firsts_name: String
+	first_amt: Int
+	second_name: String
+	second_amt: Int
+	con_score: Int
+	spacetime_score: Int
+	exec_score: Int
+	mem_score: Int
+	ling_score: Int
+	cal_score: Int
+	reac_score: Int
+	orient_score: Int
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+type MonthlyBrainSignalTableConnection {
+	items: [MonthlyBrainSignalTable]
 	nextToken: String
 }
 
@@ -331,6 +438,20 @@ input TableInstitutionCommentConversationTableFilterInput {
 	updatedAt: TableStringFilterInput
 }
 
+input TableInstitutionEssentialCareTableFilterInput {
+	INSTITUTION_ID: TableStringFilterInput
+	USER_ID: TableStringFilterInput
+	BIRTH: TableStringFilterInput
+	INSTITUTION: TableStringFilterInput
+	MEDICATION: TableStringFilterInput
+	MEDICATION_WAY: TableStringFilterInput
+	NAME: TableStringFilterInput
+	IMAGE: TableStringFilterInput
+	PHONE_NUMBER: TableStringFilterInput
+	createdAt: TableStringFilterInput
+	updatedAt: TableStringFilterInput
+}
+
 input TableInstitutionEventScheduleTableFilterInput {
 	INSTITUTION_ID: TableStringFilterInput
 	SCHEDULE_ID: TableStringFilterInput
@@ -381,6 +502,28 @@ input TableIntFilterInput {
 	between: [Int]
 }
 
+input TableMonthlyBrainSignalTableFilterInput {
+	id: TableStringFilterInput
+	month: TableStringFilterInput
+	total_time: TableIntFilterInput
+	avg_att: TableIntFilterInput
+	avg_med: TableIntFilterInput
+	firsts_name: TableStringFilterInput
+	first_amt: TableIntFilterInput
+	second_name: TableStringFilterInput
+	second_amt: TableIntFilterInput
+	con_score: TableIntFilterInput
+	spacetime_score: TableIntFilterInput
+	exec_score: TableIntFilterInput
+	mem_score: TableIntFilterInput
+	ling_score: TableIntFilterInput
+	cal_score: TableIntFilterInput
+	reac_score: TableIntFilterInput
+	orient_score: TableIntFilterInput
+	createdAt: TableStringFilterInput
+	updatedAt: TableStringFilterInput
+}
+
 input TableStringFilterInput {
 	ne: String
 	eq: String
@@ -392,6 +535,17 @@ input TableStringFilterInput {
 	notContains: String
 	between: [String]
 	beginsWith: String
+}
+
+input TableUserTableFilterInput {
+	ID: TableStringFilterInput
+	BIRTH: TableStringFilterInput
+	INSTITUTION: TableStringFilterInput
+	INSTITUTION_ID: TableStringFilterInput
+	NAME: TableStringFilterInput
+	SEX: TableStringFilterInput
+	CREATEDAT: TableStringFilterInput
+	UPDATEDAT: TableStringFilterInput
 }
 
 input UpdateInstitutionAnnouncementTableInput {
@@ -427,6 +581,20 @@ input UpdateInstitutionCommentConversationTableInput {
 	EMAIL: String
 	CONTENT: String
 	WRITER: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+input UpdateInstitutionEssentialCareTableInput {
+	INSTITUTION_ID: String!
+	USER_ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	MEDICATION: String
+	MEDICATION_WAY: String
+	NAME: String
+	IMAGE: String
+	PHONE_NUMBER: String
 	createdAt: AWSDateTime
 	updatedAt: AWSDateTime
 }
@@ -469,6 +637,55 @@ input UpdateInstitutionShuttleTimeTableInput {
 	updatedAt: AWSDateTime
 }
 
+input UpdateMonthlyBrainSignalTableInput {
+	id: String!
+	month: String!
+	total_time: Int
+	avg_att: Int
+	avg_med: Int
+	firsts_name: String
+	first_amt: Int
+	second_name: String
+	second_amt: Int
+	con_score: Int
+	spacetime_score: Int
+	exec_score: Int
+	mem_score: Int
+	ling_score: Int
+	cal_score: Int
+	reac_score: Int
+	orient_score: Int
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+input UpdateUserTableInput {
+	ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	INSTITUTION_ID: String
+	NAME: String
+	SEX: String
+	CREATEDAT: AWSDateTime
+	UPDATEDAT: AWSDateTime
+}
+
+type UserTable {
+	ID: String!
+	BIRTH: String
+	INSTITUTION: String
+	INSTITUTION_ID: String
+	NAME: String
+	SEX: String
+	CREATEDAT: AWSDateTime
+	UPDATEDAT: AWSDateTime
+}
+
+type UserTableConnection {
+	items: [UserTable]
+	nextToken: String
+}
+
 type Mutation {
 	createInstitutionCommentBoardTable(input: CreateInstitutionCommentBoardTableInput!): InstitutionCommentBoardTable
 	updateInstitutionCommentBoardTable(input: UpdateInstitutionCommentBoardTableInput!): InstitutionCommentBoardTable
@@ -491,6 +708,15 @@ type Mutation {
 	createInstitutionShuttleTimeTable(input: CreateInstitutionShuttleTimeTableInput!): InstitutionShuttleTimeTable
 	updateInstitutionShuttleTimeTable(input: UpdateInstitutionShuttleTimeTableInput!): InstitutionShuttleTimeTable
 	deleteInstitutionShuttleTimeTable(input: DeleteInstitutionShuttleTimeTableInput!): InstitutionShuttleTimeTable
+	createInstitutionEssentialCareTable(input: CreateInstitutionEssentialCareTableInput!): InstitutionEssentialCareTable
+	updateInstitutionEssentialCareTable(input: UpdateInstitutionEssentialCareTableInput!): InstitutionEssentialCareTable
+	deleteInstitutionEssentialCareTable(input: DeleteInstitutionEssentialCareTableInput!): InstitutionEssentialCareTable
+	createMonthlyBrainSignalTable(input: CreateMonthlyBrainSignalTableInput!): MonthlyBrainSignalTable
+	updateMonthlyBrainSignalTable(input: UpdateMonthlyBrainSignalTableInput!): MonthlyBrainSignalTable
+	deleteMonthlyBrainSignalTable(input: DeleteMonthlyBrainSignalTableInput!): MonthlyBrainSignalTable
+	createUserTable(input: CreateUserTableInput!): UserTable
+	updateUserTable(input: UpdateUserTableInput!): UserTable
+	deleteUserTable(input: DeleteUserTableInput!): UserTable
 }
 
 type Query {
@@ -508,6 +734,12 @@ type Query {
 	listInstitutionFoodTables(filter: TableInstitutionFoodTableFilterInput, limit: Int, nextToken: String): InstitutionFoodTableConnection
 	getInstitutionShuttleTimeTable(INSTITUTION_ID: String!): InstitutionShuttleTimeTable
 	listInstitutionShuttleTimeTables(filter: TableInstitutionShuttleTimeTableFilterInput, limit: Int, nextToken: String): InstitutionShuttleTimeTableConnection
+	getInstitutionEssentialCareTable(INSTITUTION_ID: String!, USER_ID: String!): InstitutionEssentialCareTable
+	listInstitutionEssentialCareTables(filter: TableInstitutionEssentialCareTableFilterInput, limit: Int, nextToken: String): InstitutionEssentialCareTableConnection
+	getMonthlyBrainSignalTable(id: String!, month: String!): MonthlyBrainSignalTable
+	listMonthlyBrainSignalTables(filter: TableMonthlyBrainSignalTableFilterInput, limit: Int, nextToken: String): MonthlyBrainSignalTableConnection
+	getUserTable(ID: String!): UserTable
+	listUserTables(filter: TableUserTableFilterInput, limit: Int, nextToken: String): UserTableConnection
 }
 
 type Subscription {
@@ -692,7 +924,76 @@ type Subscription {
 		updatedAt: AWSDateTime
 	): InstitutionShuttleTimeTable
 		@aws_subscribe(mutations: ["deleteInstitutionShuttleTimeTable"])
+	onCreateInstitutionEssentialCareTable(
+		INSTITUTION_ID: String,
+		USER_ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		MEDICATION: String
+	): InstitutionEssentialCareTable
+		@aws_subscribe(mutations: ["createInstitutionEssentialCareTable"])
+	onUpdateInstitutionEssentialCareTable(
+		INSTITUTION_ID: String,
+		USER_ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		MEDICATION: String
+	): InstitutionEssentialCareTable
+		@aws_subscribe(mutations: ["updateInstitutionEssentialCareTable"])
+	onDeleteInstitutionEssentialCareTable(
+		INSTITUTION_ID: String,
+		USER_ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		MEDICATION: String
+	): InstitutionEssentialCareTable
+		@aws_subscribe(mutations: ["deleteInstitutionEssentialCareTable"])
+	onCreateMonthlyBrainSignalTable(
+		id: String,
+		month: String,
+		total_time: Int,
+		avg_att: Int,
+		avg_med: Int
+	): MonthlyBrainSignalTable
+		@aws_subscribe(mutations: ["createMonthlyBrainSignalTable"])
+	onUpdateMonthlyBrainSignalTable(
+		id: String,
+		month: String,
+		total_time: Int,
+		avg_att: Int,
+		avg_med: Int
+	): MonthlyBrainSignalTable
+		@aws_subscribe(mutations: ["updateMonthlyBrainSignalTable"])
+	onDeleteMonthlyBrainSignalTable(
+		id: String,
+		month: String,
+		total_time: Int,
+		avg_att: Int,
+		avg_med: Int
+	): MonthlyBrainSignalTable
+		@aws_subscribe(mutations: ["deleteMonthlyBrainSignalTable"])
+	onCreateUserTable(
+		ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		INSTITUTION_ID: String,
+		NAME: String
+	): UserTable
+		@aws_subscribe(mutations: ["createUserTable"])
+	onUpdateUserTable(
+		ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		INSTITUTION_ID: String,
+		NAME: String
+	): UserTable
+		@aws_subscribe(mutations: ["updateUserTable"])
+	onDeleteUserTable(
+		ID: String,
+		BIRTH: String,
+		INSTITUTION: String,
+		INSTITUTION_ID: String,
+		NAME: String
+	): UserTable
+		@aws_subscribe(mutations: ["deleteUserTable"])
 }
-
-
-

@@ -82,74 +82,45 @@
         }
       ]
     },
-    "AMPLIFY_storage_Institution_arn": {
+    "AMPLIFY_storage_awsamplify741ed7d3_bucketName": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "Institution"
+          "resourceName": "awsamplify741ed7d3"
         }
       ]
     },
-    "AMPLIFY_storage_Institution_partitionKeyName": {
+    "AMPLIFY_storage_awsamplify741ed7d3_region": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "Institution"
+          "resourceName": "awsamplify741ed7d3"
         }
       ]
     },
-    "AMPLIFY_storage_Institution_partitionKeyType": {
+    "AMPLIFY_storage_awsamplify9cd0a992_bucketName": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "Institution"
+          "resourceName": "awsamplify9cd0a992"
         }
       ]
     },
-    "AMPLIFY_storage_Institution_region": {
+    "AMPLIFY_storage_awsamplify9cd0a992_region": {
       "usedBy": [
         {
           "category": "storage",
-          "resourceName": "Institution"
-        }
-      ]
-    },
-    "AMPLIFY_storage_Institution_sortKeyName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "Institution"
-        }
-      ]
-    },
-    "AMPLIFY_storage_Institution_sortKeyType": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "Institution"
-        }
-      ]
-    },
-    "AMPLIFY_storage_Institution_tableName": {
-      "usedBy": [
-        {
-          "category": "storage",
-          "resourceName": "Institution"
+          "resourceName": "awsamplify9cd0a992"
         }
       ]
     }
   },
   "storage": {
-    "Institution": {
+    "awsamplify9cd0a992": {
       "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "service": "DynamoDB",
+      "service": "S3",
       "serviceType": "imported"
-    },
-    "s3abed2243": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "S3"
     }
   }
 }
