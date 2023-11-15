@@ -74,6 +74,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'protector app for showing brain signal',
       theme: ThemeData(
+
         // colorScheme: ColorScheme(brightness: brightness, primary: primary, onPrimary: onPrimary, secondary: secondary, onSecondary: onSecondary, error: error, onError: onError, background: background, onBackground: onBackground, surface: surface, onSurface: onSurface),
           // dividerColor: Colors.white,
           // scaffoldBackgroundColor: Colors.black87,

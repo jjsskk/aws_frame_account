@@ -106,6 +106,7 @@ class _ConveniencePageState extends State<ConveniencePage> {
     final appBarColor = themeData.primaryColor;
 
     return Scaffold(
+      appBar: AppBar(),
       body: Column(
         children: [
           Expanded(
@@ -116,15 +117,13 @@ class _ConveniencePageState extends State<ConveniencePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                    child:
                         Text(
                           '식단정보',
                           style: Theme.of(context).textTheme.headline5,
                         ),
-                      ],
-                    ),
+
+
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
