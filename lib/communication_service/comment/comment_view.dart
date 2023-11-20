@@ -331,7 +331,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
         });
       }
     });
-    stream = gql.subscribeInstitutionCommentBoard(); //1234 기관 id
+    stream = gql.subscribeInstitutionCommentBoard();
     print(stream);
     subscribeCommentChange();
   }

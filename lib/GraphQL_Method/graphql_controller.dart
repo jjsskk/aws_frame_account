@@ -120,7 +120,7 @@ class GraphQLController {
 
   Future<List<InstitutionAnnouncementTable>>
       queryInstitutionAnnouncementsByInstitutionId(
-          {required String institutionId, String? nextToken}) async {
+          {String? nextToken}) async {
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
@@ -145,7 +145,7 @@ class GraphQLController {
         """,
           variables: {
             "filter": {
-              "INSTITUTION_ID": {"eq": institutionId}
+              "INSTITUTION_ID": {"eq": institutionNumber}
             },
             "limit": 1000,
             "nextToken": nextToken,
@@ -175,7 +175,7 @@ class GraphQLController {
         // recursive call for next page's data
         var additionalItems =
             await queryInstitutionAnnouncementsByInstitutionId(
-                institutionId: institutionId, nextToken: newNextToken);
+                nextToken: newNextToken);
         announcements.addAll(additionalItems);
       }
 
@@ -187,7 +187,7 @@ class GraphQLController {
   }
 
   Future<List<InstitutionNewsTable>> queryInstitutionNewsByInstitutionId(
-      {required String institutionId, String? nextToken}) async {
+      { String? nextToken}) async {
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
@@ -212,7 +212,7 @@ class GraphQLController {
       """,
           variables: {
             "filter": {
-              "INSTITUTION_ID": {"eq": institutionId}
+              "INSTITUTION_ID": {"eq": institutionNumber}
             },
             "limit": 1000,
             "nextToken": nextToken,
@@ -241,7 +241,7 @@ class GraphQLController {
       if (newNextToken != null) {
         // recursive call for next page's data
         var additionalItems = await queryInstitutionNewsByInstitutionId(
-            institutionId: institutionId, nextToken: newNextToken);
+           nextToken: newNextToken);
         news.addAll(additionalItems);
       }
 
@@ -253,7 +253,7 @@ class GraphQLController {
   }
 
   Future<InstitutionFoodTable?> queryFoodByInstitutionIdAndDate(
-      String institutionId, String date) async {
+ String date) async {
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
@@ -271,7 +271,7 @@ class GraphQLController {
             }
           }
         """,
-          variables: {"INSTITUTION_ID": institutionId, "DATE": date},
+          variables: {"INSTITUTION_ID": institutionNumber, "DATE": date},
         ),
       );
       var response = await operation.response;
@@ -296,8 +296,8 @@ class GraphQLController {
   }
 
   Future<InstitutionShuttleTimeTable?> queryShuttleTimeByInstitutionId(
-      String institutionId) async {
-    print(institutionId);
+    ) async {
+    // print(institutionId);
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
@@ -315,7 +315,7 @@ class GraphQLController {
           }
         """,
           variables: {
-            "INSTITUTION_ID": institutionId,
+            "INSTITUTION_ID": institutionNumber,
           },
         ),
       );
@@ -343,7 +343,7 @@ class GraphQLController {
 
   Future<List<InstitutionEssentialCareTable>>
       queryEssentialCareInformationByInstitutionIdAndUserId(
-          {required String userId, String? nextToken}) async {
+          { String? nextToken}) async {
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(
@@ -370,7 +370,7 @@ class GraphQLController {
       """,
           variables: {
             "filter": {
-              "USER_ID": {"eq": userId}
+              "USER_ID": {"eq": userNumber}
             },
             "limit": 1000,
             "nextToken": nextToken,
@@ -401,7 +401,7 @@ class GraphQLController {
         // recursive call for next page's data
         var additionalItems =
             await queryEssentialCareInformationByInstitutionIdAndUserId(
-                userId: userId, nextToken: newNextToken);
+                nextToken: newNextToken);
         essentialCare.addAll(additionalItems);
       }
 

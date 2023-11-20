@@ -47,7 +47,7 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
   Future<void> getEssentialCare() async {
     _essentialCare = [];
     await gql
-        .queryEssentialCareInformationByInstitutionIdAndUserId(userId: "1")
+        .queryEssentialCareInformationByInstitutionIdAndUserId()
         .then((value) {
       if (value != null && value.isNotEmpty) {
         var care = value.first; // 첫 번째 아이템만 사용합니다.
@@ -134,8 +134,8 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
                     if (snapshot.hasData) {
                       String careImageUrl = snapshot.data!;
                       return Container(
-                        width: 150,
-                        height: 150,
+                        width: MediaQuery.of(context).size.width/2,
+                        height: MediaQuery.of(context).size.width/2,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(

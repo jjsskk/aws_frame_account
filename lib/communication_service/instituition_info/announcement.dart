@@ -21,9 +21,9 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
   late LoginState announcementProvider;
 
   Future<List<InstitutionAnnouncementTable>> getAnnouncements(
-      String institutionId) {
+    ) {
     return gql.queryInstitutionAnnouncementsByInstitutionId(
-        institutionId: institutionId);
+        );
   }
 
   @override
@@ -31,7 +31,7 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
     super.initState();
 
     // 초기 데이터 로딩
-    _announcements = getAnnouncements("INST_ID_123");
+    _announcements = getAnnouncements();
   }
 
   String getYearMonthDay(String dateString) {

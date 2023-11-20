@@ -1,5 +1,5 @@
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
-import 'package:aws_frame_account/communication_service/comment_view.dart';
+import 'package:aws_frame_account/communication_service/comment/comment_view.dart';
 import 'package:aws_frame_account/communication_service/communication_yard.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
 import 'package:aws_frame_account/communication_service/user_activity.dart';
@@ -171,10 +171,10 @@ class GlobalDrawer {
               ),
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => UserActivityPage()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => UserActivityPage()),
+              // );
             },
           ),
 
@@ -192,7 +192,7 @@ class GlobalDrawer {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CommentViewPage()),
+                MaterialPageRoute(builder: (context) =>CommentViewPage()),
               );
             },
           ),

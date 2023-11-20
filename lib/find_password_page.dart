@@ -259,7 +259,7 @@ class _Find_Password_PageState extends State<Find_Password_Page> {
                         )),
                     onPressed: _confirmemail,
                     child: Text(
-                      '보내기',
+                      '발송',
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
                     )),

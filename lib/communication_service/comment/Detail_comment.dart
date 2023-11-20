@@ -87,10 +87,10 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
         .getInstitutionCommentBoard(widget.user_id, widget.board_id)
         .then((value) {
       print(value);
-      commentTitle = value.TITLE;
-      commentContent = value.CONTENT;
-      user = value.USERNAME;
-      date = value.createdAt.toString().substring(0, 10);
+      commentTitle = value.TITLE?? '';
+      commentContent = value.CONTENT?? '';
+      user = value.USERNAME?? '';
+      date = value.createdAt.toString().substring(0, 10)?? '';
       if (value.NEW_CONVERSATION_INST == true) {
         // print('NEW_CONVERSATION_PROTECTOR == true');
         gql.updateCommentBoarddataForReadConversation(
@@ -383,58 +383,74 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                         ],
                       ),
                       gql.protectorEmail == value['email']
-                          ? IconButton(
-                              icon: Icon(
-                                Icons.highlight_remove_rounded,
+                          ? Container(
+                        width: 23,
+                              height: 23,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50
+                                ),
                                 color: blue,
                               ),
-                              onPressed: () async {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('해당 댓글을 삭제하시겠습니까?'),
-                                        actions: [
-                                          TextButton(
-                                              onPressed: () async {
-                                                final check = await gql
-                                                    .deleteCommentConversationdata(
-                                                  value['board_id'],
-                                                  value['conversation_id'],
-                                                );
-                                                if (check) {
-                                                  // ScaffoldMessenger.of(context)
-                                                  //     .showSnackBar(SnackBar(
-                                                  //   content: Text(
-                                                  //     '댓글이 삭제 되었습니다',
-                                                  //     style:
-                                                  //     TextStyle(fontWeight: FontWeight.bold),
-                                                  //   ),
-                                                  // ));
+                              child: Center(
+                                  child: InkWell(
+                                onTap: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text('해당 댓글을 삭제하시겠습니까?'),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () async {
+                                                  final check = await gql
+                                                      .deleteCommentConversationdata(
+                                                    value['board_id'],
+                                                    value['conversation_id'],
+                                                  );
+                                                  if (check) {
+                                                    // ScaffoldMessenger.of(context)
+                                                    //     .showSnackBar(SnackBar(
+                                                    //   content: Text(
+                                                    //     '댓글이 삭제 되었습니다',
+                                                    //     style:
+                                                    //     TextStyle(fontWeight: FontWeight.bold),
+                                                    //   ),
+                                                    // ));
+                                                    Navigator.pop(context);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
+                                                      content: const Text(
+                                                        '댓글이 삭제 되지 못했습니다. 다시 시도해주세요.',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ));
+                                                    Navigator.pop(context);
+                                                  }
+                                                },
+                                                child: const Text('네')),
+                                            TextButton(
+                                                onPressed: () {
                                                   Navigator.pop(context);
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(SnackBar(
-                                                    content: const Text(
-                                                      '댓글이 삭제 되지 못했습니다. 다시 시도해주세요.',
-                                                      style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ));
-                                                  Navigator.pop(context);
-                                                }
-                                              },
-                                              child: const Text('네')),
-                                          TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('아니요'))
-                                        ],
-                                      );
-                                    });
-                              },
+                                                },
+                                                child: const Text('아니요'))
+                                          ],
+                                        );
+                                      });
+                                },
+                                child: Center(
+                                  child: Text(
+                                    'X',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              )),
                             )
                           : const SizedBox(),
                     ],

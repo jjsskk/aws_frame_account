@@ -383,11 +383,11 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                       width: 80,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: AssetImage("image/report (32).png"),
+                                          image: AssetImage("image/report (13).png"),
                                           // 여기에 배경 이미지 경로를 지정합니다.
                                           fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
                                         ),),
-                                      child: Center(child: Text(AVG_ATT, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
+                                      child: Center(child: Text(AVG_ATT, style: TextStyle(color: Colors.orangeAccent,fontSize: 30, fontWeight: FontWeight.bold)))),
                                   const SizedBox(
                                     height: 10,
                                   ),
@@ -407,11 +407,11 @@ class _TraningReportPageState extends State<TraningReportPage> {
                                       width: 80,
                                       decoration: BoxDecoration(
                                         image: DecorationImage(
-                                          image: AssetImage("image/report (27).png"),
+                                          image: AssetImage("image/report (14).png"),
                                           // 여기에 배경 이미지 경로를 지정합니다.
                                           fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
                                         ),),
-                                      child: Center(child: Text(AVG_MED, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold)))),
+                                      child: Center(child: Text(AVG_MED, style: TextStyle(color:Colors.orangeAccent,fontSize: 30, fontWeight: FontWeight.bold)))),
                                   const SizedBox(
                                     height: 10,
                                   ),

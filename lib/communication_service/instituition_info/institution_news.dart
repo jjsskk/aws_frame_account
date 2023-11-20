@@ -30,7 +30,7 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
   void initState() {
     super.initState();
     _news =
-        gql.queryInstitutionNewsByInstitutionId(institutionId: "INST_ID_123");
+        gql.queryInstitutionNewsByInstitutionId();
 
   }
 

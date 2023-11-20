@@ -161,7 +161,7 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
     int changeddate = year * 10000 + month * 100;
     numberForonedata = 0;
     Future<dynamic> future =
-        gql.queryMonthlyDBRequiredItem(gql.userId, changeddate).then((values) {
+        gql.queryMonthlyDBRequiredItem(gql.userNumber, changeddate).then((values) {
       // 현제 보호자의 유저(훈련인)의 데이터 불러오기
       if (values.isNotEmpty) {
         values.sort((a, b) {

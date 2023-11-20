@@ -58,12 +58,12 @@ class _NewMessageState extends State<NewMessage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 8),
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.symmetric(horizontal: 8,vertical: 0),
       child: Row(
         children: [
           Expanded(
             child: TextField(
+              maxLength: 255,
               style: TextStyle(color: Colors.black),
               maxLines: null, //자동으로 줄바꿈해줌
               controller: _contentController,
