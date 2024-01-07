@@ -160,8 +160,9 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
   Future<dynamic> extractRequiredBrainData() {
     int changeddate = year * 10000 + month * 100;
     numberForonedata = 0;
-    Future<dynamic> future =
-        gql.queryMonthlyDBRequiredItem(gql.userNumber, changeddate).then((values) {
+    Future<dynamic> future = gql
+        .queryMonthlyDBRequiredItem(gql.userNumber, changeddate)
+        .then((values) {
       // 현제 보호자의 유저(훈련인)의 데이터 불러오기
       if (values.isNotEmpty) {
         values.sort((a, b) {
@@ -445,6 +446,13 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text('분석 보고서',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         centerTitle: true,

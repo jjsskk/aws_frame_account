@@ -304,6 +304,27 @@ class AuthService {
     }
   }
 
+  Future<void> listenAuthHub() async {
+    Amplify.Hub.listen([HubChannel.Auth], (event) async {
+      switch (event.eventName) {
+        case "SIGNED_IN":
+        //Route to Splash Page to load user session.
+          print("listenAuthHub: SIGNED_IN");
+          break;
+        case "SIGNED_OUT":
+        //Route to Login Page
+          print("listenAuthHub : SIGNED_OUT");
+          break;
+        case "SESSION_EXPIRED":
+        //Route to Login Page
+          print("listenAuthHub : SESSION_EXPIRED");
+          final state = AuthState(authFlowStatus: AuthFlowStatus.login);
+          authStateController.add(state);
+          break;
+      }
+    });
+  }
+
   Future<void> deleteUser() async {
     try {
       await Amplify.Auth.deleteUser();

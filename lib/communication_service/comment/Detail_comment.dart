@@ -40,69 +40,16 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
   bool loading_conversation = true;
   String date = '';
 
-  void subscribeConversationChange() {
-    listener = stream!.listen(
-      (snapshot) {
-        print('data : ${snapshot.data!}');
-        gql.listInstitutionCommentConversation(widget.board_id).then((result) {
-          print(result);
-          _conversations = [];
-          result.forEach((value) {
-            // print(value.createdAt.toString().substring(0,10));
-            _conversations.add({
-              // 'date': value.createdAt.toString().substring(0, 10),
-              'date': value.createdAt.toString() ?? '',
-              'content': value.CONTENT ?? '',
-              'writer': value.WRITER ?? '',
-              'board_id': value.BOARD_ID ?? '',
-              'conversation_id': value.CONVERSATION_ID ?? '',
-              'email': value.EMAIL ?? ''
-            });
-          });
-          _conversations.sort((a, b) {
-            String aa = a['date'];
+  late LoginState commentProvider;
 
-            String bb = b['date'];
-            return aa.compareTo(bb);
-          });
-          setState(() {
-            _conversations = _conversations;
-          });
-        });
-      },
-      onError: (Object e) => safePrint('Error in subscription stream: $e'),
-    );
-  }
-
-  @override
-  void dispose() {
-    if (listener != null) listener?.cancel();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    gql
-        .getInstitutionCommentBoard(widget.user_id, widget.board_id)
-        .then((value) {
-      print(value);
-      commentTitle = value.TITLE?? '';
-      commentContent = value.CONTENT?? '';
-      user = value.USERNAME?? '';
-      date = value.createdAt.toString().substring(0, 10)?? '';
-      if (value.NEW_CONVERSATION_INST == true) {
-        // print('NEW_CONVERSATION_PROTECTOR == true');
-        gql.updateCommentBoarddataForReadConversation(
-            widget.user_id, widget.board_id);
-      }
-      setState(() {
-        loading_comment = false;
-      });
-    });
-
+  /*
+   only called when this institution CRUD conversation(댓글) not when other institution CRUD converstaion(댓글)
+   ->  detectConversationChange func is used in this page
+  */
+  void detectConversationChange() {
     gql.listInstitutionCommentConversation(widget.board_id).then((result) {
       print(result);
+      _conversations = [];
       result.forEach((value) {
         // print(value.createdAt.toString().substring(0,10));
         _conversations.add({
@@ -121,14 +68,70 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
         String bb = b['date'];
         return aa.compareTo(bb);
       });
+      if (mounted) {
+        setState(() {
+          _conversations = _conversations;
+          loading_conversation = false;
+        });
+      }
+    });
+  }
 
-      stream = gql.subscribeInstitutionCommentConversation();
-      print(stream);
-      subscribeConversationChange();
+  /*
+  called not only when this institution CRUD conversation(댓글) but also when other institution CRUD conversation(댓글)
+   -> generate resource waste if using graphql subscribe query(api)
+   refer conversation Table of sort key and partition key
+   -> subscribeConversationChange func is not used
+  */
+  void subscribeConversationChange() {
+    listener = stream!.listen(
+      (snapshot) {
+        print('data : ${snapshot.data!}');
+        detectConversationChange();
+      },
+      onError: (Object e) => safePrint('Error in subscription stream: $e'),
+    );
+  }
+
+  @override
+  void dispose() {
+    if (listener != null) listener?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    commentProvider = Provider.of<LoginState>(context, listen: false);
+    gql
+        .getInstitutionCommentBoard(widget.user_id, widget.board_id)
+        .then((value) async{
+      print(value);
+      commentTitle = value.TITLE ?? '';
+      commentContent = value.CONTENT ?? '';
+      user = value.USERNAME ?? '';
+      date = value.createdAt.toString().substring(0, 10) ?? '';
+      if (value.NEW_CONVERSATION_INST == true) {
+        final check_update = await gql.updateCommentBoarddataForReadConversation(
+            widget.user_id, widget.board_id);
+
+        if (check_update && (commentProvider.detectCommentChange != null))
+          commentProvider.detectCommentChange!(widget.user_id);
+
+      }
       setState(() {
-        loading_conversation = false;
+        loading_comment = false;
       });
     });
+
+    detectConversationChange();
+
+    /*
+    // using subscribe api for conversation(댓글) CRUD update
+    stream = gql.subscribeInstitutionCommentConversation();
+    print(stream);
+    subscribeConversationChange();
+     */
   }
 
   @override
@@ -137,6 +140,13 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text('코멘트 상세보기',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
         centerTitle: true,
@@ -289,31 +299,7 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                             Column(
                               children: _buildListCards(),
                             )
-                            // ListView.builder(
-                            //   itemCount: data.length,
-                            //   itemBuilder: (context, index) {
-                            //     // final announcement = snapshot.data![index];
-                            //     return Card(
-                            //       child: ListTile(
-                            //         leading: Icon(Icons.message),
-                            //         title: Row(
-                            //           children: [
-                            //             Text(data[index][0],
-                            //                 style: TextStyle(color: Colors.black)),
-                            //             const SizedBox(
-                            //               width: 10,
-                            //             ),
-                            //             Text(
-                            //               data[index][2],
-                            //               style: TextStyle(color: Colors.black),
-                            //             ),
-                            //           ],
-                            //         ),
-                            //         subtitle: Text(data[index][1]),
-                            //       ),
-                            //     );
-                            //   },
-                            // ),
+
                           ],
                         ),
                       ),
@@ -322,6 +308,7 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                         board_id: widget.board_id,
                         writer: gql.protectorName,
                         email: gql.protectorEmail,
+                        detectConversationChange: detectConversationChange,
                       ),
                     ],
                   ),
@@ -384,11 +371,10 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                       ),
                       gql.protectorEmail == value['email']
                           ? Container(
-                        width: 23,
+                              width: 23,
                               height: 23,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50
-                                ),
+                                borderRadius: BorderRadius.circular(50),
                                 color: blue,
                               ),
                               child: Center(
@@ -416,6 +402,7 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                                                     //     TextStyle(fontWeight: FontWeight.bold),
                                                     //   ),
                                                     // ));
+                                                    detectConversationChange();
                                                     Navigator.pop(context);
                                                   } else {
                                                     ScaffoldMessenger.of(

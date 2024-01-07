@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:amplify_core/amplify_core.dart';
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/communication_service/comment/Detail_comment.dart';
 import 'package:aws_frame_account/loading_page/loading_page.dart';
+import 'package:aws_frame_account/models/InstitutionCommentBoardTable.dart';
 import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,6 +44,8 @@ class _CommentViewPageState extends State<CommentViewPage> {
   StreamSubscription<GraphQLResponse<dynamic>>? listener = null;
 
   bool dropDownDisappear = true;
+
+  late var commentProvider;
 
   void _runFilter(String enteredKeyword) {
     List<Map<String, dynamic>> results = [];
@@ -89,7 +93,8 @@ class _CommentViewPageState extends State<CommentViewPage> {
             value.NEW_CONVERSATION_CREATEDAT.toString()
       });
     });
-    _comments.sort((a, b) {//descending order
+    _comments.sort((a, b) {
+      //descending order
       String aa = a['new_conversation_createdat'];
 
       String bb = b['new_conversation_createdat'];
@@ -98,29 +103,58 @@ class _CommentViewPageState extends State<CommentViewPage> {
     _foundComments = List.from(_comments);
   }
 
+  void refreshData() {
+
+    gql
+        .listInstitutionCommentBoard('USER_ID', '$current_year',
+        current_month < 10 ? '0${current_month}' : '$current_month',
+        nextToken: null) //institution_id
+        .then((result) {
+      print(result);
+      if (result.isNotEmpty) {
+        storeAndSort(result);
+        setCurrentDate();
+      }
+      print('year : $year');
+      print('month : $month');
+
+      if (mounted) {
+        setState(() {
+          loading_comment = false;
+        });
+      }
+    });
+  }
+
+  /*
+   only called when this institution CRUD comment not when other institution CRUD comment
+   -> detectCommentChange func is used
+  */
+  void detectCommentChange(String userId) {
+    refreshData();
+  }
+
+  /*
+  called not only when this institution CRUD comment but also when other institution CRUD comment
+   -> generate resource waste if using graphql subscribe query(api)
+   refer Comment Table of sort key and partition key
+   -> subscribeCommentChange func is not used
+  */
   void subscribeCommentChange() {
     listener = stream!.listen(
       (snapshot) {
         print('data : ${snapshot.data!}');
-        gql
-            .listInstitutionCommentBoard('USER_ID', '$current_year',
-                current_month < 10 ? '0${current_month}' : '$current_month',
-                nextToken: null) //institution_id
-            .then((result) {
-          print(result);
-          if (result.isNotEmpty) {
-            storeAndSort(result);
-            setCurrentDate();
-          }
-          print('year : $year');
-          print('month : $month');
-
-          if (mounted) {
-            setState(() {
-              loading_comment = false;
-            });
-          }
-        });
+        var data = jsonDecode(snapshot.data);
+        var item = data['onsubscribeInstitutionCommentBoardTable'];
+        if (snapshot.data == null || item == null) {
+          print('errors: ${snapshot.errors}');
+          return;
+        }
+        InstitutionCommentBoardTable comment =
+        InstitutionCommentBoardTable.fromJson(item);
+        if (comment.USER_ID == gql.userNumber) {
+          refreshData();
+        }
       },
       onError: (Object e) => safePrint('Error in subscription stream: $e'),
     );
@@ -206,56 +240,6 @@ class _CommentViewPageState extends State<CommentViewPage> {
               });
             }
           });
-          // gql
-          //     .listInstitutionCommentBoard(
-          //     selectedName == '전체' ? 'INSTITUTION_ID' : 'USER_ID',
-          //     selectedId,
-          //     '$year',
-          //     month < 10 ? '0${month}' : '$month',
-          //     nextToken: null) //institution_id
-          //     .then((result) {
-          //   print(result);
-          //   print('the number of data :${result.length}');
-          //
-          //   if (result.isNotEmpty) {
-          //     List<Map<String, dynamic>> _commentsTemp = [];
-          //     result.forEach((value) {
-          //       // print(value.createdAt.toString().substring(0,10));
-          //       _commentsTemp.add({
-          //         'date': value.createdAt.toString().substring(0, 10) ?? '',
-          //         'title': value.TITLE ?? '',
-          //         'username': value.USERNAME ?? '',
-          //         'user_id': value.USER_ID ?? '',
-          //         'board_id': value.BOARD_ID ?? '',
-          //         'new_conversation': value.NEW_CONVERSATION_PROTECTOR,
-          //         'new_conversation_createdat':
-          //         value.NEW_CONVERSATION_CREATEDAT.toString()
-          //       });
-          //     });
-          //     _commentsTemp.sort((a, b) {
-          //       String aa = a['new_conversation_createdat'];
-          //
-          //       String bb = b['new_conversation_createdat'];
-          //       return bb.compareTo(aa);
-          //     });
-          //     _comments.addAll(_commentsTemp);
-          //     _foundComments.addAll(_commentsTemp);
-          //
-          //     month--;
-          //     if (month == 0) {
-          //       month = 12;
-          //       year--;
-          //     }
-          //     print('year : $year');
-          //     print('month : $month');
-          //   }
-          //   if (mounted) {
-          //     setState(() {
-          //       loading_scroll = false;
-          //       // _foundComments = _foundComments;
-          //     });
-          //   }
-          // });
         }
       }
     }
@@ -263,54 +247,22 @@ class _CommentViewPageState extends State<CommentViewPage> {
 
   @override
   void dispose() {
-    if (listener != null) listener?.cancel();
     super.dispose();
+    commentProvider.detectCommentChange = null;
+    if (listener != null) listener?.cancel();
   }
 
   @override
   void initState() {
     super.initState();
+    commentProvider = Provider.of<LoginState>(context, listen: false);
+    commentProvider.detectCommentChange = detectCommentChange;
+
     int index = 0;
     year = DateTime.now().year;
     month = DateTime.now().month;
     current_year = year;
     current_month = month;
-    // gql.listInstitutionCommentBoard('1234').then((result) {
-    //   print(result);
-    //   result.forEach((value) {
-    //     // print(value.createdAt.toString().substring(0,10));
-    //     _comments.add({
-    //       'date': value.createdAt.toString().substring(0, 10)?? '',
-    //       'title': value.TITLE?? '',
-    //       'username': value.USERNAME?? '',
-    //       'user_id': value.USER_ID?? '',
-    //       'board_id': value.BOARD_ID?? '',
-    //       'new_conversation': value.NEW_CONVERSATION_INST,
-    //       'new_conversation_createdat':
-    //           value.NEW_CONVERSATION_CREATEDAT.toString()
-    //     });
-    //     // _foundComments.add({
-    //     //   'date': value.createdAt.toString().substring(0, 10),
-    //     //   'title': value.TITLE,
-    //     //   'username': value.USERNAME,
-    //     //   'user_id': value.USER_ID,
-    //     //   'board_id': value.BOARD_ID,
-    //     //   'new_conversation_createdat': value.NEW_CONVERSATION_CREATEDAT
-    //     //       .toString()
-    //     // });
-    //   });
-    //
-    //   _comments.sort((a, b) {
-    //     String aa = a['new_conversation_createdat'];
-    //
-    //     String bb = b['new_conversation_createdat'];
-    //     return bb.compareTo(aa);
-    //   });
-    //   _foundComments = List.from(_comments);
-    //   setState(() {
-    //     loading = false;
-    //   });
-    // });
 
     gql
         .listInstitutionCommentBoard(
@@ -331,9 +283,12 @@ class _CommentViewPageState extends State<CommentViewPage> {
         });
       }
     });
+    /*
+    // using subscribe api for comment CRUD update
     stream = gql.subscribeInstitutionCommentBoard();
     print(stream);
     subscribeCommentChange();
+     */
   }
 
   void decreaseMonth() {
@@ -358,6 +313,13 @@ class _CommentViewPageState extends State<CommentViewPage> {
     var appState = context.watch<LoginState>();
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           '코멘트 모아보기',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -375,13 +337,14 @@ class _CommentViewPageState extends State<CommentViewPage> {
       body: loading_comment
           ? LoadingPage()
           : Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
-            fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
-          ),
-        ),
-            child: Center(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image:
+                      AssetImage("image/ui (3).png"), // 여기에 배경 이미지 경로를 지정합니다.
+                  fit: BoxFit.fill, // 이미지가 전체 화면을 커버하도록 설정합니다.
+                ),
+              ),
+              child: Center(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -400,13 +363,13 @@ class _CommentViewPageState extends State<CommentViewPage> {
                                     hintText: '검색해주세요..',
                                     // Add a clear button to the search bar
                                     suffixIcon: IconButton(
-                                      icon: Icon(
-                                        Icons.clear,
-                                        color: Colors.transparent,
-                                      ),
-                                      onPressed:null
-                                          // () => _searchController.clear(),
-                                    ),
+                                        icon: Icon(
+                                          Icons.clear,
+                                          color: Colors.transparent,
+                                        ),
+                                        onPressed: null
+                                        // () => _searchController.clear(),
+                                        ),
                                     // Add a search icon or button to the search bar
                                     prefixIcon: IconButton(
                                       icon: Icon(
@@ -414,7 +377,8 @@ class _CommentViewPageState extends State<CommentViewPage> {
                                         color: Colors.transparent,
                                       ),
                                       onPressed: () {
-                                        _runFilter(_searchController.text.trim());
+                                        _runFilter(
+                                            _searchController.text.trim());
                                       },
                                     ),
                                   ),
@@ -472,8 +436,8 @@ class _CommentViewPageState extends State<CommentViewPage> {
                                     child: Container(
                                       width:
                                           MediaQuery.of(context).size.width / 9,
-                                      child:
-                                          Image.asset('image/community (4).png'),
+                                      child: Image.asset(
+                                          'image/community (4).png'),
                                     ),
                                   )
                                 : Container(
@@ -551,7 +515,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                   ),
                 ),
               ),
-          ),
+            ),
     );
     ;
   }

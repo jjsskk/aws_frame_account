@@ -46,33 +46,26 @@ class GraphQLController {
   String _protectorEmail = '';
   String _protectorName = '';
   String _protectorPhonenumber = '';
-  String _userNumber = ''; //= userId
   String _institutionNumber = '';
 
   // user table info
-  // String _userId = ''; // userNumber
+  String _userNumber = ''; //= userId
   String _userBirth = '';
   String _userName = '';
 
   void resetVariables() {
-    print("provider!!!");
     // protector's attribute info
     _protectorEmail = '';
     _protectorName = '';
     _protectorPhonenumber = '';
-    _userNumber = '';
     _institutionNumber = '';
+
     // user table info
-    // _userId = '';
+    _userNumber = '';
     _userBirth = '';
     _userName = '';
   }
 
-  // String get userId => _userId;
-
-  // set userId(String value) {
-  //   _userId = value;
-  // }
 
   String get userNumber => _userNumber;
 
@@ -1217,7 +1210,7 @@ class GraphQLController {
   }
 
   Stream<GraphQLResponse>? subscribeInstitutionCommentBoard() {
-    String inst_id = 'aaa';
+
     try {
       var operation = Amplify.API.subscribe(
         GraphQLRequest(
@@ -1250,16 +1243,6 @@ class GraphQLController {
         },
       );
 
-      // var response = await operation.response;
-      // List<InstitutionScheduleTable> schedules =
-      // (jsonDecode(response.data)['listInstitutionScheduleTables']['items']
-      // as List)
-      //     .map((item) => InstitutionScheduleTable.fromJson(item))
-      //     .toList();
-      // if (schedules == null) {
-      //   print('errors: ${response.errors}');
-      //   return const [];
-      // }
       return operation;
     } on ApiException catch (e) {
       print('Query failed: $e');
@@ -1485,6 +1468,7 @@ class GraphQLController {
 	                  BOARD_ID
 	                  USER_ID
 	                  CONTENT
+	                  INSTITUTION_ID
 	                  TITLE
 	                  updatedAt
                }  
@@ -1529,6 +1513,7 @@ class GraphQLController {
                   deleteInstitutionCommentBoardTable(input: \$input) {
                     USER_ID
                     BOARD_ID
+                    INSTITUTION_ID
                }  
               }
             ''',

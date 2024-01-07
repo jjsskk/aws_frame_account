@@ -33,7 +33,7 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
   String medicationWay = "";
   String institutionId = "";
   String institution = '';
-  bool loading  = true;
+  bool loading = true;
 
   String convertToE164(String phoneNumber, String countryCode) {
     // 전화번호의 맨 앞자리가 0인 경우, 국가 코드로 대체
@@ -79,12 +79,12 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
         });
       }
       setState(() {
-        loading =false;
+        loading = false;
       });
     }).catchError((error) {
       setState(() {
         _essentialCare = []; // 에러 발생 시 이미지 URL을 빈 문자열로 설정
-        loading =false;
+        loading = false;
       });
       print("Error fetching data: $error");
     });
@@ -103,8 +103,9 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_circle_left_outlined, color: Colors.white, size: 35),
-          onPressed: (){
+          icon: Icon(Icons.arrow_circle_left_outlined,
+              color: Colors.white, size: 35),
+          onPressed: () {
             Navigator.pop(context);
           },
         ),
@@ -122,147 +123,194 @@ class _EssentialCareInfoPageState extends State<EssentialCareInfoPage> {
           ),
         ),
       ),
-      body: loading? LoadingPage() : ListView(
-        padding: EdgeInsets.all(16),
-        children: [
-          // SizedBox(height:20),
-          imageUrl != ""
-              ? FutureBuilder<String>(
-                  future: storageService.getImageUrlFromS3(imageUrl),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    if (snapshot.hasData) {
-                      String careImageUrl = snapshot.data!;
-                      return Container(
-                        width: MediaQuery.of(context).size.width/2,
-                        height: MediaQuery.of(context).size.width/2,
+      body: loading
+          ? LoadingPage()
+          : ListView(
+              padding: EdgeInsets.all(16),
+              children: [
+                // SizedBox(height:20),
+                imageUrl != ""
+                    ? FutureBuilder<String>(
+                        future: storageService.getImageUrlFromS3(imageUrl),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<String> snapshot) {
+                          if (snapshot.hasData) {
+                            String careImageUrl = snapshot.data!;
+                            return Center(
+                              child: ClipOval(
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width / 2,
+                                  height: MediaQuery.of(context).size.width / 2,
+                                  child: FittedBox(
+                                    child: Image.network(
+                                      careImageUrl,
+                                    ),
+                                    fit: BoxFit
+                                        .cover, // 이미지가 Container 안에 맞게 조절됩니다.
+                                  ),
+                                ),
+                              ),
+                            );
+                            //   Container(
+                            //   width: MediaQuery.of(context).size.width/2,
+                            //   height: MediaQuery.of(context).size.width/2,
+                            //   decoration: BoxDecoration(
+                            //     shape: BoxShape.circle,
+                            //     image: DecorationImage(
+                            //       fit: BoxFit.contain,
+                            //       image: NetworkImage(careImageUrl),
+                            //     ),
+                            //   ),
+                            // );
+                          } else if (snapshot.hasError) {
+                            return Text('이미지를 불러올 수 없습니다.');
+                          }
+                          return CircularProgressIndicator();
+                        })
+                    : Container(
+                        width: 200,
+                        height: 200,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             fit: BoxFit.contain,
-                            image: NetworkImage(careImageUrl),
+                            image: AssetImage('image/community (14).png'),
                           ),
                         ),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text('이미지를 불러올 수 없습니다.');
-                    }
-                    return CircularProgressIndicator();
-                  })
-              : Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      fit: BoxFit.contain,
-                      image: AssetImage('image/community (14).png'),
+                      ),
+                SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "이름: ",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFD3D8EA),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: Text(essentialName,
+                                style: TextStyle(fontSize: 15)),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-          SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text("이름: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
-                  Container(
-                    decoration: BoxDecoration(
-                      color:Color(0xFFD3D8EA),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    Flexible(
+                      child: Container(),
                     ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: Text(essentialName,style: TextStyle(fontSize: 15)),
+                    Row(
+                      children: [
+                        Text(
+                          "생년월일: ",
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xFFD3D8EA),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 20),
+                            child: Text(birth, style: TextStyle(fontSize: 15)),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Flexible(
-                child: Container(),
-              ),
-              Row(
-                children: [
-                  Text("생년월일: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
-                  Container(
-                    decoration: BoxDecoration(
-                      color:Color(0xFFD3D8EA),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: Text(birth,style: TextStyle(fontSize: 15)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-
-          SizedBox(height: 30),
-          Row(
-            children: [
-              Text("전화번호: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
-              Container(
-                  decoration: BoxDecoration(
-                    color:Color(0xFFD3D8EA),
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: Text(phoneNumber,style: TextStyle(fontSize: 15)),
-                  ),
+                  ],
                 ),
 
-            ],
-          ),
-          SizedBox(height: 30),
-          medication != ""
-              ? Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("복용약: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
-               Container(
-                 decoration: BoxDecoration(
-                   color:Color(0xFFD3D8EA),
-                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                 ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                    child: Text(medication,style: TextStyle(fontSize: 15)),
-                  ),
+                SizedBox(height: 30),
+                Row(
+                  children: [
+                    Text(
+                      "전화번호: ",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFD3D8EA),
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                      ),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                        child:
+                            Text(phoneNumber, style: TextStyle(fontSize: 15)),
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(height: 30),
+                medication != ""
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "복용약: ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFD3D8EA),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              child: Text(medication,
+                                  style: TextStyle(fontSize: 15)),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Text(""),
+                SizedBox(height: 30),
+                medicationWay != ""
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "복용법: ",
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Color(0xFFD3D8EA),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(20)),
+                            ),
+                            child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 20),
+                                child: Text(
+                                  medicationWay,
+                                  style: TextStyle(fontSize: 15),
+                                )),
+                          ),
+                        ],
+                      )
+                    : Text(""),
 
-            ],
-          )
-              : Text(""),
-          SizedBox(height: 30),
-          medicationWay != ""
-              ? Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text("복용법: ", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
-              SizedBox(width: 5,),
-               Container(
-                 decoration: BoxDecoration(
-                   color:Color(0xFFD3D8EA),
-                   borderRadius: BorderRadius.all(Radius.circular(20)),
-                 ),
-                  child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: Text(medicationWay, style: TextStyle(fontSize: 15),)
-                  ),
-                ),
-
-            ],
-          )
-              : Text(""),
-
-          SizedBox(height: 16),
-        ],
-      ),
+                SizedBox(height: 16),
+              ],
+            ),
     );
   }
 }
