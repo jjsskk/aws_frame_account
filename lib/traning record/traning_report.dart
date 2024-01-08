@@ -19,6 +19,8 @@ class TraningReportPage extends StatefulWidget {
 }
 
 class _TraningReportPageState extends State<TraningReportPage> {
+  final iconColor = Colors.white;
+
   String CON_SCORE = '';
 
   // 주의력 점수
@@ -131,7 +133,8 @@ class _TraningReportPageState extends State<TraningReportPage> {
             },
           ),
           title: Text('훈련보고서',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              style: TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold, color: iconColor)),
           centerTitle: true,
           flexibleSpace: Container(
             decoration: BoxDecoration(

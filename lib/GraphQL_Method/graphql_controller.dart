@@ -111,6 +111,7 @@ class GraphQLController {
 
   // 병찬
 
+  //기관 공지사항 불러오기
   Future<List<InstitutionAnnouncementTable>>
       queryInstitutionAnnouncementsByInstitutionId(
           {String? nextToken}) async {
@@ -179,6 +180,7 @@ class GraphQLController {
     }
   }
 
+  //기관 뉴스 불러오기
   Future<List<InstitutionNewsTable>> queryInstitutionNewsByInstitutionId(
       { String? nextToken}) async {
     try {
@@ -245,6 +247,7 @@ class GraphQLController {
     }
   }
 
+  // 기관 편의사항 식단 사진 불러오기
   Future<InstitutionFoodTable?> queryFoodByInstitutionIdAndDate(
  String date) async {
     try {
@@ -288,6 +291,7 @@ class GraphQLController {
     }
   }
 
+  // 기관 편의사항 셔틀 버스 사진 불러오기
   Future<InstitutionShuttleTimeTable?> queryShuttleTimeByInstitutionId(
     ) async {
     // print(institutionId);
@@ -334,6 +338,7 @@ class GraphQLController {
     }
   }
 
+  //기관 필수돌봄 정보 불러오기
   Future<List<InstitutionEssentialCareTable>>
       queryEssentialCareInformationByInstitutionIdAndUserId(
           { String? nextToken}) async {
@@ -479,6 +484,7 @@ class GraphQLController {
 
   // 진수
 
+  //CLI로 만든 UserDBTestTable 훈련자 가공 데이터 만들기
   Future<void> createUserData() async {
     try {
       final row = UserDBTest(
@@ -503,6 +509,7 @@ class GraphQLController {
     }
   }
 
+  //CLI로 만든 MonthlyDBTest 테이블에 훈련자 가공 데이터 만들기
   Future<void> createMonthlyData() async {
     try {
       final row = MonthlyDBTest(
@@ -540,6 +547,7 @@ class GraphQLController {
     }
   }
 
+  // MonthlyBrainSignalTable에서 해당 훈련자의 1년치 데이터 가져오기 -> sorting을 통해 최신데이터 얻기는 각 페이지에서 구현됨
   Future<List<MonthlyBrainSignalTable?>> queryMonthlyDBLatestItem(
       {String? nextToken}) async {
     int currentMonth = DateTime.now().month;
@@ -634,145 +642,7 @@ class GraphQLController {
     }
   }
 
-  Future<MonthlyDBTest?> queryMonthlyDBItem() async {
-    try {
-      var ID = '3';
-      int limit =
-          1; // Fetch the latest 1 data items, you can change this value to fetch more or less
-      String sortDirection =
-          "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
-
-      var operation = Amplify.API.query(
-        request: GraphQLRequest(
-          apiName: "awsamplify",
-          document: """
-          query ListMonthlyDBTests(\$id: ID, \$limit: Int, \$sortDirection: ModelSortDirection) {
-            listMonthlyDBTests(
-              id: \$id,
-              limit: \$limit,
-              sortDirection: \$sortDirection
-            ) {
-              items {
-                id
-                month
-                total_time
-                avg_att
-                avg_med
-                firsts_name
-                first_amt
-                second_name
-                second_amt
-                con_score
-                spacetime_score
-                exec_score
-                mem_score
-                ling_score
-                cal_score
-                reac_score
-                orient_score
-                createdAt
-                updatedAt
-              }
-            }
-          }
-        """,
-          variables: {
-            "id": userNumber,
-            "limit": limit,
-            "sortDirection": sortDirection,
-          },
-        ),
-      );
-
-      var response = await operation.response;
-      // print(response.data);
-      // Map<String, dynamic> json = jsonDecode(response.data);
-      // in Dart, you can use the jsonDecode function from the dart:convert library. The jsonDecode function parses a JSON string and returns the corresponding Dart object.
-      MonthlyDBTest monthlyDBTest =
-          (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
-              .map((item) => MonthlyDBTest.fromJson(item))
-              .toList()
-              .first;
-      if (monthlyDBTest == null) {
-        safePrint('errors: ${response.errors}');
-        // safePrint('errors: ${response}');
-      }
-      return monthlyDBTest;
-    } on ApiException catch (e) {
-      safePrint('Query failed: $e');
-      return null;
-    }
-  }
-
-  Future<List<MonthlyDBTest?>> queryListMonthlyDBItems() async {
-    try {
-      var ID = '3';
-      int limit =
-          12; // Fetch the latest 12 data items, you can change this value to fetch more or less
-      String sortDirection =
-          "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
-
-      var operation = Amplify.API.query(
-        request: GraphQLRequest(
-          apiName: "awsamplify",
-          document: """
-          query ListMonthlyDBTests(\$id: ID, \$limit: Int, \$sortDirection: ModelSortDirection) {
-            listMonthlyDBTests(
-              id: \$id,
-              limit: \$limit,
-              sortDirection: \$sortDirection
-            ) {
-              items {
-                id
-                month
-                total_time
-                avg_att
-                avg_med
-                firsts_name
-                first_amt
-                second_name
-                second_amt
-                con_score
-                spacetime_score
-                exec_score
-                mem_score
-                ling_score
-                cal_score
-                reac_score
-                orient_score
-                createdAt
-                updatedAt
-              }
-            }
-          }
-        """,
-          variables: {
-            "id": ID,
-            "limit": limit,
-            "sortDirection": sortDirection,
-          },
-        ),
-      );
-
-      var response = await operation.response;
-      // print(response.data);
-      // Map<String, dynamic> json = jsonDecode(response.data);
-      // in Dart, you can use the jsonDecode function from the dart:convert library. The jsonDecode function parses a JSON string and returns the corresponding Dart object.
-      List<MonthlyDBTest> monthlyDBTests =
-          (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
-              .map((item) => MonthlyDBTest.fromJson(item))
-              .toList();
-      if (monthlyDBTests == null) {
-        print('errors: ${response.errors}');
-        return const [];
-      }
-      return monthlyDBTests;
-    } on ApiException catch (e) {
-      print('Query failed: $e');
-      return const [];
-    }
-  }
-
+  // 특정 훈련자의 특정 월의 MonthlyBrainSignalTable의 인지훈련 데이터 얻기
   Future<List<MonthlyBrainSignalTable?>> queryMonthlyDBRequiredItem(
       String selectedAgeUserId, int yearMonth,
       {String? nextToken}) async {
@@ -862,175 +732,7 @@ class GraphQLController {
     }
   }
 
-  Future<List<MonthlyDBTest?>> queryMonthlyDBLatestTwoItems() async {
-    try {
-      var ID = '3';
-      int limit =
-          2; // Fetch the latest 2 data items, you can change this value to fetch more or less
-      String sortDirection =
-          "DESC"; // Set to "ASC" for ascending order, or "DESC" for descending order
-
-      var operation = Amplify.API.query(
-        request: GraphQLRequest(
-          apiName: "awsamplify",
-          document: """
-          query ListMonthlyDBTests(\$id: ID, \$limit: Int, \$sortDirection: ModelSortDirection) {
-            listMonthlyDBTests(
-              id: \$id,
-              limit: \$limit,
-              sortDirection: \$sortDirection
-            ) {
-              items {
-                id
-                month
-                total_time
-                avg_att
-                avg_med
-                firsts_name
-                first_amt
-                second_name
-                second_amt
-                con_score
-                spacetime_score
-                exec_score
-                mem_score
-                ling_score
-                cal_score
-                reac_score
-                orient_score
-                createdAt
-                updatedAt
-              }
-            }
-          }
-        """,
-          variables: {
-            "id": ID,
-            "limit": limit,
-            "sortDirection": sortDirection,
-          },
-        ),
-      );
-
-      var response = await operation.response;
-      // print(response.data);
-      // Map<String, dynamic> json = jsonDecode(response.data);
-      // in Dart, you can use the jsonDecode function from the dart:convert library. The jsonDecode function parses a JSON string and returns the corresponding Dart object.
-      List<MonthlyDBTest> monthlyDBTests =
-          (jsonDecode(response.data)['listMonthlyDBTests']['items'] as List)
-              .map((item) => MonthlyDBTest.fromJson(item))
-              .toList();
-      if (monthlyDBTests == null) {
-        print('errors: ${response.errors}');
-        return const [];
-      }
-      return monthlyDBTests;
-    } on ApiException catch (e) {
-      print('Query failed: $e');
-      return const [];
-    }
-  }
-
-  // Future<MonthlyDBTest?> queryMonthlyDBRequiredItem(
-  //     int yearMonth) async {
-  //   print(yearMonth + 40);
-  //   final queryPredicateDate = MonthlyDBTest.MONTH
-  //       .between(yearMonth.toString(), (yearMonth + 40).toString());
-  //   final queryPredicateboth = MonthlyDBTest.ID.eq(userId).and(queryPredicateDate);
-  //
-  //   try {
-  //     final request = ModelQueries.list<MonthlyDBTest>(
-  //       MonthlyDBTest.classType,
-  //       where: queryPredicateboth,
-  //     );
-  //     final response = await Amplify.API.query(request: request).response;
-  //     final test = response.data?.items.last; // latest data
-  //     if (test == null) {
-  //       safePrint('errors: ${response.errors}');
-  //       return null;
-  //     }
-  //     print(test.toString());
-  //     return test;
-  //   } on ApiException catch (e) {
-  //     safePrint('Query failed: $e');
-  //     return null;
-  //   }
-  // }
-
-  // Future<UserDBTest?> queryUserDBItem(String id) async {
-  //   const ID = '1';
-  //
-  //   final queryPredicate = UserDBTest.ID.eq(ID);
-  //   // final queryPredicateboth = UserDBTest.BIRTH.between(start, end).and(queryPredicateId);
-  //
-  //   try {
-  //     final request = ModelQueries.list<UserDBTest>(
-  //       UserDBTest.classType,
-  //       where: queryPredicate,
-  //     );
-  //     // print('apiname: ${request.apiName}');
-  //     final response = await Amplify.API.query(request: request).response;
-  //     final test = response.data?.items.first;
-  //     if (test == null) {
-  //       safePrint('errors: ${response.errors}');
-  //     }
-  //     print(test.toString());
-  //     return test;
-  //   } on ApiException catch (e) {
-  //     safePrint('Query failed: $e');
-  //     return null;
-  //   }
-  // }
-
-  // Future<UserDBTest?> queryUserDBItem(String id) async {
-  //   const ID = '1';
-  //   try {
-  //     var operation = Amplify.API.query(
-  //       request: GraphQLRequest(
-  //         apiName: "awsamplify",
-  //         document: """
-  //         query getUserDBTest(\$id: ID!) {
-  //           getUserDBTest(
-  //             id: \$id
-  //           ) {
-  //               id
-  //               birth
-  //               name
-  //               organization
-  //               sex
-  //               createdAt
-  //               updatedAt
-  //           }
-  //         }
-  //       """,
-  //         variables: {
-  //           "id": ID,
-  //         },
-  //       ),
-  //     );
-  //
-  //     var response = await operation.response;
-  //     {
-  //       print(response.data);
-  //       if (response.data == null) {
-  //         safePrint('errors: ${response.errors}');
-  //         return null;
-  //       }
-  //       UserDBTest user =
-  //           UserDBTest.fromJson(jsonDecode(response.data)['getUserDBTest']);
-  //       if (user == null) {
-  //         safePrint('errors: ${response.errors}');
-  //         return null;
-  //       }
-  //
-  //       return user;
-  //     }
-  //   } on ApiException catch (e) {
-  //     safePrint('Query failed: $e');
-  //     return null;
-  //   }
-  // }
-
+  // UserTable에서 해당 훈련자 정보 불러오기
   Future<UserTable?> queryUserDBItem(String id) async {
     try {
       var operation = Amplify.API.query(
@@ -1077,6 +779,7 @@ class GraphQLController {
     }
   }
 
+  //분석 보고서 페이지에서 해당 훈련자와 같은 나이대의 훈련자들의 데이터를 불러오기
   Future<List<UserTable?>> queryListUserDBItemsForAverageAge(int start, int end,
       {String? nextToken}) async {
     try {
@@ -1145,6 +848,8 @@ class GraphQLController {
     }
   }
 
+  // 코멘트 페이지들 관련 함수들
+  //코멘트 생성하기
   Future<bool?> createCommentBoarddata(String user_id, String title,
       String writer, String content, String username, String inst_id) async {
     final time = '${TemporalDateTime.now()}';
@@ -1209,8 +914,8 @@ class GraphQLController {
     }
   }
 
+  // 코멘트 테이블의 CRUD 감지하도록 구독하는 함수
   Stream<GraphQLResponse>? subscribeInstitutionCommentBoard() {
-
     try {
       var operation = Amplify.API.subscribe(
         GraphQLRequest(
@@ -1250,6 +955,7 @@ class GraphQLController {
     }
   }
 
+  //한달 단위로 코멘트 불러오기
   Future<List<InstitutionCommentBoardTable?>> listInstitutionCommentBoard(
       String filterName, String year, String month,
       {String? nextToken}) async {
@@ -1330,65 +1036,7 @@ class GraphQLController {
     }
   }
 
-  // Future<List<InstitutionCommentBoardTable>?> listInstitutionCommentBoard(
-  //     String institutionId) async {
-  //   // String inst_id = 'aaa';
-  //   // int dateNext = int.parse(date);
-  //   // dateNext += 40;
-  //   try {
-  //     var operation = Amplify.API.query(
-  //       request: GraphQLRequest(
-  //         apiName: "Protector_API",
-  //         document: """
-  //     query listInstitutionCommentBoardTables(\$filter: TableInstitutionCommentBoardTableFilterInput) {
-  //       listInstitutionCommentBoardTables(
-  //         filter: \$filter,
-  //       ) {
-  //         items {
-  //                   BOARD_ID
-  //                   USER_ID
-  //                   WRITER
-  //                   TITLE
-  //                   USERNAME
-  //                   INSTITUTION_ID
-  //                   NEW_CONVERSATION_PROTECTOR
-  //                   NEW_CONVERSATION_INST
-  //                   NEW_CONVERSATION_CREATEDAT
-  //                   createdAt
-  //                   updatedAt
-  //         }
-  //       }
-  //     }
-  //   """,
-  //         variables: {
-  //           "filter": {
-  //             "INSTITUTION_ID": {"eq": institutionId},
-  //           },
-  //         },
-  //       ),
-  //     );
-  //
-  //     var response = await operation.response;
-  //     print(response.data);
-  //     List<InstitutionCommentBoardTable> comments =
-  //         (jsonDecode(response.data)['listInstitutionCommentBoardTables']
-  //                 ['items'] as List)
-  //             .map((item) => InstitutionCommentBoardTable.fromJson(item))
-  //             .toList();
-  //     if (comments == null ||
-  //         jsonDecode(response.data)['listInstitutionCommentBoardTables']
-  //                 ['items'] ==
-  //             null) {
-  //       safePrint('errors: ${response.errors}');
-  //       return const [];
-  //     }
-  //     return comments;
-  //   } on ApiException catch (e) {
-  //     print('Query failed: $e');
-  //     return const [];
-  //   }
-  // }
-
+  // 특정 코멘트 1개 불러오기
   Future<InstitutionCommentBoardTable?> getInstitutionCommentBoard(
       String user_id, String board_id) async {
     // String inst_id = 'aaa';
@@ -1541,6 +1189,7 @@ class GraphQLController {
     }
   }
 
+  // 상세 코멘트 보기 페이지 (Detail_comment.dart)에서 댓글을 위한 함수들 (conversation = 댓글)
   Future<bool?> createCommentConversationdata(
       String board_id, String writer, String content, String email) async {
     final time = '${TemporalDateTime.now()}';
@@ -1597,6 +1246,7 @@ class GraphQLController {
     }
   }
 
+  // 특정 코멘트의 댓글들 불러오기
   Future<List<InstitutionCommentConversationTable?>>
       listInstitutionCommentConversation(String boardId,
           {String? nextToken}) async {
@@ -1666,6 +1316,7 @@ class GraphQLController {
     }
   }
 
+  //InstitutionCommentConversation Table의 CRUD 감지를 구독하는 함수
   Stream<GraphQLResponse>? subscribeInstitutionCommentConversation() {
     try {
       var operation = Amplify.API.subscribe(
@@ -1814,6 +1465,7 @@ class GraphQLController {
     }
   }
 
+//보호자가 최신 댓글을 달았음을 NEW_CONVERSATION_PROTECTOR column을 true로 표시하도록 업데이트
   Future<bool?> updateCommentBoarddataForNewConversation(
       String user_id, String board_id) async {
     final time = '${TemporalDateTime.now()}';
@@ -1863,6 +1515,7 @@ class GraphQLController {
     }
   }
 
+  // 기관이 최신 댓글 단 코멘트를 보호자가 읽었음을 저장하기 위한 함수
   Future<bool?> updateCommentBoarddataForReadConversation(
       String user_id, String board_id) async {
     final time = '${TemporalDateTime.now()}';
@@ -1911,7 +1564,7 @@ class GraphQLController {
     }
   }
 
-//스켸줄 페이지
+  //기관이 등록한 스케줄들을 한달단위로 불러오는 함수
   Future<List<InstitutionEventScheduleTable?>>
       queryInstitutionScheduleByInstitutionId( String date,
           {String? nextToken}) async {
@@ -1987,4 +1640,4 @@ class GraphQLController {
     }
   }
 }
-// institution
+

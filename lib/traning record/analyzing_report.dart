@@ -19,11 +19,15 @@ class AnalyzingReportPage extends StatefulWidget {
 }
 
 class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
+  final iconColor = Colors.white;
+
   bool loading = true;
 
   var userbutton = '유저(훈련인) 데이터 추가';
   var brainbutton = '뇌파 데이터 추가';
+
   late final gql;
+
   int usercount = 0; // DATA count added to USER DB
   int braincount = 0; // DATA count added to MONTHLY DB
 
@@ -454,7 +458,8 @@ class _AnalyzingReportPageState extends State<AnalyzingReportPage> {
           },
         ),
         title: Text('분석 보고서',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: iconColor)),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(

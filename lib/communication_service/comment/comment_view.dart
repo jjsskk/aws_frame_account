@@ -22,6 +22,8 @@ const List<String> _filterlist = ['날짜', '제목'];
 class _CommentViewPageState extends State<CommentViewPage> {
   final TextEditingController _searchController = TextEditingController();
 
+  final iconColor = Colors.white;
+
   late var year;
   late var current_year;
   late var month;
@@ -104,11 +106,10 @@ class _CommentViewPageState extends State<CommentViewPage> {
   }
 
   void refreshData() {
-
     gql
         .listInstitutionCommentBoard('USER_ID', '$current_year',
-        current_month < 10 ? '0${current_month}' : '$current_month',
-        nextToken: null) //institution_id
+            current_month < 10 ? '0${current_month}' : '$current_month',
+            nextToken: null) //institution_id
         .then((result) {
       print(result);
       if (result.isNotEmpty) {
@@ -151,7 +152,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
           return;
         }
         InstitutionCommentBoardTable comment =
-        InstitutionCommentBoardTable.fromJson(item);
+            InstitutionCommentBoardTable.fromJson(item);
         if (comment.USER_ID == gql.userNumber) {
           refreshData();
         }
@@ -322,7 +323,8 @@ class _CommentViewPageState extends State<CommentViewPage> {
         ),
         title: Text(
           '코멘트 모아보기',
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: iconColor),
         ),
         centerTitle: true,
         flexibleSpace: Container(

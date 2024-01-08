@@ -24,7 +24,9 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
 
   final TextEditingController _contentController = TextEditingController();
 
-  var blue = const Color(0xff1f43f3);
+  final blue = const Color(0xff1f43f3);
+
+  final iconColor = Colors.white;
 
   List<Map<String, dynamic>> _conversations = [];
 
@@ -105,19 +107,19 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
     commentProvider = Provider.of<LoginState>(context, listen: false);
     gql
         .getInstitutionCommentBoard(widget.user_id, widget.board_id)
-        .then((value) async{
+        .then((value) async {
       print(value);
       commentTitle = value.TITLE ?? '';
       commentContent = value.CONTENT ?? '';
       user = value.USERNAME ?? '';
       date = value.createdAt.toString().substring(0, 10) ?? '';
       if (value.NEW_CONVERSATION_INST == true) {
-        final check_update = await gql.updateCommentBoarddataForReadConversation(
-            widget.user_id, widget.board_id);
+        final check_update =
+            await gql.updateCommentBoarddataForReadConversation(
+                widget.user_id, widget.board_id);
 
         if (check_update && (commentProvider.detectCommentChange != null))
           commentProvider.detectCommentChange!(widget.user_id);
-
       }
       setState(() {
         loading_comment = false;
@@ -142,13 +144,14 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_circle_left_outlined,
-              color: Colors.white, size: 35),
+              color: iconColor, size: 35),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text('코멘트 상세보기',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: iconColor)),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(
@@ -212,7 +215,7 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(50),
-                                            color: Colors.white,
+                                            color: iconColor,
                                           ),
                                         ),
                                         const SizedBox(
@@ -292,14 +295,12 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                                 ),
                               ),
                             ),
-
                             Divider(
                               thickness: 2.0,
                             ),
                             Column(
                               children: _buildListCards(),
                             )
-
                           ],
                         ),
                       ),
@@ -359,7 +360,7 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                             width: 20,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
-                              color: Colors.white,
+                              color: iconColor,
                             ),
                           ),
                           const SizedBox(
@@ -433,7 +434,7 @@ class _DetailCommentPageState extends State<DetailCommentPage> {
                                   child: Text(
                                     'X',
                                     style: TextStyle(
-                                        color: Colors.white,
+                                        color: iconColor,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ),

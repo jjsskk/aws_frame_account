@@ -1,6 +1,7 @@
 import 'package:aws_frame_account/bottomappbar/globalkey.dart';
 import 'package:flutter/material.dart';
 
+
 class GlobalBottomAppBar extends StatelessWidget {
   GlobalBottomAppBar({required this.keyObj});
 
@@ -24,33 +25,36 @@ class GlobalBottomAppBar extends StatelessWidget {
             const SizedBox(
               width: 40,
             ),
-            IconButton(
-              onPressed: () {
-                // print(keyObj.key);
-                keyObj.key.currentState!.openDrawer();
-              },
-              icon: Icon(
-                Icons.menu,
-                size: 35,
-              ),
-            ),
+            Expanded(
+                child: IconButton(
+                  onPressed: () {
+                    // print(keyObj.key);
+                    keyObj.key.currentState!.openDrawer();
+                  },
+                  icon: Icon(
+                    Icons.menu,
+                    size: 40,
+                  ),
+                )),
             const SizedBox(
               width: 160,
             ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.settings,
-                size: 35,
+            Expanded(
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.settings,
+                  size: 40,
+                ),
               ),
             ),
             const SizedBox(
               width: 40,
             ),
-
           ],
         ),
       ),
     );
   }
 }
+

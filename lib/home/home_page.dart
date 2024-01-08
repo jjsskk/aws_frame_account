@@ -35,7 +35,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  // final GlobalKey<ScaffoldState> _key = GlobalKey();
+  final iconColor = Colors.white;
 
   late final bottomappbar;
   late final keyObj;
@@ -258,7 +258,10 @@ class _HomePageState extends State<HomePage> {
             appBar: AppBar(
               title: Text(
                 ' ${gql.userName}님의 동반자 ${gql.protectorName}님 안녕하세요!',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: iconColor),
               ),
               flexibleSpace: Container(
                 decoration: BoxDecoration(
@@ -271,7 +274,8 @@ class _HomePageState extends State<HomePage> {
               ),
               actions: [
                 IconButton(
-                  icon: const Icon(
+                  icon: Icon(
+                    color: iconColor,
                     Icons.logout,
                     semanticLabel: 'logout',
                   ),
@@ -301,35 +305,30 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Text('${gql.userName} 님의 훈련 데이터',
                           style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold)),
+                              fontSize: 24, fontWeight: FontWeight.bold)),
                       const SizedBox(
                         height: 4,
                       ),
                       // GraphPage(),
                       max > 0
                           ? Linechart(
-                        data: dataForCamparing,
-                        dataName: nameForMax,
-                      )
+                              data: dataForCamparing,
+                              dataName: nameForMax,
+                            )
                           : SizedBox(
-                        // 비교 데이터가 없거나 상승 데이터가 없을 떄 차트 대신 나올 asset으로 꾸미면 좋을듯
-                        height:
-                        MediaQuery.of(context).size.height /
-                            3,
-                      ),
+                              // 비교 데이터가 없거나 상승 데이터가 없을 떄 차트 대신 나올 asset으로 꾸미면 좋을듯
+                              height: MediaQuery.of(context).size.height / 3,
+                            ),
                       const SizedBox(
                         height: 20,
                       ),
                       max > 0
                           ? Text('지난달보다 $nameForMax $max 상승!',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold))
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold))
                           : Text('지난달보다 상승된 데이터가 없습니다ㅠㅠ!',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold)),
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
                       SizedBox(
                         height: 100,
                         width: MediaQuery.of(context).size.width, // 원하는 너비로 조절
@@ -341,8 +340,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    TraningReportPage(),
+                                builder: (context) => TraningReportPage(),
                               ),
                             );
                           },
@@ -363,7 +361,8 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CommunicationYardPage(),
+                                    builder: (context) =>
+                                        CommunicationYardPage(),
                                   ),
                                 );
                               },
@@ -382,7 +381,8 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CommunicationYardPage(),
+                                    builder: (context) =>
+                                        CommunicationYardPage(),
                                   ),
                                 );
                               },
