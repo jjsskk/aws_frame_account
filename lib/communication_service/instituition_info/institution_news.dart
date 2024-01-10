@@ -23,15 +23,10 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
   final storageService = StorageService();
   late LoginState newsProvider;
 
-
-
-
   @override
   void initState() {
     super.initState();
-    _news =
-        gql.queryInstitutionNewsByInstitutionId();
-
+    _news = gql.queryInstitutionNewsByInstitutionId();
   }
 
   String getYearMonthDay(String dateString) {
@@ -51,12 +46,12 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
         child: FutureBuilder<List<InstitutionNewsTable>>(
           future: _news,
           builder: (context, snapshot) {
-
-            if(snapshot.connectionState == ConnectionState.waiting)
+            if (snapshot.connectionState == ConnectionState.waiting)
               return LoadingPage();
 
             if (snapshot.hasData) {
-              snapshot.data!.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+              snapshot.data!
+                  .sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
 
               return ListView.builder(
                 itemCount: snapshot.data!.length,
@@ -65,7 +60,7 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
                   return Align(
                     alignment: Alignment.center,
                     child: Container(
-                      width: 350,  // 원하는 가로 사이즈로 조절하세요.
+                      width: 350, // 원하는 가로 사이즈로 조절하세요.
                       child: AspectRatio(
                         aspectRatio: 1232 / 392,
                         child: InkWell(
@@ -91,19 +86,28 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    getYearMonthDay(news.createdAt.toString()),
-                                    style: TextStyle(color: Colors.black, backgroundColor: Colors.transparent, fontWeight: FontWeight.w400),
+                                    getYearMonthDay(DateTime.parse(
+                                            news.createdAt.toString())
+                                        .toLocal()
+                                        .toString()), //UTC ->KST
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        backgroundColor: Colors.transparent,
+                                        fontWeight: FontWeight.w400),
                                   ),
                                   Text(
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     news.TITLE!,
-                                    style: TextStyle(color: Colors.black, backgroundColor: Colors.transparent, fontWeight: FontWeight.w600, fontSize: 20),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        backgroundColor: Colors.transparent,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20),
                                   ),
                                 ],
                               ),
                             ),
-
                           ),
                         ),
                       ),
@@ -111,7 +115,6 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
                   );
                 },
               );
-
             }
 
             return Center(child: Text('공지사항이 없습니다.'));
@@ -119,36 +122,38 @@ class _InstitutionNewsPageState extends State<InstitutionNewsPage> {
         ),
       ),
     );
-
   }
 }
 
 class InstitutionNewsDetailPage extends StatefulWidget {
   final InstitutionNewsTable news;
   final StorageService storageService;
+
   InstitutionNewsDetailPage(
       {Key? key, required this.news, required this.storageService})
       : super(key: key);
 
   @override
-  State<InstitutionNewsDetailPage> createState() => _InstitutionNewsDetailPageState();
+  State<InstitutionNewsDetailPage> createState() =>
+      _InstitutionNewsDetailPageState();
 }
 
 class _InstitutionNewsDetailPageState extends State<InstitutionNewsDetailPage> {
   final gql = GraphQLController.Obj;
-  String title = '', content  = '', url = '', image = '';
+  String title = '', content = '', url = '', image = '';
 
   String getYearMonthDay(String dateString) {
     return dateString.substring(0, 10);
   }
+
   @override
   void initState() {
     // TODO: implement initState
 
     title = widget.news.TITLE!;
-    widget.news.CONTENT  != null ? content = widget.news.CONTENT!: content = '';
-    widget.news.URL!=null ?url = widget.news.URL!:url = '';
-    widget.news.IMAGE!=null?image = widget.news.IMAGE!: image = '';
+    widget.news.CONTENT != null ? content = widget.news.CONTENT! : content = '';
+    widget.news.URL != null ? url = widget.news.URL! : url = '';
+    widget.news.IMAGE != null ? image = widget.news.IMAGE! : image = '';
     super.initState();
   }
 
@@ -165,7 +170,10 @@ class _InstitutionNewsDetailPageState extends State<InstitutionNewsDetailPage> {
         ),
         title: Text(
           '기관소식 세부 정보',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20), // 글자색을 하얀색으로 설정
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20), // 글자색을 하얀색으로 설정
         ),
         centerTitle: true,
         flexibleSpace: Container(
@@ -193,9 +201,16 @@ class _InstitutionNewsDetailPageState extends State<InstitutionNewsDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-
-                Text('작성일: ' + getYearMonthDay(widget.news.createdAt.toString()), style: TextStyle(color: Colors.grey, fontSize: 14),),
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                SizedBox(height: 8),
+                Text(
+                  '작성일: ' +
+                      getYearMonthDay(
+                          DateTime.parse(widget.news.createdAt.toString())
+                              .toLocal()
+                              .toString()), //UTC-> KST
+                ),
                 SizedBox(height: 8),
                 Divider(),
                 SizedBox(height: 8),
@@ -207,8 +222,8 @@ class _InstitutionNewsDetailPageState extends State<InstitutionNewsDetailPage> {
                   if (image.isNotEmpty)
                     FutureBuilder<String>(
                       future: widget.storageService.getImageUrlFromS3(image!),
-                      builder:
-                          (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      builder: (BuildContext context,
+                          AsyncSnapshot<String> snapshot) {
                         if (snapshot.hasData) {
                           String imageUrl = snapshot.data!;
                           return Image.network(imageUrl);

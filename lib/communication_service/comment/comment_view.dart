@@ -82,9 +82,9 @@ class _CommentViewPageState extends State<CommentViewPage> {
     _comments = [];
     _foundComments = [];
     result.forEach((value) {
-      // print(value.createdAt.toString().substring(0,10));
       _comments.add({
-        'date': value.createdAt.toString().substring(0, 10) ?? '',
+        // 'date': value.createdAt.toString().substring(0, 10) ?? '',
+        'date': DateTime.parse(value.createdAt.toString()).toLocal().toString().substring(0, 10), //UTC ->KST
         'title': value.TITLE ?? '',
         'username': value.USERNAME ?? '',
         'user_id': value.USER_ID ?? '',
@@ -92,7 +92,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
         'board_id': value.BOARD_ID ?? '',
         'new_conversation': value.NEW_CONVERSATION_INST,
         'new_conversation_createdat':
-            value.NEW_CONVERSATION_CREATEDAT.toString()
+            value.NEW_CONVERSATION_CREATEDAT.toString() //sorting 용도로만 쓰니까 그냥 UTC 쓰자
       });
     });
     _comments.sort((a, b) {
@@ -209,9 +209,9 @@ class _CommentViewPageState extends State<CommentViewPage> {
             if (result.isNotEmpty) {
               List<Map<String, dynamic>> _commentsTemp = [];
               result.forEach((value) {
-                // print(value.createdAt.toString().substring(0,10));
                 _commentsTemp.add({
-                  'date': value.createdAt.toString().substring(0, 10) ?? '',
+                  // 'date': value.createdAt.toString().substring(0, 10) ?? '',
+                  'date': DateTime.parse(value.createdAt.toString()).toLocal().toString().substring(0, 10), //UTC ->KST
                   'title': value.TITLE ?? '',
                   'username': value.USERNAME ?? '',
                   'content': value.CONTENT ?? '',
@@ -219,7 +219,7 @@ class _CommentViewPageState extends State<CommentViewPage> {
                   'board_id': value.BOARD_ID ?? '',
                   'new_conversation': value.NEW_CONVERSATION_INST,
                   'new_conversation_createdat':
-                      value.NEW_CONVERSATION_CREATEDAT.toString()
+                      value.NEW_CONVERSATION_CREATEDAT.toString() //sorting 용도로만 쓰니까 그냥 UTC 쓰자
                 });
               });
               _commentsTemp.sort((a, b) {

@@ -960,10 +960,11 @@ class GraphQLController {
       String filterName, String year, String month,
       {String? nextToken}) async {
     final time = '${TemporalDateTime.now()}';
-    var remain = time.substring(12);
+    var remain = time.substring(10);
     var start = '$year-$month-00$remain';
     var end = '$year-$month-40$remain';
-
+    print('start: $time');
+    print('start: $start');
     try {
       var operation = Amplify.API.query(
         request: GraphQLRequest(

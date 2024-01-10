@@ -1,9 +1,9 @@
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/communication_service/comment/comment_view.dart';
 import 'package:aws_frame_account/communication_service/communication_yard.dart';
+import 'package:aws_frame_account/communication_service/instituition_info/essential_care_information.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
 import 'package:aws_frame_account/communication_service/user_activity.dart';
-import 'package:aws_frame_account/communication_service/user_care_information.dart';
 import 'package:aws_frame_account/provider/login_state.dart';
 import 'package:aws_frame_account/traning%20record/analyzing_report.dart';
 import 'package:aws_frame_account/traning%20record/brain_signal_graph.dart';
@@ -155,7 +155,7 @@ class GlobalDrawer {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserCareInfoPage()),
+                MaterialPageRoute(builder: (context) => EssentialCareInfoPage()),
               );
             },
           ),
@@ -171,10 +171,7 @@ class GlobalDrawer {
               ),
             ),
             onTap: () {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => UserActivityPage()),
-              // );
+
             },
           ),
 

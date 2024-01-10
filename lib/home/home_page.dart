@@ -1,7 +1,6 @@
 import 'package:aws_frame_account/GraphQL_Method/graphql_controller.dart';
 import 'package:aws_frame_account/backey/backKey_dialog.dart';
 import 'package:aws_frame_account/bottomappbar/bottom_appbar.dart';
-import 'package:aws_frame_account/camera_gallary/graph_page.dart';
 import 'package:aws_frame_account/communication_service/communication_yard.dart';
 import 'package:aws_frame_account/drawer/drawer.dart';
 import 'package:aws_frame_account/bottomappbar/globalkey.dart';
@@ -19,16 +18,11 @@ import 'package:back_button_interceptor/back_button_interceptor.dart';
 class HomePage extends StatefulWidget {
   HomePage(
       {Key? key,
-      required this.didtogglegallery,
-      // required this.didtogglegraph,
-      required this.pickedimageurl,
       required this.shouldLogOut})
       : super(key: key);
-  final VoidCallback didtogglegallery;
 
   // final VoidCallback didtogglegraph;
   final VoidCallback shouldLogOut;
-  String pickedimageurl = '';
 
   @override
   State<HomePage> createState() => _HomePageState();

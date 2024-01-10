@@ -20,10 +20,8 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
   final storageService = StorageService();
   late LoginState announcementProvider;
 
-  Future<List<InstitutionAnnouncementTable>> getAnnouncements(
-    ) {
-    return gql.queryInstitutionAnnouncementsByInstitutionId(
-        );
+  Future<List<InstitutionAnnouncementTable>> getAnnouncements() {
+    return gql.queryInstitutionAnnouncementsByInstitutionId();
   }
 
   @override
@@ -92,8 +90,10 @@ class _AnnouncementPageState extends State<AnnouncementPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    getYearMonthDay(
-                                        announcement.createdAt.toString()),
+                                    getYearMonthDay(DateTime.parse(
+                                            announcement.createdAt.toString())
+                                        .toLocal()
+                                        .toString()), //UTC ->KST
                                     style: TextStyle(
                                         color: Colors.black,
                                         backgroundColor: Colors.transparent,
@@ -179,7 +179,10 @@ class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
         ),
         title: Text(
           '공지사항 세부 정보',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20), // 글자색을 하얀색으로 설정
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 20), // 글자색을 하얀색으로 설정
         ),
         centerTitle: true,
         flexibleSpace: Container(
@@ -195,14 +198,16 @@ class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start  ,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title,
-                  style:
-                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               SizedBox(height: 8),
               Text('작성일: ' +
-                  getYearMonthDay(widget.announcement.createdAt.toString())),
+                  getYearMonthDay(
+                      DateTime.parse(widget.announcement.createdAt.toString())
+                          .toLocal()
+                          .toString())), //UTC ->KST
               SizedBox(height: 8),
               Divider(),
               SizedBox(height: 8),
@@ -214,11 +219,13 @@ class _AnnouncementDetailPageState extends State<AnnouncementDetailPage> {
                 if (image!.isNotEmpty)
                   FutureBuilder<String>(
                     future: widget.storageService.getImageUrlFromS3(image!),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<String> snapshot) {
-                      if(snapshot.connectionState == ConnectionState.waiting){
+                    builder:
+                        (BuildContext context, AsyncSnapshot<String> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
                         print('로딩중');
-                        return const Center(child: CircularProgressIndicator(),);
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
                       }
                       if (snapshot.hasData) {
                         String imageUrl = snapshot.data!;

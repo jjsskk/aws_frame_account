@@ -4,7 +4,6 @@ import 'package:aws_frame_account/communication_service/instituition_info/essent
 import 'package:aws_frame_account/communication_service/instituition_info/institution_information.dart';
 import 'package:aws_frame_account/communication_service/instituition_info/schedule/schedule.dart';
 import 'package:aws_frame_account/communication_service/user_activity.dart';
-import 'package:aws_frame_account/communication_service/user_care_information.dart';
 import 'package:aws_frame_account/drawer/drawer.dart';
 import 'package:aws_frame_account/bottomappbar/globalkey.dart';
 import 'package:aws_frame_account/provider/login_state.dart';
@@ -103,8 +102,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                           children: <Widget>[
                             Image.asset(
                               'image/community (2).png',
-                              width: 120,
-                              height: 120,
+                              width: MediaQuery.of(context).size.width/3.5,
                             ), // 아이콘
                             Text('이용자 돌봄 정보',
                                 style: TextStyle(
@@ -137,8 +135,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                           children: <Widget>[
                             Image.asset(
                               'image/community (8).png',
-                              width: 120,
-                              height: 120,
+                              width: MediaQuery.of(context).size.width/3.5,
                             ), // 아이콘
                             Text('이용자 활동 기록',
                                 style: TextStyle(
@@ -185,8 +182,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                           children: <Widget>[
                             Image.asset(
                               'image/community (16).png',
-                              width: 120,
-                              height: 120,
+                              width: MediaQuery.of(context).size.width/3.5,
                             ), // 아이콘
                             Text('코멘트 모아보기',
                                 style: TextStyle(
@@ -219,8 +215,7 @@ class _CommunicationYardPageState extends State<CommunicationYardPage> {
                           children: <Widget>[
                             Image.asset(
                               'image/community (5).png',
-                              width: 120,
-                              height: 120,
+                              width: MediaQuery.of(context).size.width/3.5,
                             ), // 아이콘
                             Text('기관 정보',
                                 style: TextStyle(

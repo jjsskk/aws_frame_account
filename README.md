@@ -1,4 +1,4 @@
-# Frame 보호자 앱
+# Frame Android 보호자 앱
 
 Flutter + AWS Amplify project.
 

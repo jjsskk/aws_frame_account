@@ -267,8 +267,7 @@ class _TraningReportPageState extends State<TraningReportPage> {
                           Stack(children: <Widget>[
                             Image.asset(
                               'image/report (17).png', // 이미지 경로
-                              width: 400, // 필요에 따라 조절
-                              height: 250, // 필요에 따라 조절
+                              width: MediaQuery.of(context).size.width, // 필요에 따라 조절
                               //fit: BoxFit.cover, // 이미지를 적절히 맞추거나 채움
                             ),
                             Column(children: [
