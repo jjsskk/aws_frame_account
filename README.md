@@ -25,7 +25,7 @@ Terminal tool인 Amplify CLI가 설치되지 않았다면 설치를 해야 합�
 
 오하이오 주(US-EAST-2)에 있는 보호자 앱의 Amplify Studio에 들어가 오른쪽 상단에 있는 local setup instructions를 누른 후 나오는 명령어를 IDE(ex: 안드로이드 스튜디오)로 open한 clone 프로젝트 root 위치 터미널에서 실행합니다.
 
-![Alt text](image.png)
+![Alt text](image1.png)
 
 ```
 amplify pull --appId <실제 appId> --envName staging
